@@ -1,0 +1,16 @@
+C:/Users/jimmy/Desktop/FastDDS/flutter_application_1/build/windows/x64/runner/Debug/data/icudtl.dat
+C:/Users/jimmy/Desktop/FastDDS/flutter_application_1/build/windows/x64/runner/Debug/flutter_windows.dll
+C:/Users/jimmy/Desktop/FastDDS/flutter_application_1/build/windows/x64/runner/Debug/data/flutter_assets/AssetManifest.bin
+C:/Users/jimmy/Desktop/FastDDS/flutter_application_1/build/windows/x64/runner/Debug/data/flutter_assets/AssetManifest.bin.json
+C:/Users/jimmy/Desktop/FastDDS/flutter_application_1/build/windows/x64/runner/Debug/data/flutter_assets/AssetManifest.json
+C:/Users/jimmy/Desktop/FastDDS/flutter_application_1/build/windows/x64/runner/Debug/data/flutter_assets/assets/ASRCLOGO.png
+C:/Users/jimmy/Desktop/FastDDS/flutter_application_1/build/windows/x64/runner/Debug/data/flutter_assets/assets/ASRCTransparent.png
+C:/Users/jimmy/Desktop/FastDDS/flutter_application_1/build/windows/x64/runner/Debug/data/flutter_assets/assets/pic1.png
+C:/Users/jimmy/Desktop/FastDDS/flutter_application_1/build/windows/x64/runner/Debug/data/flutter_assets/assets/pic2.png
+C:/Users/jimmy/Desktop/FastDDS/flutter_application_1/build/windows/x64/runner/Debug/data/flutter_assets/FontManifest.json
+C:/Users/jimmy/Desktop/FastDDS/flutter_application_1/build/windows/x64/runner/Debug/data/flutter_assets/fonts/MaterialIcons-Regular.otf
+C:/Users/jimmy/Desktop/FastDDS/flutter_application_1/build/windows/x64/runner/Debug/data/flutter_assets/kernel_blob.bin
+C:/Users/jimmy/Desktop/FastDDS/flutter_application_1/build/windows/x64/runner/Debug/data/flutter_assets/NOTICES
+C:/Users/jimmy/Desktop/FastDDS/flutter_application_1/build/windows/x64/runner/Debug/data/flutter_assets/NOTICES.Z
+C:/Users/jimmy/Desktop/FastDDS/flutter_application_1/build/windows/x64/runner/Debug/data/flutter_assets/packages/cupertino_icons/assets/CupertinoIcons.ttf
+C:/Users/jimmy/Desktop/FastDDS/flutter_application_1/build/windows/x64/runner/Debug/data/flutter_assets/shaders/ink_sparkle.frag

@@ -1,0 +1,14 @@
+[
+{
+  "directory": "C:/Users/jimmy/Desktop/FastDDS/flutter_application_1/build",
+  "command": "C:\\msys64\\mingw64\\bin\\g++.exe -Dhello_library_EXPORTS -g -o CMakeFiles\\hello_library.dir\\hello.cpp.obj -c C:\\Users\\jimmy\\Desktop\\FastDDS\\flutter_application_1\\lib\\hello_library\\hello.cpp",
+  "file": "C:\\Users\\jimmy\\Desktop\\FastDDS\\flutter_application_1\\lib\\hello_library\\hello.cpp",
+  "output": "CMakeFiles\\hello_library.dir\\hello.cpp.obj"
+},
+{
+  "directory": "C:/Users/jimmy/Desktop/FastDDS/flutter_application_1/build",
+  "command": "C:\\msys64\\mingw64\\bin\\g++.exe -g -o CMakeFiles\\hello_test.dir\\hello.cpp.obj -c C:\\Users\\jimmy\\Desktop\\FastDDS\\flutter_application_1\\lib\\hello_library\\hello.cpp",
+  "file": "C:\\Users\\jimmy\\Desktop\\FastDDS\\flutter_application_1\\lib\\hello_library\\hello.cpp",
+  "output": "CMakeFiles\\hello_test.dir\\hello.cpp.obj"
+}
+]

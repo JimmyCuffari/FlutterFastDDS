@@ -1,0 +1,10 @@
+^C:\USERS\JIMMY\DESKTOP\FASTDDS\FLUTTERFASTDDS\LIB\BUILD\CMAKEFILES\9C7345FC7003DDEFCBFDC3D675A48FE9\GENERATE.STAMP.RULE
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/jimmy/Desktop/FastDDS/FlutterFastDDS/lib -BC:/Users/jimmy/Desktop/FastDDS/FlutterFastDDS/lib/build --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file C:/Users/jimmy/Desktop/FastDDS/FlutterFastDDS/lib/build/FastDDSChat.sln
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
