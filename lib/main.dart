@@ -14,14 +14,14 @@ import 'package:flutter/rendering.dart';
 import 'package:path/path.dart' as path;
 
 // FFI signature of the hello_world C function
-typedef HelloWorldFunc = ffi.Void Function();
+typedef AddUserFunc = ffi.Void Function();
 // Dart type definition for calling the C foreign function
-typedef HelloWorld = void Function();
+typedef CppAddUser = void Function();
 
 // FFI signature of the hello_world C function
-typedef returnHelloFunc = ffi.Void Function();
+typedef CreatePubFunc = ffi.Void Function();
 // Dart type definition for calling the C foreign function
-typedef returnHello = void Function();
+typedef CreatePub = void Function();
 
 var libraryPath = path.join(
     Directory.current.path, 'lib', 'build', 'Debug', 'FastDDSUser.dll');
@@ -30,6 +30,15 @@ var libraryPath = path.join(
 //  Directory.current.path, 'lib', 'hello_library', 'libhello_library.dll');
 
 final dylib = ffi.DynamicLibrary.open(libraryPath);
+
+final CppAddUser addUser =
+    dylib.lookup<ffi.NativeFunction<AddUserFunc>>('addUser').asFunction();
+
+final CreatePub createPub = dylib
+    .lookup<ffi.NativeFunction<CreatePubFunc>>('createPublisher')
+    .asFunction();
+
+var pubs = {};
 
 /*
 // Look up the C function 'hello_world'
@@ -70,6 +79,7 @@ void main() {
   }
 
   final dylib = ffi.DynamicLibrary.open(libraryPath);
+
 
   // Look up the C function 'hello_world'
   final HelloWorld hello = dylib
@@ -195,6 +205,7 @@ class _MyHomePageState extends State<MyHomePage> {
   List<Widget> message_list = <Widget>[
     //self_message
   ];
+
   List<Widget> tempList = <Widget>[
     //self_message
   ];
@@ -224,6 +235,8 @@ class _MyHomePageState extends State<MyHomePage> {
 */
 
   void _addUser() {
+    createPub();
+
     if (userController.text.trim() != "" &&
         !usernameList.contains(userController.text)) {
       String newUser = userController.text;

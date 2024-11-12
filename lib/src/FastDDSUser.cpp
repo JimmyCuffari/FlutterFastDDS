@@ -39,8 +39,11 @@ void resetTextColor() {
 }
 */
 
+extern "C"{
+
 std::vector<std::string> endThreadSignal = {};  // Lets threads know to end
 std::vector<std::string> curr_chat_tab = {};    // Tells which tabbed user is currently being talked to (option 3)
+
 
 // Class for representing a Subscriber
 class sub_thread {
@@ -58,6 +61,8 @@ public:
         user_sub = new UserChatSubscriber(sub_topic, curr_history, end_signal, curr_tab);
         user_sub->init();
         st = std::thread(&sub_thread::run, this);
+        
+        std::cout << "subthread constructor" << std::endl;
     }
 
     void run() {
@@ -88,10 +93,16 @@ private:
 
 public:
     pub_thread(std::string pub_topic, std::string name, std::vector<std::string>& history, std::vector<std::string>& signal) : curr_history(&history), end_signal(&signal) {
+       
         this->pub_topic = pub_topic;
         user_pub = new UserChatPublisher(pub_topic, name, curr_history, end_signal);
         user_pub->init();
-        pt = std::thread(&pub_thread::run, this);
+    
+        pt = std::thread(&pub_thread::run, this); //////////////////issue
+
+
+        pt.join();
+        std::cout << "pubthread constructor" << std::endl;
     }
 
     void run() {
@@ -110,6 +121,29 @@ public:
         return curr_history;
     }
 };
+
+
+
+UserChatPublisher* pubMethod(){
+    UserChatPublisher* user_pub;
+    std::vector<std::string>* curr_history;
+    std::vector<std::string>* end_signal = &endThreadSignal;
+    user_pub = new UserChatPublisher("pub_topic", "name", curr_history, end_signal);
+    return user_pub;
+}
+
+
+
+
+
+    std::vector<pub_thread> pubs = {};
+    std::vector<sub_thread> subs = {};
+    std::vector<std::string> threaded_usernames = {};
+    std::string username = "ABBB";
+    std::vector<std::vector<std::string>> chat_histories = {};
+
+
+
 
 // Find index of element in vector
 int findIndex(std::vector<std::string> vector, std::string search) {
@@ -143,8 +177,8 @@ void viewUsers(std::vector<std::string>& threaded_usernames, std::vector<pub_thr
 
 // Add new user
 void addUser(std::vector<pub_thread>& pubs, std::vector<sub_thread>& subs, std::vector<std::string>& threaded_usernames, std::string username, std::vector<std::vector<std::string>>& chat_histories) {
-    std::string new_user = "";
-
+    std::string new_user = "ghgvgv";
+/*
     while (true) {
         std::cout << std::endl << "Enter new user: ";
         std::getline(std::cin, new_user);
@@ -166,19 +200,24 @@ void addUser(std::vector<pub_thread>& pubs, std::vector<sub_thread>& subs, std::
             }
         }
     }
+*/
 
     std::vector<std::string> temp_history = {};
     chat_histories.push_back(temp_history);
 
-    pub_thread pub(username + "_" + new_user, username, chat_histories.at(chat_histories.size()-1), endThreadSignal);
-    sub_thread sub(new_user + "_" + username, chat_histories.at(chat_histories.size() - 1), endThreadSignal, curr_chat_tab);
+    pub_thread pub(username + "_" + new_user, username, chat_histories.at(chat_histories.size()-1), endThreadSignal);    //issues here
+   // sub_thread sub(new_user + "_" + username, chat_histories.at(chat_histories.size() - 1), endThreadSignal, curr_chat_tab);
 
-    pubs.push_back(std::move(pub));
+/*
+    pubs.push_back(std::move(pub)); 
     subs.push_back(std::move(sub));
+threaded_usernames.push_back(new_user);
+*/
 
-    threaded_usernames.push_back(new_user);
+    pubMethod();
 
     std::cout << "Successfully added " + new_user + "." << std::endl;
+
 }
 
 // Remove user
@@ -218,6 +257,21 @@ void removeUser(std::vector<pub_thread>& pubs, std::vector<sub_thread>& subs, st
 
     std::cout << removed_user + " has been successfully removed." << std::endl;
 }
+
+void createPublisher() {
+    /*
+    std::vector<pub_thread> pubs = {};
+    std::vector<sub_thread> subs = {};
+    std::vector<std::string> threaded_usernames = {};
+    std::string username = "ABBB";
+    std::vector<std::vector<std::string>> chat_histories = {};*/
+    std::cout << "before" << std::endl;
+    addUser(pubs, subs, threaded_usernames, username, chat_histories);
+    std::cout << "after" << std::endl;
+
+}
+
+
 
 // Home Menu
 void printHomeMenu() {
@@ -348,6 +402,7 @@ void changeColor() {
     }
 }
 */
+/*
 int main()
 {
     curr_chat_tab.push_back("");
@@ -371,16 +426,7 @@ int main()
 
     std::cout << "Welcome, " + username + ". Your password is " + password + "." << std::endl;
 
-    while (true) {
-        int option = -1;
-        printHomeMenu();
-
-        while (true) {
-            std::cin >> option;
-
-            if (std::cin.fail()) {
-                std::cin.clear();
-                //std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    while (true) {ric_limits<std::streamsize>::max(), '\n');
                 std::cout << "Invalid input. Please try again: ";
             }
             else {
@@ -447,4 +493,5 @@ int main()
 
     //resetTextColor();
 }
-
+*/
+}

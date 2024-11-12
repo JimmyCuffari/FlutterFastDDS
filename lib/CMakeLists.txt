@@ -53,5 +53,5 @@ file(GLOB FASTDDS_CHAT_SOURCES_CXX "src/*.cxx")
 #add_executable(DDSHelloWorldSubscriber src/HelloWorldSubscriber.cpp ${DDS_HELLOWORLD_SOURCES_CXX})
 #target_link_libraries(DDSHelloWorldSubscriber fastdds fastcdr)
 
-add_library(FastDDSUser SHARED src/FastDDSUser.cpp ${FASTDDS_CHAT_SOURCES_CXX})
+add_library(FastDDSUser SHARED src/FastDDSUser.cpp ${FASTDDS_CHAT_SOURCES_CXX} src/FastDDSChat.def)
 target_link_libraries(FastDDSUser fastdds fastcdr OpenSSL::SSL OpenSSL::Crypto)
