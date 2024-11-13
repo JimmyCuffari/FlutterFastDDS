@@ -44,6 +44,10 @@ extern "C"{
 std::vector<std::string> endThreadSignal = {};  // Lets threads know to end
 std::vector<std::string> curr_chat_tab = {};    // Tells which tabbed user is currently being talked to (option 3)
 
+std::vector<std::vector<std::string>> chat_histories = {};
+std::vector<std::string> temp_history = {};
+
+
 
 // Class for representing a Subscriber
 class sub_thread {
@@ -96,17 +100,24 @@ public:
        
         this->pub_topic = pub_topic;
         user_pub = new UserChatPublisher(pub_topic, name, curr_history, end_signal);
-        user_pub->init();
+       // user_pub->init();
     
         pt = std::thread(&pub_thread::run, this); //////////////////issue
 
+        
 
-        pt.join();
         std::cout << "pubthread constructor" << std::endl;
     }
 
+
     void run() {
-        user_pub->run();
+
+//        user_pub->run();
+
+        end_signal->push_back("pub_topic");
+
+        pt.join();        
+        
     }
 
     UserChatPublisher* getPub() {
@@ -122,25 +133,30 @@ public:
     }
 };
 
+std::vector<pub_thread> pubs = {};
+std::vector<sub_thread> subs = {};
+std::vector<std::string> threaded_usernames = {};
+std::string username = "ABBB";
 
 
-UserChatPublisher* pubMethod(){
+void pubMethod(){
     UserChatPublisher* user_pub;
-    std::vector<std::string>* curr_history;
+
+    chat_histories.push_back(temp_history); 
+
+    //std::vector<std::string>* curr_history = {};
     std::vector<std::string>* end_signal = &endThreadSignal;
-    user_pub = new UserChatPublisher("pub_topic", "name", curr_history, end_signal);
-    return user_pub;
+  //  user_pub = new UserChatPublisher("pub_topic", "name", &chat_histories.at(chat_histories.size()-1), end_signal);
+    
+    //pubs.push_back(user_pub);
+
+
 }
 
 
 
 
 
-    std::vector<pub_thread> pubs = {};
-    std::vector<sub_thread> subs = {};
-    std::vector<std::string> threaded_usernames = {};
-    std::string username = "ABBB";
-    std::vector<std::vector<std::string>> chat_histories = {};
 
 
 
@@ -208,13 +224,13 @@ void addUser(std::vector<pub_thread>& pubs, std::vector<sub_thread>& subs, std::
     pub_thread pub(username + "_" + new_user, username, chat_histories.at(chat_histories.size()-1), endThreadSignal);    //issues here
    // sub_thread sub(new_user + "_" + username, chat_histories.at(chat_histories.size() - 1), endThreadSignal, curr_chat_tab);
 
-/*
+
     pubs.push_back(std::move(pub)); 
-    subs.push_back(std::move(sub));
+/*    subs.push_back(std::move(sub));
 threaded_usernames.push_back(new_user);
 */
 
-    pubMethod();
+    //pubMethod();
 
     std::cout << "Successfully added " + new_user + "." << std::endl;
 
