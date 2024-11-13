@@ -45,7 +45,7 @@ std::vector<std::string> endThreadSignal = {};  // Lets threads know to end
 std::vector<std::string> curr_chat_tab = {};    // Tells which tabbed user is currently being talked to (option 3)
 
 std::vector<std::vector<std::string>> chat_histories = {};
-std::vector<std::string> temp_history = {};
+
 
 
 
@@ -95,29 +95,37 @@ private:
     std::vector<std::string>* curr_history;
     std::vector<std::string>* end_signal;
 
+
+
 public:
     pub_thread(std::string pub_topic, std::string name, std::vector<std::string>& history, std::vector<std::string>& signal) : curr_history(&history), end_signal(&signal) {
        
         this->pub_topic = pub_topic;
         user_pub = new UserChatPublisher(pub_topic, name, curr_history, end_signal);
-       // user_pub->init();
+        user_pub->init();
     
         pt = std::thread(&pub_thread::run, this); //////////////////issue
 
+    //   end_signal->push_back(pub_topic);
+    //   pt.join();
         
 
         std::cout << "pubthread constructor" << std::endl;
     }
 
+    /*~pub_thread() {
+        end_signal->push_back(pub_topic);
+        pt.join();
+    }*/
+
 
     void run() {
+        user_pub->run();       
+    }
 
-//        user_pub->run();
-
-        end_signal->push_back("pub_topic");
-
-        pt.join();        
-        
+    void end() {
+        end_signal->push_back(pub_topic);
+        pt.join();
     }
 
     UserChatPublisher* getPub() {
@@ -137,26 +145,6 @@ std::vector<pub_thread> pubs = {};
 std::vector<sub_thread> subs = {};
 std::vector<std::string> threaded_usernames = {};
 std::string username = "ABBB";
-
-
-void pubMethod(){
-    UserChatPublisher* user_pub;
-
-    chat_histories.push_back(temp_history); 
-
-    //std::vector<std::string>* curr_history = {};
-    std::vector<std::string>* end_signal = &endThreadSignal;
-  //  user_pub = new UserChatPublisher("pub_topic", "name", &chat_histories.at(chat_histories.size()-1), end_signal);
-    
-    //pubs.push_back(user_pub);
-
-
-}
-
-
-
-
-
 
 
 
@@ -222,13 +210,13 @@ void addUser(std::vector<pub_thread>& pubs, std::vector<sub_thread>& subs, std::
     chat_histories.push_back(temp_history);
 
     pub_thread pub(username + "_" + new_user, username, chat_histories.at(chat_histories.size()-1), endThreadSignal);    //issues here
-   // sub_thread sub(new_user + "_" + username, chat_histories.at(chat_histories.size() - 1), endThreadSignal, curr_chat_tab);
+    //sub_thread sub(new_user + "_" + username, chat_histories.at(chat_histories.size() - 1), endThreadSignal, curr_chat_tab);
 
 
     pubs.push_back(std::move(pub)); 
-/*    subs.push_back(std::move(sub));
+//    subs.push_back(std::move(sub));
 threaded_usernames.push_back(new_user);
-*/
+
 
     //pubMethod();
 
@@ -348,6 +336,38 @@ void chatUser(std::string username, std::string other_user, std::vector<std::str
 
     std::cout << "Leaving chat with " + other_user + "." << std::endl;
 }
+
+void killThreads(){
+ 
+ 
+  //  end_signal->push_back(pub_topic);
+  //  pt.join();
+        
+
+    for (int i = 0; i < pubs.size(); i++) {
+        std::cout << "Starting removal " << i << std::endl;
+        std::string removed_user = threaded_usernames.at(i);
+
+        std::string temp_pub_topic = username + "_" + removed_user;
+    //    std::string temp_sub_topic = removed_user + "_" + username;
+
+        endThreadSignal.push_back(temp_pub_topic);
+        std::cout << "Username: " + temp_pub_topic << std::endl;
+
+        
+        std::cout << "join " << i << std::endl;
+     //   endThreadSignal.push_back(temp_sub_topic);
+
+        pubs.at(i).end();
+        std::cout << "End removal " << i << std::endl;
+//        subs.at(i).getThread()->join();
+    }
+
+
+        std::cout << "End all removal" << std::endl;
+}
+
+
 /*
 void changeColor() {
     std::cout << std::endl << "Which color would you like to choose?" << std::endl;
@@ -418,9 +438,13 @@ void changeColor() {
     }
 }
 */
-/*
+
 int main()
 {
+
+while(true){}
+
+    /*
     curr_chat_tab.push_back("");
     curr_chat_tab.push_back("");
 
@@ -510,4 +534,5 @@ int main()
     //resetTextColor();
 }
 */
+}
 }

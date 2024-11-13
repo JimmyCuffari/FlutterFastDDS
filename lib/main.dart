@@ -23,6 +23,10 @@ typedef CreatePubFunc = ffi.Void Function();
 // Dart type definition for calling the C foreign function
 typedef CreatePub = void Function();
 
+typedef KillThreadsFunc = ffi.Void Function();
+
+typedef KillThreads = void Function();
+
 var libraryPath = path.join(
     Directory.current.path, 'lib', 'build', 'Debug', 'FastDDSUser.dll');
 
@@ -37,6 +41,9 @@ final CppAddUser addUser =
 final CreatePub createPub = dylib
     .lookup<ffi.NativeFunction<CreatePubFunc>>('createPublisher')
     .asFunction();
+
+final KillThreads killThreads =
+    dylib.lookup<ffi.NativeFunction<AddUserFunc>>('killThreads').asFunction();
 
 var pubs = {};
 
@@ -236,6 +243,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void _addUser() {
     createPub();
+    //killThreads();
 
     if (userController.text.trim() != "" &&
         !usernameList.contains(userController.text)) {
@@ -282,6 +290,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void _updateText() {
+    killThreads();
     if (textController.text != "") {
       message = textController.text;
       textController.text = "";

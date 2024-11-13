@@ -172,8 +172,10 @@ public:
         uint32_t samples_sent = 0;
         while (true)
         {
+            std::cout << "RUNNIN=" << std::endl;
             //if (std::find(endThreadSignal.begin(), endThreadSignal.end(), topic_name) != endThreadSignal.end()) break;
-            if (std::find(end_signal->begin(), end_signal->end(), topic_name) != end_signal->end()) break;
+            if (std::find(end_signal->begin(), end_signal->end(), topic_name) != end_signal->end()) break;  // THIS IS BAD AINFI >:()
+            std::cout << "we found nothing" << std::endl;
 
             if (getActive()) {
                 if (!getStatus()) {
@@ -202,6 +204,7 @@ public:
                     }
                 }
             }
+            std::cout << "we passed nothing" << std::endl;
 
             std::this_thread::sleep_for(std::chrono::milliseconds(1000));
         }

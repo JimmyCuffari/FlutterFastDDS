@@ -2,3 +2,4 @@ LIBRARY   FastDDSChat
 EXPORTS
    addUser
    createPublisher
+   killThreads
