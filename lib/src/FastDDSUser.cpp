@@ -41,13 +41,11 @@ void resetTextColor() {
 
 extern "C"{
 
-std::vector<std::string> endThreadSignal = {};  // Lets threads know to end
+std::vector<std::string> endThreadSignal;  // Lets threads know to end
 std::vector<std::string> curr_chat_tab = {};    // Tells which tabbed user is currently being talked to (option 3)
+std::vector<std::string> test;
 
 std::vector<std::vector<std::string>> chat_histories = {};
-
-
-
 
 // Class for representing a Subscriber
 class sub_thread {
@@ -93,39 +91,29 @@ private:
     std::string pub_topic;
     std::thread pt;
     std::vector<std::string>* curr_history;
-    std::vector<std::string>* end_signal;
-
-
 
 public:
-    pub_thread(std::string pub_topic, std::string name, std::vector<std::string>& history, std::vector<std::string>& signal) : curr_history(&history), end_signal(&signal) {
-       
+    pub_thread(std::string pub_topic, std::string name, std::vector<std::string>& history) : curr_history(&history) { 
         this->pub_topic = pub_topic;
-        user_pub = new UserChatPublisher(pub_topic, name, curr_history, end_signal);
+        user_pub = new UserChatPublisher(pub_topic, name, curr_history);
         user_pub->init();
-    
         pt = std::thread(&pub_thread::run, this); //////////////////issue
 
     //   end_signal->push_back(pub_topic);
     //   pt.join();
-        
 
         std::cout << "pubthread constructor" << std::endl;
     }
 
-    /*~pub_thread() {
-        end_signal->push_back(pub_topic);
-        pt.join();
-    }*/
-
 
     void run() {
-        user_pub->run();       
+        user_pub->run();
     }
 
     void end() {
-        end_signal->push_back(pub_topic);
+        endThreadSignal.push_back(pub_topic);
         pt.join();
+        endThreadSignal.clear();
     }
 
     UserChatPublisher* getPub() {
@@ -145,9 +133,6 @@ std::vector<pub_thread> pubs = {};
 std::vector<sub_thread> subs = {};
 std::vector<std::string> threaded_usernames = {};
 std::string username = "ABBB";
-
-
-
 
 // Find index of element in vector
 int findIndex(std::vector<std::string> vector, std::string search) {
@@ -209,14 +194,14 @@ void addUser(std::vector<pub_thread>& pubs, std::vector<sub_thread>& subs, std::
     std::vector<std::string> temp_history = {};
     chat_histories.push_back(temp_history);
 
-    pub_thread pub(username + "_" + new_user, username, chat_histories.at(chat_histories.size()-1), endThreadSignal);    //issues here
+    //pub_thread pub(username + "_" + new_user, username, chat_histories.at(chat_histories.size()-1), endThreadSignal);
+    pub_thread pub(username + "_" + new_user, username, chat_histories.at(chat_histories.size()-1));
     //sub_thread sub(new_user + "_" + username, chat_histories.at(chat_histories.size() - 1), endThreadSignal, curr_chat_tab);
 
 
     pubs.push_back(std::move(pub)); 
 //    subs.push_back(std::move(sub));
-threaded_usernames.push_back(new_user);
-
+    threaded_usernames.push_back(new_user);
 
     //pubMethod();
 
@@ -263,19 +248,10 @@ void removeUser(std::vector<pub_thread>& pubs, std::vector<sub_thread>& subs, st
 }
 
 void createPublisher() {
-    /*
-    std::vector<pub_thread> pubs = {};
-    std::vector<sub_thread> subs = {};
-    std::vector<std::string> threaded_usernames = {};
-    std::string username = "ABBB";
-    std::vector<std::vector<std::string>> chat_histories = {};*/
     std::cout << "before" << std::endl;
     addUser(pubs, subs, threaded_usernames, username, chat_histories);
     std::cout << "after" << std::endl;
-
 }
-
-
 
 // Home Menu
 void printHomeMenu() {
@@ -338,8 +314,6 @@ void chatUser(std::string username, std::string other_user, std::vector<std::str
 }
 
 void killThreads(){
- 
- 
   //  end_signal->push_back(pub_topic);
   //  pt.join();
         
@@ -441,8 +415,6 @@ void changeColor() {
 
 int main()
 {
-
-while(true){}
 
     /*
     curr_chat_tab.push_back("");

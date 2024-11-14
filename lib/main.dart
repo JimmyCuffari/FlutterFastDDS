@@ -290,7 +290,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void _updateText() {
-    killThreads();
+    //  killThreads();
     if (textController.text != "") {
       message = textController.text;
       textController.text = "";
