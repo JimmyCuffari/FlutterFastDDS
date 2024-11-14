@@ -43,7 +43,6 @@ extern "C"{
 
 std::vector<std::string> endThreadSignal;  // Lets threads know to end
 std::vector<std::string> curr_chat_tab = {};    // Tells which tabbed user is currently being talked to (option 3)
-std::vector<std::string> test;
 
 std::vector<std::vector<std::string>> chat_histories = {};
 
@@ -53,14 +52,16 @@ private:
     UserChatSubscriber* user_sub;
     std::string sub_topic;
     std::thread st;
-    std::vector<std::string>* curr_history;
-    std::vector<std::string>* end_signal;
-    std::vector<std::string>* curr_tab;
+    int history_index;
+    //std::vector<std::string>* curr_history;
+    //std::vector<std::string>* end_signal;
+    //std::vector<std::string>* curr_tab;
 
 public:
-    sub_thread(std::string sub_topic, std::vector<std::string>& history, std::vector<std::string>& signal, std::vector<std::string>& tab) : curr_history(&history), end_signal(&signal), curr_tab(&tab) {
+    sub_thread(std::string sub_topic, int index) {
+        this->history_index = index;
         this->sub_topic = sub_topic;
-        user_sub = new UserChatSubscriber(sub_topic, curr_history, end_signal, curr_tab);
+        user_sub = new UserChatSubscriber(sub_topic, history_index);
         user_sub->init();
         st = std::thread(&sub_thread::run, this);
         
@@ -79,8 +80,8 @@ public:
         return &st;
     }
 
-    std::vector<std::string>* getHistory() {
-        return curr_history;
+    int getHistoryIndex() {
+        return history_index;
     }
 };
 
@@ -90,12 +91,14 @@ private:
     UserChatPublisher* user_pub;
     std::string pub_topic;
     std::thread pt;
-    std::vector<std::string>* curr_history;
+    //std::vector<std::string>* curr_history;
+    int history_index;
 
 public:
-    pub_thread(std::string pub_topic, std::string name, std::vector<std::string>& history) : curr_history(&history) { 
+    pub_thread(std::string pub_topic, std::string name, int index) { 
+        history_index = index;
         this->pub_topic = pub_topic;
-        user_pub = new UserChatPublisher(pub_topic, name, curr_history);
+        user_pub = new UserChatPublisher(pub_topic, name, history_index);
         user_pub->init();
         pt = std::thread(&pub_thread::run, this); //////////////////issue
 
@@ -124,15 +127,15 @@ public:
         return &pt;
     }
 
-    std::vector<std::string>* getHistory() {
-        return curr_history;
+    int getHistoryIndex() {
+        return history_index;
     }
 };
 
 std::vector<pub_thread> pubs = {};
 std::vector<sub_thread> subs = {};
 std::vector<std::string> threaded_usernames = {};
-std::string username = "ABBB";
+std::string username = "kkvkv";
 
 // Find index of element in vector
 int findIndex(std::vector<std::string> vector, std::string search) {
@@ -165,7 +168,7 @@ void viewUsers(std::vector<std::string>& threaded_usernames, std::vector<pub_thr
 }
 
 // Add new user
-void addUser(std::vector<pub_thread>& pubs, std::vector<sub_thread>& subs, std::vector<std::string>& threaded_usernames, std::string username, std::vector<std::vector<std::string>>& chat_histories) {
+void addUser(std::vector<pub_thread>& pubs, std::vector<sub_thread>& subs, std::vector<std::string>& threaded_usernames, std::string username) {
     std::string new_user = "ghgvgv";
 /*
     while (true) {
@@ -195,12 +198,13 @@ void addUser(std::vector<pub_thread>& pubs, std::vector<sub_thread>& subs, std::
     chat_histories.push_back(temp_history);
 
     //pub_thread pub(username + "_" + new_user, username, chat_histories.at(chat_histories.size()-1), endThreadSignal);
-    pub_thread pub(username + "_" + new_user, username, chat_histories.at(chat_histories.size()-1));
+    pub_thread pub(username + "_" + new_user, username, chat_histories.size()-1);
     //sub_thread sub(new_user + "_" + username, chat_histories.at(chat_histories.size() - 1), endThreadSignal, curr_chat_tab);
 
+    username = username + "a";
 
     pubs.push_back(std::move(pub)); 
-    subs.push_back(std::move(sub));
+    //subs.push_back(std::move(sub));
     threaded_usernames.push_back(new_user);
 
     //pubMethod();
@@ -249,7 +253,7 @@ void removeUser(std::vector<pub_thread>& pubs, std::vector<sub_thread>& subs, st
 
 void createPublisher() {
     std::cout << "before" << std::endl;
-    addUser(pubs, subs, threaded_usernames, username, chat_histories);
+    addUser(pubs, subs, threaded_usernames, username);
     std::cout << "after" << std::endl;
 }
 
@@ -288,10 +292,10 @@ void chatUser(std::string username, std::string other_user, std::vector<std::str
 
     std::cout << std::endl << "Here's your current history with " + other_user + ":" << std::endl;
 
-    std::vector<std::string>* temp_history = pubs.at(index).getHistory();
+    std::vector<std::string> temp_history = chat_histories.at(pubs.at(index).getHistoryIndex());
 
-    if (!temp_history->empty()) {
-        for (std::string& str : *temp_history) {
+    if (!temp_history.empty()) {
+        for (std::string& str : temp_history) {
             std::cout << str << std::endl;
         }
     }

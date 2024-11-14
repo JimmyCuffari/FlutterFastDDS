@@ -32,7 +32,8 @@ private:
 
     std::atomic<bool> active;           // Whether Publisher is accepting input
     std::atomic<bool> status;           // Whether Publisher is online or not (matched with subscriber)
-    std::vector<std::string>* history;  // Ongoing history of chat
+    //std::vector<std::string>* history;  // Ongoing history of chat
+    int history_index;
 
     std::string username;
     std::string topic_name;
@@ -67,19 +68,19 @@ private:
     } listener_;
 
 public:
-    UserChatPublisher(std::string topic_name, std::string name, std::vector<std::string>* curr_history)
+    UserChatPublisher(std::string topic_name, std::string name, int index)
         : participant_(nullptr)
         , publisher_(nullptr)
         , topic_(nullptr)
         , writer_(nullptr)
         , type_(new UserChatPubSubType())
         , listener_(this)
-        , history(curr_history)
     {
         this->topic_name = topic_name;
-        this->active = false;
+        this->active.store(false);// = false;
         this->status = false;
         this->username = name;
+        this->history_index = index;
     }
 
     virtual ~UserChatPublisher() {
@@ -171,6 +172,7 @@ public:
     void run()
     {
         uint32_t samples_sent = 0;
+        setActive(false);
         while (true)
         {
             std::cout << "RUNNIN=" << std::endl;
@@ -178,7 +180,8 @@ public:
             if (std::find(endThreadSignal.begin(), endThreadSignal.end(), topic_name) != endThreadSignal.end()) break;
 
             if (getActive()) {
-                if (!getStatus()) {
+                std::cout << "hello?" << std::endl;
+                /*if (!getStatus()) {
                     std::cout << std::endl << "Other user is offline now. Last message discarded. Press any key to go back to main ui...";
                     getchar();
 
@@ -200,9 +203,9 @@ public:
                         user_message_.message(message);
 
                         std::string str = user_message_.username() + ": " + message;
-                        history->push_back(str);
+                        chat_histories.at(history_index).push_back(str);
                     }
-                }
+                }*/
             }
 
             std::this_thread::sleep_for(std::chrono::milliseconds(1000));

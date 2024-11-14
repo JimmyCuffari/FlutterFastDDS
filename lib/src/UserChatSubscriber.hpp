@@ -28,9 +28,10 @@ private:
     TypeSupport type_;
 
     std::string topic_name;
-    std::vector<std::string>* history;  // Ongoing history of chat
-    std::vector<std::string>* end_signal; // Tells thread to end
-    std::vector<std::string>* curr_tab; // Tells subscriber if user is tabbed into chat to output messages
+    //std::vector<std::string>* history;  // Ongoing history of chat
+    //std::vector<std::string>* end_signal; // Tells thread to end
+    //std::vector<std::string>* curr_tab; // Tells subscriber if user is tabbed into chat to output messages
+    int history_index;
 
     class SubListener : public DataReaderListener
     {
@@ -64,25 +65,25 @@ private:
 
                     if (user_message_.username() != "" && user_message_.message() != "") {
                         std::string str = user_message_.username() + ": " + user_message_.message();
-                        std::vector<std::string>* curr_history = subscriber_->getHistory();
-                        std::vector<std::string>* curr_tab = subscriber_->getCurrTab();
+                        //std::vector<std::string>* curr_history = subscriber_->getHistory();
+                        //std::vector<std::string>* curr_tab = subscriber_->getCurrTab();
 
                         if (last_received_message == "") {
-                            if (curr_tab->at(0) == "in" && curr_tab->at(1) == subscriber_->getTopicName()) {
+                            if (curr_chat_tab.at(0) == "in" && curr_chat_tab.at(1) == subscriber_->getTopicName()) {
                                 std::cout << user_message_.username() + ": ";
                                 std::cout << user_message_.message() << std::endl;
                             }
 
-                            curr_history->push_back(str);
+                            chat_histories.at(subscriber_->getHistoryIndex()).push_back(str);
                             last_received_message = str;
                         }
                         else if (last_received_message != str) {
-                            if (curr_tab->at(0) == "in" && curr_tab->at(1) == subscriber_->getTopicName()) {
+                            if (curr_chat_tab.at(0) == "in" && curr_chat_tab.at(1) == subscriber_->getTopicName()) {
                                 std::cout << user_message_.username() + ": ";
                                 std::cout << user_message_.message() << std::endl;
                             }
 
-                            curr_history->push_back(str);
+                            chat_histories.at(subscriber_->getHistoryIndex()).push_back(str);
                             last_received_message = str;
                         }
                     }
@@ -97,18 +98,16 @@ private:
     listener_;
 
 public:
-    UserChatSubscriber(std::string topic_name, std::vector<std::string>* curr_history, std::vector<std::string>* signal, std::vector<std::string>* tab)
+    UserChatSubscriber(std::string topic_name, int index)
         : participant_(nullptr)
         , subscriber_(nullptr)
         , topic_(nullptr)
         , reader_(nullptr)
         , type_(new UserChatPubSubType())
         , listener_(this)
-        , history(curr_history)
-        , end_signal(signal)
-        , curr_tab(tab)
     {
         this->topic_name = topic_name;
+        this->history_index = index;
     }
 
     virtual ~UserChatSubscriber()
@@ -169,18 +168,14 @@ public:
         return topic_name;
     }
 
-    std::vector<std::string>* getHistory() {
-        return history;
-    }
-
-    std::vector<std::string>* getCurrTab() {
-        return curr_tab;
+    int getHistoryIndex() {
+        return history_index;
     }
 
     void run() {
         while (true) {
             //if (std::find(endThreadSignal.begin(), endThreadSignal.end(), topic_name) != endThreadSignal.end()) break;
-            if (std::find(end_signal->begin(), end_signal->end(), topic_name) != end_signal->end()) break;
+            if (std::find(endThreadSignal.begin(), endThreadSignal.end(), topic_name) != endThreadSignal.end()) break;
 
             std::this_thread::sleep_for(std::chrono::milliseconds(100));
         }

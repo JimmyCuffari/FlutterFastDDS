@@ -5,9 +5,11 @@
 
 //extern std::vector<std::string> endThreadSignal;
 //extern std::vector<std::string> curr_chat_tab;
-extern std::vector<std::string> test;
+
 extern std::vector<std::string> endThreadSignal;  // Lets threads know to end
 extern std::vector<std::string> curr_chat_tab;    // Tells which tabbed user is currently being talked to (option 3)
+extern std::vector<std::vector<std::string>> chat_histories;
+
 
 // for colors
 #ifdef _WIN32
