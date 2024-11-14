@@ -2,6 +2,7 @@
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
 
+import 'dart:collection';
 import 'dart:ffi' as ffi;
 import 'dart:ffi';
 import 'dart:io' show Platform, Directory;
@@ -184,7 +185,14 @@ class _MyHomePageState extends State<MyHomePage> {
 
   List usernameList = ["General"]; //for the user being selected
 
+  var userMessages = Map<String, List<Widget>>();
+
   int selectedUser = 0;
+
+  @override
+  initState() {
+    userMessages["General"] = <Widget>[];
+  }
 
   @override
   void dispose() {
@@ -248,6 +256,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
       String newUser = userController.text;
       userController.text = "";
+
+      userMessages[newUser] = <Widget>[];
 
       setState(() {
         _selectedUsers.add(false);
@@ -442,6 +452,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                 children: users,
                                 onPressed: (int index) {
                                   setState(() {
+                                    userMessages[usernameList[selectedUser]] =
+                                        message_list;
                                     selectedUser = index;
                                     for (int buttonIndex = 0;
                                         buttonIndex < _selectedUsers.length;
@@ -452,6 +464,9 @@ class _MyHomePageState extends State<MyHomePage> {
                                         _selectedUsers[buttonIndex] = false;
                                       }
                                     }
+
+                                    message_list = userMessages[
+                                        usernameList[selectedUser]]!;
                                   });
                                 },
                               ),
