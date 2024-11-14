@@ -200,7 +200,7 @@ void addUser(std::vector<pub_thread>& pubs, std::vector<sub_thread>& subs, std::
 
 
     pubs.push_back(std::move(pub)); 
-//    subs.push_back(std::move(sub));
+    subs.push_back(std::move(sub));
     threaded_usernames.push_back(new_user);
 
     //pubMethod();
