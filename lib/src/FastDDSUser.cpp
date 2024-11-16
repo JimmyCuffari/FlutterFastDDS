@@ -9,6 +9,7 @@
 #include <vector>
 #include <thread>
 #include <atomic>
+#include <cstdint>
 
 // For colors
 #ifdef _WIN32
@@ -42,9 +43,12 @@ void resetTextColor() {
 extern "C"{
 
 std::vector<std::string> endThreadSignal;  // Lets threads know to end
-std::vector<std::string> curr_chat_tab = {};    // Tells which tabbed user is currently being talked to (option 3)
+//std::vector<std::string> curr_chat_tab = {};    // Tells which tabbed user is currently being talked to (option 3)
+std::string curr_chat_tab = "";
 
 std::vector<std::vector<std::string>> chat_histories = {};
+
+std::vector<std::string> send_message = {};
 
 // Class for representing a Subscriber
 class sub_thread {
@@ -101,9 +105,6 @@ public:
         user_pub = new UserChatPublisher(pub_topic, name, history_index);
         user_pub->init();
         pt = std::thread(&pub_thread::run, this); //////////////////issue
-
-    //   end_signal->push_back(pub_topic);
-    //   pt.join();
 
         std::cout << "pubthread constructor" << std::endl;
     }
@@ -167,9 +168,27 @@ void viewUsers(std::vector<std::string>& threaded_usernames, std::vector<pub_thr
     }
 }
 
+void setSendMessage(char *user, char *msg) {
+    //send_message = message;
+    std::string username(user);
+    std::string message(msg);
+
+    std::cout << "User is " + username + ". Set Message to \"" + message + "\"" << std::endl;
+
+    send_message.push_back(username);
+    send_message.push_back(message);
+}
+
+void setCurrTab(char *user) {
+    std::string tab(user);
+    std::cout << "Tab String: " + tab << std::endl;
+
+    curr_chat_tab = tab + "_" + username;
+    std::cout << "Current tab: " + curr_chat_tab << std::endl;
+}
+
 // Add new user
-void addUser(std::vector<pub_thread>& pubs, std::vector<sub_thread>& subs, std::vector<std::string>& threaded_usernames, std::string username) {
-    std::string new_user = "ghgvgv";
+void addUser(std::vector<pub_thread>& pubs, std::vector<sub_thread>& subs, std::vector<std::string>& threaded_usernames, std::string username, std::string new_user) {
 /*
     while (true) {
         std::cout << std::endl << "Enter new user: ";
@@ -199,12 +218,12 @@ void addUser(std::vector<pub_thread>& pubs, std::vector<sub_thread>& subs, std::
 
     //pub_thread pub(username + "_" + new_user, username, chat_histories.at(chat_histories.size()-1), endThreadSignal);
     pub_thread pub(username + "_" + new_user, username, chat_histories.size()-1);
-    //sub_thread sub(new_user + "_" + username, chat_histories.at(chat_histories.size() - 1), endThreadSignal, curr_chat_tab);
+    sub_thread sub(new_user + "_" + username, chat_histories.size() - 1);
 
-    username = username + "a";
+    //username = username + "a";
 
     pubs.push_back(std::move(pub)); 
-    //subs.push_back(std::move(sub));
+    subs.push_back(std::move(sub));
     threaded_usernames.push_back(new_user);
 
     //pubMethod();
@@ -251,10 +270,12 @@ void removeUser(std::vector<pub_thread>& pubs, std::vector<sub_thread>& subs, st
     std::cout << removed_user + " has been successfully removed." << std::endl;
 }
 
-void createPublisher() {
-    std::cout << "before" << std::endl;
-    addUser(pubs, subs, threaded_usernames, username);
-    std::cout << "after" << std::endl;
+void createPublisher(char *user) {
+    std::string newUser(user);
+
+    //std::cout << "before" << std::endl;
+    addUser(pubs, subs, threaded_usernames, username, newUser);
+    //std::cout << "after" << std::endl;
 }
 
 // Home Menu
@@ -305,14 +326,14 @@ void chatUser(std::string username, std::string other_user, std::vector<std::str
 
     std::cout << std::endl;
 
-    curr_chat_tab.at(0) = "in";
-    curr_chat_tab.at(1) = other_user + "_" + username;
+    //curr_chat_tab.at(0) = "in";
+    //curr_chat_tab.at(1) = other_user + "_" + username;
     pubs.at(index).getPub()->setActive(true);   // Allows typing messages in Publisher
     while (pubs.at(index).getPub()->getActive() == true) {
     }
 
-    curr_chat_tab.at(0) = "";
-    curr_chat_tab.at(1) = "";
+    //curr_chat_tab.at(0) = "";
+    //curr_chat_tab.at(1) = "";
 
     std::cout << "Leaving chat with " + other_user + "." << std::endl;
 }

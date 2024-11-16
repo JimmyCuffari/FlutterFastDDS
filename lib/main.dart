@@ -20,13 +20,18 @@ typedef AddUserFunc = ffi.Void Function();
 typedef CppAddUser = void Function();
 
 // FFI signature of the hello_world C function
-typedef CreatePubFunc = ffi.Void Function();
+typedef CreatePubFunc = ffi.Void Function(Pointer<Utf8>);
 // Dart type definition for calling the C foreign function
-typedef CreatePub = void Function();
+typedef CreatePub = void Function(Pointer<Utf8>);
 
 typedef KillThreadsFunc = ffi.Void Function();
-
 typedef KillThreads = void Function();
+
+typedef SetSendMessageFunc = ffi.Void Function(Pointer<Utf8>, Pointer<Utf8>);
+typedef SetSendMessage = void Function(Pointer<Utf8>, Pointer<Utf8>);
+
+typedef SetCurrTabFunc = ffi.Void Function(Pointer<Utf8>);
+typedef SetCurrTab = void Function(Pointer<Utf8>);
 
 var libraryPath = path.join(
     Directory.current.path, 'lib', 'build', 'Debug', 'FastDDSUser.dll');
@@ -45,6 +50,12 @@ final CreatePub createPub = dylib
 
 final KillThreads killThreads =
     dylib.lookup<ffi.NativeFunction<AddUserFunc>>('killThreads').asFunction();
+
+final SetSendMessage setSendMessage =
+    dylib.lookup<ffi.NativeFunction<SetSendMessageFunc>>('setSendMessage').asFunction();
+
+final SetCurrTab setCurrTab =
+    dylib.lookup<ffi.NativeFunction<SetCurrTabFunc>>('setCurrTab').asFunction();
 
 var pubs = {};
 
@@ -192,6 +203,9 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   initState() {
     userMessages["General"] = <Widget>[];
+
+    var tempStr = "General";
+    setCurrTab(tempStr.toNativeUtf8()); // Sets initial tab to General
   }
 
   @override
@@ -252,10 +266,10 @@ class _MyHomePageState extends State<MyHomePage> {
   void _addUser() {
     if (userController.text.trim() != "" &&
         !usernameList.contains(userController.text)) {
-      createPub();
-
       String newUser = userController.text;
       userController.text = "";
+
+      createPub(newUser.toNativeUtf8()); // To add user to topics
 
       userMessages[newUser] = <Widget>[];
 
@@ -305,6 +319,11 @@ class _MyHomePageState extends State<MyHomePage> {
     if (textController.text != "") {
       message = textController.text;
       textController.text = "";
+
+      // Sends Message to Publisher
+      final sendMessage = message.toNativeUtf8();
+      final sendUsername = usernameList[selectedUser].toString().toNativeUtf8();
+      setSendMessage(sendUsername, sendMessage);
 
       setState(() {
         message_list = [
@@ -455,6 +474,10 @@ class _MyHomePageState extends State<MyHomePage> {
                                     userMessages[usernameList[selectedUser]] =
                                         message_list;
                                     selectedUser = index;
+                                    var strUser = usernameList[index].toString();
+                                    setCurrTab(strUser.toNativeUtf8());
+                                    //setCurrTab(usernameList[index].toNativeUtf8());
+                                    //print(index);
                                     for (int buttonIndex = 0;
                                         buttonIndex < _selectedUsers.length;
                                         buttonIndex++) {

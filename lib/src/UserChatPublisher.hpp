@@ -179,9 +179,14 @@ public:
             //if (end_signal && std::find(end_signal->begin(), end_signal->end(), topic_name) != end_signal->end()) break;  // THIS IS BAD AINFI >:()
             if (std::find(endThreadSignal.begin(), endThreadSignal.end(), topic_name) != endThreadSignal.end()) break;
 
-            if (getActive()) {
+            if (publish() && !send_message.empty()) {
+                user_message_.message(send_message.at(1));
+                std::cout << "Message received from Publisher: \"" + send_message.at(1) + "\". Sent to " + send_message.at(0) + "." << std::endl;
+                send_message.clear();
+            }
+            /*if (getActive()) {
                 std::cout << "hello?" << std::endl;
-                /*if (!getStatus()) {
+                if (!getStatus()) {
                     std::cout << std::endl << "Other user is offline now. Last message discarded. Press any key to go back to main ui...";
                     getchar();
 
@@ -205,8 +210,8 @@ public:
                         std::string str = user_message_.username() + ": " + message;
                         chat_histories.at(history_index).push_back(str);
                     }
-                }*/
-            }
+                }
+            }*/
 
             std::this_thread::sleep_for(std::chrono::milliseconds(1000));
         }

@@ -69,7 +69,12 @@ private:
                         //std::vector<std::string>* curr_tab = subscriber_->getCurrTab();
 
                         if (last_received_message == "") {
-                            if (curr_chat_tab.at(0) == "in" && curr_chat_tab.at(1) == subscriber_->getTopicName()) {
+                            /*if (curr_chat_tab.at(0) == "in" && curr_chat_tab.at(1) == subscriber_->getTopicName()) {
+                                std::cout << user_message_.username() + ": ";
+                                std::cout << user_message_.message() << std::endl;
+                            }*/
+
+                            if (curr_chat_tab == subscriber_->getTopicName()) {
                                 std::cout << user_message_.username() + ": ";
                                 std::cout << user_message_.message() << std::endl;
                             }
@@ -78,7 +83,11 @@ private:
                             last_received_message = str;
                         }
                         else if (last_received_message != str) {
-                            if (curr_chat_tab.at(0) == "in" && curr_chat_tab.at(1) == subscriber_->getTopicName()) {
+                            /*if (curr_chat_tab.at(0) == "in" && curr_chat_tab.at(1) == subscriber_->getTopicName()) {
+                                std::cout << user_message_.username() + ": ";
+                                std::cout << user_message_.message() << std::endl;
+                            }*/
+                            if (curr_chat_tab == subscriber_->getTopicName()) {
                                 std::cout << user_message_.username() + ": ";
                                 std::cout << user_message_.message() << std::endl;
                             }

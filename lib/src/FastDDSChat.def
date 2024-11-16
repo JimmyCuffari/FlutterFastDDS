@@ -3,3 +3,5 @@ EXPORTS
    addUser
    createPublisher
    killThreads
+   setSendMessage
+   setCurrTab
