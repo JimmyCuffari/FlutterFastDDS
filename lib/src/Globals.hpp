@@ -3,6 +3,8 @@
 
 #include <vector>
 
+typedef void (*CallbackFunction)(const char*);
+
 //extern std::vector<std::string> endThreadSignal;
 //extern std::vector<std::string> curr_chat_tab;
 
@@ -11,6 +13,12 @@ extern std::vector<std::string> endThreadSignal;  // Lets threads know to end
 extern std::string curr_chat_tab;
 extern std::vector<std::vector<std::string>> chat_histories;
 extern std::vector<std::string> send_message; // Message to send through Publisher
+extern std::string receive_message;
+
+extern CallbackFunction receiveCallback;
+
+extern "C" void receiveDart(const char*);
+extern "C" void callbackNative(const char*);
 
 
 // for colors

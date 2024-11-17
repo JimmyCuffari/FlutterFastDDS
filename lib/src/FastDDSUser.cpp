@@ -9,7 +9,8 @@
 #include <vector>
 #include <thread>
 #include <atomic>
-#include <cstdint>
+#include <cstdint>  
+#include <functional>
 
 // For colors
 #ifdef _WIN32
@@ -168,6 +169,46 @@ void viewUsers(std::vector<std::string>& threaded_usernames, std::vector<pub_thr
     }
 }
 
+//std::function<void(const char*)> dartCallback = nullptr;
+CallbackFunction receiveCallback = nullptr;
+//Dart_Port receivePort;
+
+void callbackNative(const char* message) {
+    if (receiveCallback) {
+        receiveCallback(message);
+    } else {
+        std::cout << "No callback is currently set." << std::endl;
+    }
+}
+
+void receiveDart(const char* message) {
+    if (receiveCallback) {
+        //receiveCallback(message);
+        /*Dart_CObject msg;
+        msg.type = Dart_CObject_kString;
+        msg.value.as_string = "HELLO WORK!!!";
+        Dart_PostCObject_DL(receivePort, &msg);*/
+        //Dart_PostCObject;
+    } else {
+        std::cout << "No callback is currently set." << std::endl;
+    }
+}
+
+/*void setDartCallback(std::function<void(const char*)> callback) {
+    dartCallback = callback;
+}*/
+
+/*void setDartReceivePort(Dart_Port port) {
+    receivePort = port;
+
+    std::cout << "Successfully set port!" << std::endl;
+}*/
+
+// Sets function to run in dart
+void setDartReceiveCallback(CallbackFunction callback) {
+    receiveCallback = callback;
+}
+
 void setSendMessage(char *user, char *msg) {
     //send_message = message;
     std::string username(user);
@@ -276,6 +317,8 @@ void createPublisher(char *user) {
     //std::cout << "before" << std::endl;
     addUser(pubs, subs, threaded_usernames, username, newUser);
     //std::cout << "after" << std::endl;
+    
+    //receiveDart("Hey dart!");
 }
 
 // Home Menu

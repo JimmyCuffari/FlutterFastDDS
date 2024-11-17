@@ -1,7 +1,9 @@
 {
-    "cmake.sourceDirectory": "C:/Users/jimmy/Desktop/FastDDS/FlutterFastDDS/lib",
+    "cmake.sourceDirectory": "D:/ddsplace/FlutterFastDDS/lib",
     "C_Cpp.errorSquiggles": "disabled",
     "files.associations": {
+        "*.ejs": "html",
+        "*.html": "html",
         "atomic": "cpp",
         "bit": "cpp",
         "cctype": "cpp",
@@ -81,6 +83,13 @@
         "thread": "cpp",
         "cinttypes": "cpp",
         "variant": "cpp",
-        "forward_list": "cpp"
+        "forward_list": "cpp",
+        "locale": "cpp",
+        "xhash": "cpp",
+        "xlocbuf": "cpp",
+        "xlocmes": "cpp",
+        "xlocmon": "cpp",
+        "xloctime": "cpp",
+        "xtree": "cpp"
     }
 }

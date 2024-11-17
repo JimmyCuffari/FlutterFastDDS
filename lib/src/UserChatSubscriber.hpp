@@ -67,6 +67,8 @@ private:
                         std::string str = user_message_.username() + ": " + user_message_.message();
                         //std::vector<std::string>* curr_history = subscriber_->getHistory();
                         //std::vector<std::string>* curr_tab = subscriber_->getCurrTab();
+                        
+                        callbackNative(user_message_.message().c_str());
 
                         if (last_received_message == "") {
                             /*if (curr_chat_tab.at(0) == "in" && curr_chat_tab.at(1) == subscriber_->getTopicName()) {

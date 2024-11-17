@@ -41,7 +41,6 @@ endif()
 message(STATUS "Configuring FastDDS Chat...")
 file(GLOB FASTDDS_CHAT_SOURCES_CXX "src/*.cxx")
 
-
 #ADD_DEFINITIONS(-D_AFXDLL)
 
 #set(CMAKE_MFC_FLAG 2)

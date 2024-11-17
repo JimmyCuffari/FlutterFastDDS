@@ -5,3 +5,6 @@ EXPORTS
    killThreads
    setSendMessage
    setCurrTab
+   receiveDart
+   setDartReceiveCallback
+   callbackNative

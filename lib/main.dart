@@ -6,6 +6,7 @@ import 'dart:collection';
 import 'dart:ffi' as ffi;
 import 'dart:ffi';
 import 'dart:io' show Platform, Directory;
+import 'dart:isolate';
 
 import "package:ffi/ffi.dart";
 
@@ -33,6 +34,15 @@ typedef SetSendMessage = void Function(Pointer<Utf8>, Pointer<Utf8>);
 typedef SetCurrTabFunc = ffi.Void Function(Pointer<Utf8>);
 typedef SetCurrTab = void Function(Pointer<Utf8>);
 
+typedef ReceiveDartFunc = ffi.Void Function(Pointer<Utf8>);
+typedef ReceiveDart = void Function(Pointer<Utf8>);
+
+typedef SetDartReceiveCallbackFunc = ffi.Void Function(Pointer<NativeFunction<Void Function(Pointer<Utf8>)>>);
+typedef SetDartReceiveCallback = void Function(Pointer<NativeFunction<Void Function(Pointer<Utf8>)>>);
+
+/*typedef SetDartReceivePortFunc = ffi.Void Function(Pointer<NativeType>);
+typedef SetDartReceivePort = void Function(Pointer<NativeType>);*/
+
 var libraryPath = path.join(
     Directory.current.path, 'lib', 'build', 'Debug', 'FastDDSUser.dll');
 
@@ -57,7 +67,33 @@ final SetSendMessage setSendMessage =
 final SetCurrTab setCurrTab =
     dylib.lookup<ffi.NativeFunction<SetCurrTabFunc>>('setCurrTab').asFunction();
 
+final ReceiveDart receiveDart =
+    dylib.lookup<ffi.NativeFunction<ReceiveDartFunc>>('receiveDart').asFunction();
+
+final SetDartReceiveCallback setDartReceiveCallback =
+    dylib.lookup<ffi.NativeFunction<SetDartReceiveCallbackFunc>>('setDartReceiveCallback').asFunction();
+
+/*final SetDartReceivePort setDartReceivePort =
+    dylib.lookup<ffi.NativeFunction<SetDartReceivePortFunc>>('setDartReceivePort').asFunction();*/
+
+
+//test
+typedef CallbackNativeType = Void Function(Pointer<Utf8>);
+//typedef CallbackNativeTypeFunc = ffi.Void Function(Pointer<Utf8>);
+
+typedef CallbackNativeTypeFunction = void Function(Pointer<Utf8>);
+typedef CallbackNativeTypeNativeFunction = Void Function(Pointer<Utf8>);
+
+
+final CallbackNativeTypeFunction callbackNativeType =
+    dylib.lookup<ffi.NativeFunction<CallbackNativeTypeNativeFunction>>('callbackNativeType').asFunction();
+
 var pubs = {};
+
+void _onMessageReceived(Pointer<Utf8> message) {
+  final dartMessage = message.toDartString();
+  print("Message received from C++: $dartMessage");
+}
 
 /*
 // Look up the C function 'hello_world'
@@ -81,6 +117,15 @@ final int Function() num =
     dylib.lookup<NativeFunction<Int64 Function()>>('returnX').asFunction();
 int retnum() => num().toInt();
 */ /////////////////////////
+
+/*void isolateReceive(SendPort sendPort) {
+  final port = ReceivePort();
+  sendPort.send(port.sendPort);
+
+  port.listen((message) {
+    print("Received message from c++: $message");
+  });
+}*/
 
 void main() {
   // Open the dynamic library
@@ -206,6 +251,25 @@ class _MyHomePageState extends State<MyHomePage> {
 
     var tempStr = "General";
     setCurrTab(tempStr.toNativeUtf8()); // Sets initial tab to General
+  
+    final callback = NativeCallable<CallbackNativeType>.listener(callbackFunction);
+    setDartReceiveCallback(callback.nativeFunction);
+
+    /*final callbackPointer = Pointer.fromFunction<Void Function(Pointer<Utf8>)>(callbackFunction);
+    setDartReceiveCallback(callbackPointer);*/
+    
+    /*final receivePort = ReceivePort();
+    Isolate.spawn(isolateReceive, receivePort.sendPort);
+
+    receivePort.listen((sendPort) {
+      final isolatePort = sendPort as SendPort;
+      final message = "Hello from C++";
+
+      isolatePort.send(message);
+    });
+
+    final receivePortPointer = Pointer.fromAddress(receivePort.hashCode);
+    setDartReceivePort(receivePortPointer);*/
   }
 
   @override
@@ -342,6 +406,33 @@ class _MyHomePageState extends State<MyHomePage> {
         ];
       });
     }
+  }
+
+  void callbackFunction(Pointer<Utf8> message) {
+    String msg = message.toDartString();
+    print(msg);
+
+    _updateTextReceive(msg);
+  }
+
+  // for updating messages when received
+  void _updateTextReceive(String message) {
+      setState(() {
+        message_list = [
+          Container(
+              key: UniqueKey(),
+              padding: EdgeInsets.fromLTRB(10, 0, 5, 5),
+              alignment: Alignment.centerLeft,
+              child: Container(
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: Color.fromARGB(255, 116, 116, 116)),
+                padding: EdgeInsets.all(10),
+                child: Container(child: Text(message)),
+              )),
+          ...message_list,
+        ];
+      });
   }
 
   @override
@@ -588,6 +679,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             hintText: "Start Typing...",
                             hintStyle: TextStyle(
                                 color: Color.fromARGB(70, 255, 255, 255))),
+                        //onEditingComplete: _updateText,
                         onEditingComplete: _updateText,
                         controller: textController,
                       ),
