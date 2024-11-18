@@ -1,4 +1,4 @@
-# Install script for directory: D:/ddsplace/FlutterFastDDS/windows/flutter
+# Install script for directory: C:/Users/jimmy/Desktop/FastDDS/FlutterFastDDS/windows/flutter
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)

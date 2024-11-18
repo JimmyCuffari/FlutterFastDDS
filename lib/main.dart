@@ -37,8 +37,10 @@ typedef SetCurrTab = void Function(Pointer<Utf8>);
 typedef ReceiveDartFunc = ffi.Void Function(Pointer<Utf8>);
 typedef ReceiveDart = void Function(Pointer<Utf8>);
 
-typedef SetDartReceiveCallbackFunc = ffi.Void Function(Pointer<NativeFunction<Void Function(Pointer<Utf8>)>>);
-typedef SetDartReceiveCallback = void Function(Pointer<NativeFunction<Void Function(Pointer<Utf8>)>>);
+typedef SetDartReceiveCallbackFunc = ffi.Void Function(
+    Pointer<NativeFunction<Void Function(Pointer<Utf8>)>>);
+typedef SetDartReceiveCallback = void Function(
+    Pointer<NativeFunction<Void Function(Pointer<Utf8>)>>);
 
 /*typedef SetDartReceivePortFunc = ffi.Void Function(Pointer<NativeType>);
 typedef SetDartReceivePort = void Function(Pointer<NativeType>);*/
@@ -61,21 +63,24 @@ final CreatePub createPub = dylib
 final KillThreads killThreads =
     dylib.lookup<ffi.NativeFunction<AddUserFunc>>('killThreads').asFunction();
 
-final SetSendMessage setSendMessage =
-    dylib.lookup<ffi.NativeFunction<SetSendMessageFunc>>('setSendMessage').asFunction();
+final SetSendMessage setSendMessage = dylib
+    .lookup<ffi.NativeFunction<SetSendMessageFunc>>('setSendMessage')
+    .asFunction();
 
 final SetCurrTab setCurrTab =
     dylib.lookup<ffi.NativeFunction<SetCurrTabFunc>>('setCurrTab').asFunction();
 
-final ReceiveDart receiveDart =
-    dylib.lookup<ffi.NativeFunction<ReceiveDartFunc>>('receiveDart').asFunction();
+final ReceiveDart receiveDart = dylib
+    .lookup<ffi.NativeFunction<ReceiveDartFunc>>('receiveDart')
+    .asFunction();
 
-final SetDartReceiveCallback setDartReceiveCallback =
-    dylib.lookup<ffi.NativeFunction<SetDartReceiveCallbackFunc>>('setDartReceiveCallback').asFunction();
+final SetDartReceiveCallback setDartReceiveCallback = dylib
+    .lookup<ffi.NativeFunction<SetDartReceiveCallbackFunc>>(
+        'setDartReceiveCallback')
+    .asFunction();
 
 /*final SetDartReceivePort setDartReceivePort =
     dylib.lookup<ffi.NativeFunction<SetDartReceivePortFunc>>('setDartReceivePort').asFunction();*/
-
 
 //test
 typedef CallbackNativeType = Void Function(Pointer<Utf8>);
@@ -84,9 +89,10 @@ typedef CallbackNativeType = Void Function(Pointer<Utf8>);
 typedef CallbackNativeTypeFunction = void Function(Pointer<Utf8>);
 typedef CallbackNativeTypeNativeFunction = Void Function(Pointer<Utf8>);
 
-
-final CallbackNativeTypeFunction callbackNativeType =
-    dylib.lookup<ffi.NativeFunction<CallbackNativeTypeNativeFunction>>('callbackNativeType').asFunction();
+final CallbackNativeTypeFunction callbackNativeType = dylib
+    .lookup<ffi.NativeFunction<CallbackNativeTypeNativeFunction>>(
+        'callbackNativeType')
+    .asFunction();
 
 var pubs = {};
 
@@ -251,13 +257,14 @@ class _MyHomePageState extends State<MyHomePage> {
 
     var tempStr = "General";
     setCurrTab(tempStr.toNativeUtf8()); // Sets initial tab to General
-  
-    final callback = NativeCallable<CallbackNativeType>.listener(callbackFunction);
+
+    final callback =
+        NativeCallable<CallbackNativeType>.listener(callbackFunction);
     setDartReceiveCallback(callback.nativeFunction);
 
     /*final callbackPointer = Pointer.fromFunction<Void Function(Pointer<Utf8>)>(callbackFunction);
     setDartReceiveCallback(callbackPointer);*/
-    
+
     /*final receivePort = ReceivePort();
     Isolate.spawn(isolateReceive, receivePort.sendPort);
 
@@ -340,18 +347,23 @@ class _MyHomePageState extends State<MyHomePage> {
       setState(() {
         _selectedUsers.add(false);
         usernameList.add(newUser);
-        users.add(Row(children: [
-          Container(
-              padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
-              child: Image(
-                  image: AssetImage('assets/pic1.png'), width: 30, height: 30)),
-          Container(
-              padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
-              child: Text(
-                  textAlign: TextAlign.center,
-                  newUser,
-                  style: TextStyle(color: Color.fromARGB(255, 229, 229, 229))))
-        ]));
+        users.add(
+          Row(children: [
+            Container(
+                padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                child: Image(
+                    image: AssetImage('assets/pic1.png'),
+                    width: 30,
+                    height: 30)),
+            Container(
+                padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                child: Text(
+                    textAlign: TextAlign.center,
+                    newUser,
+                    style:
+                        TextStyle(color: Color.fromARGB(255, 229, 229, 229))))
+          ]),
+        );
       });
     }
 
@@ -376,6 +388,18 @@ class _MyHomePageState extends State<MyHomePage> {
         ];
       });
     }*/
+  }
+
+  void _removeUser() {
+    setState(() {
+      _selectedUsers[selectedUser] = false;
+
+      _selectedUsers[0] = true;
+
+      _selectedUsers.remove(selectedUser);
+      usernameList.remove(selectedUser);
+      users.remove(users[selectedUser]);
+    });
   }
 
   void _updateText() {
@@ -417,22 +441,22 @@ class _MyHomePageState extends State<MyHomePage> {
 
   // for updating messages when received
   void _updateTextReceive(String message) {
-      setState(() {
-        message_list = [
-          Container(
-              key: UniqueKey(),
-              padding: EdgeInsets.fromLTRB(10, 0, 5, 5),
-              alignment: Alignment.centerLeft,
-              child: Container(
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: Color.fromARGB(255, 116, 116, 116)),
-                padding: EdgeInsets.all(10),
-                child: Container(child: Text(message)),
-              )),
-          ...message_list,
-        ];
-      });
+    setState(() {
+      message_list = [
+        Container(
+            key: UniqueKey(),
+            padding: EdgeInsets.fromLTRB(10, 0, 5, 5),
+            alignment: Alignment.centerLeft,
+            child: Container(
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: Color.fromARGB(255, 116, 116, 116)),
+              padding: EdgeInsets.all(10),
+              child: Container(child: Text(message)),
+            )),
+        ...message_list,
+      ];
+    });
   }
 
   @override
@@ -565,7 +589,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                     userMessages[usernameList[selectedUser]] =
                                         message_list;
                                     selectedUser = index;
-                                    var strUser = usernameList[index].toString();
+                                    var strUser =
+                                        usernameList[index].toString();
                                     setCurrTab(strUser.toNativeUtf8());
                                     //setCurrTab(usernameList[index].toNativeUtf8());
                                     //print(index);
@@ -594,18 +619,29 @@ class _MyHomePageState extends State<MyHomePage> {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 Container(
-                  height: 50,
-                  width: double.infinity,
-                  color: const Color.fromARGB(255, 50, 50, 50),
-                  padding: EdgeInsets.fromLTRB(30, 0, 0, 0),
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    usernameList[selectedUser],
-                    style: TextStyle(
-                        color: const Color.fromARGB(255, 255, 255, 255),
-                        fontSize: 25),
-                  ),
-                ),
+                    height: 50,
+                    width: double.infinity,
+                    color: const Color.fromARGB(255, 50, 50, 50),
+                    child: Row(children: [
+                      Container(
+                        padding: EdgeInsets.fromLTRB(30, 0, 0, 0),
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          usernameList[selectedUser],
+                          style: TextStyle(
+                              color: const Color.fromARGB(255, 255, 255, 255),
+                              fontSize: 25),
+                        ),
+                      ),
+                      Container(
+                        alignment: Alignment.centerRight,
+                        child: IconButton(
+                            alignment: Alignment.centerRight,
+                            color: Colors.grey,
+                            onPressed: _removeUser,
+                            icon: Icon(Icons.person_remove)),
+                      )
+                    ])),
                 Expanded(
                     child: ListView(
                         shrinkWrap: true,
