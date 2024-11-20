@@ -222,6 +222,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  var deleteUserBtn = null;
   final textController = TextEditingController();
   final userController = TextEditingController();
   String message = "";
@@ -391,14 +392,24 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void _removeUser() {
+    _selectedUsers[selectedUser] = false;
+
+    _selectedUsers[0] = true;
+
     setState(() {
-      _selectedUsers[selectedUser] = false;
-
-      _selectedUsers[0] = true;
-
-      _selectedUsers.remove(selectedUser);
-      usernameList.remove(selectedUser);
       users.remove(users[selectedUser]);
+      _selectedUsers.remove(_selectedUsers[selectedUser]);
+      usernameList.remove(usernameList[selectedUser]);
+      selectedUser = 0;
+      if (selectedUser == 0) {
+        deleteUserBtn = null;
+      } else {
+        deleteUserBtn = IconButton(
+            alignment: Alignment.centerRight,
+            color: Colors.grey,
+            onPressed: _removeUser,
+            icon: Icon(Icons.person_remove));
+      }
     });
   }
 
@@ -603,7 +614,15 @@ class _MyHomePageState extends State<MyHomePage> {
                                         _selectedUsers[buttonIndex] = false;
                                       }
                                     }
-
+                                    if (selectedUser == 0) {
+                                      deleteUserBtn = null;
+                                    } else {
+                                      deleteUserBtn = IconButton(
+                                          alignment: Alignment.centerRight,
+                                          color: Colors.grey,
+                                          onPressed: _removeUser,
+                                          icon: Icon(Icons.person_remove));
+                                    }
                                     message_list = userMessages[
                                         usernameList[selectedUser]]!;
                                   });
@@ -635,11 +654,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       ),
                       Container(
                         alignment: Alignment.centerRight,
-                        child: IconButton(
-                            alignment: Alignment.centerRight,
-                            color: Colors.grey,
-                            onPressed: _removeUser,
-                            icon: Icon(Icons.person_remove)),
+                        child: deleteUserBtn,
                       )
                     ])),
                 Expanded(
