@@ -28,6 +28,7 @@ private:
     TypeSupport type_;
 
     std::string topic_name;
+    std::string topicAbort;
     //std::vector<std::string>* history;  // Ongoing history of chat
     //std::vector<std::string>* end_signal; // Tells thread to end
     //std::vector<std::string>* curr_tab; // Tells subscriber if user is tabbed into chat to output messages
@@ -175,6 +176,12 @@ public:
         return true;
     }
 
+    void setTopicName(std::string name) {
+        std::cout << "Before" << std::endl;
+        topicAbort = name;
+        std::cout << "After" << std::endl;
+    }
+
     std::string getTopicName() {
         return topic_name;
     }
@@ -183,12 +190,24 @@ public:
         return history_index;
     }
 
-    void run() {
+    void run(std::string test) {
         while (true) {
             //if (std::find(endThreadSignal.begin(), endThreadSignal.end(), topic_name) != endThreadSignal.end()) break;
-            if (std::find(endThreadSignal.begin(), endThreadSignal.end(), topic_name) != endThreadSignal.end()) break;
+            if (std::find(endThreadSignal.begin(), endThreadSignal.end(), test) != endThreadSignal.end()) break;
+            
+            if (!endThreadSignal.empty()) {
+                for (std::string& str : endThreadSignal) {
+                    std::cout << "Signal: "<< str << std::endl;
+                }
+            }
 
-            std::this_thread::sleep_for(std::chrono::milliseconds(100));
+            std::cout << test << std::endl;
+
+            //std::cout << "sub topic: " << topicAbort << std::endl;
+
+            //std::cout << "SUBSCRIBER TOPIC NAME " << topicAbort << std::endl;
+
+            std::this_thread::sleep_for(std::chrono::milliseconds(1000));
         }
     }
 };

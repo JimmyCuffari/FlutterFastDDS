@@ -42,6 +42,9 @@ typedef SetDartReceiveCallbackFunc = ffi.Void Function(
 typedef SetDartReceiveCallback = void Function(
     Pointer<NativeFunction<Void Function(Pointer<Utf8>)>>);
 
+typedef DartRemoveUserFunc = ffi.Void Function(Int32);
+typedef DartRemoveUser = void Function(int);
+
 /*typedef SetDartReceivePortFunc = ffi.Void Function(Pointer<NativeType>);
 typedef SetDartReceivePort = void Function(Pointer<NativeType>);*/
 
@@ -78,6 +81,9 @@ final SetDartReceiveCallback setDartReceiveCallback = dylib
     .lookup<ffi.NativeFunction<SetDartReceiveCallbackFunc>>(
         'setDartReceiveCallback')
     .asFunction();
+  
+final DartRemoveUser dartRemoveUser =
+    dylib.lookup<ffi.NativeFunction<DartRemoveUserFunc>>('dartRemoveUser').asFunction();
 
 /*final SetDartReceivePort setDartReceivePort =
     dylib.lookup<ffi.NativeFunction<SetDartReceivePortFunc>>('setDartReceivePort').asFunction();*/
@@ -392,6 +398,9 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void _removeUser() {
+    // Sends index to backend
+    dartRemoveUser(selectedUser);
+
     _selectedUsers[selectedUser] = false;
 
     _selectedUsers[0] = true;

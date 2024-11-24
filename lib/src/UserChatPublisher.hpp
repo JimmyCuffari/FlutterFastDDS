@@ -175,9 +175,10 @@ public:
         setActive(false);
         while (true)
         {
-            std::cout << "RUNNIN=" << std::endl;
+            //std::cout << "RUNNIN=" << std::endl;
             //if (end_signal && std::find(end_signal->begin(), end_signal->end(), topic_name) != end_signal->end()) break;  // THIS IS BAD AINFI >:()
             if (std::find(endThreadSignal.begin(), endThreadSignal.end(), topic_name) != endThreadSignal.end()) break;
+            //std::cout << "PUBLISHER TOPIC NAME: " << topic_name << std::endl;
 
             if (publish() && !send_message.empty()) {
                 user_message_.message(send_message.at(1));

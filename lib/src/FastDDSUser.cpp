@@ -68,13 +68,14 @@ public:
         this->sub_topic = sub_topic;
         user_sub = new UserChatSubscriber(sub_topic, history_index);
         user_sub->init();
-        st = std::thread(&sub_thread::run, this);
+        user_sub->setTopicName(sub_topic);
+        st = std::thread(&sub_thread::run, this, sub_topic);
         
         std::cout << "subthread constructor" << std::endl;
     }
 
-    void run() {
-        user_sub->run();
+    void run(std::string topic) {
+        user_sub->run(topic);
     }
 
     UserChatSubscriber* getSub() {
@@ -105,7 +106,7 @@ public:
         this->pub_topic = pub_topic;
         user_pub = new UserChatPublisher(pub_topic, name, history_index);
         user_pub->init();
-        pt = std::thread(&pub_thread::run, this); //////////////////issue
+        pt = std::thread(&pub_thread::run, this);
 
         std::cout << "pubthread constructor" << std::endl;
     }
@@ -261,26 +262,24 @@ void addUser(std::vector<pub_thread>& pubs, std::vector<sub_thread>& subs, std::
     pub_thread pub(username + "_" + new_user, username, chat_histories.size()-1);
     sub_thread sub(new_user + "_" + username, chat_histories.size() - 1);
 
-    //username = username + "a";
-
     pubs.push_back(std::move(pub)); 
     subs.push_back(std::move(sub));
     threaded_usernames.push_back(new_user);
-
-    //pubMethod();
 
     std::cout << "Successfully added " + new_user + "." << std::endl;
 
 }
 
 // Remove user
-void removeUser(std::vector<pub_thread>& pubs, std::vector<sub_thread>& subs, std::vector<std::string>& threaded_usernames, std::string removed_user, std::string username, std::vector<std::vector<std::string>>& chat_histories) {
-    int index = findIndex(threaded_usernames, removed_user);
+void removeUser(int index, std::vector<pub_thread>& pubs, std::vector<sub_thread>& subs, std::vector<std::string>& threaded_usernames, std::string username, std::vector<std::vector<std::string>>& chat_histories) {
+    /*int index = findIndex(threaded_usernames, removed_user);
 
     if (index == -1) {
         std::cout << "Error: User was not found." << std::endl;
         return;
-    }
+    }*/
+    std::string removed_user = threaded_usernames.at(index);
+    std::cout << "Currently removing user: " << removed_user << std::endl;
 
     threaded_usernames.erase(threaded_usernames.begin() + index);
 
@@ -290,13 +289,19 @@ void removeUser(std::vector<pub_thread>& pubs, std::vector<sub_thread>& subs, st
     endThreadSignal.push_back(temp_pub_topic);
     endThreadSignal.push_back(temp_sub_topic);
 
+    std::cout << "Topics to remove: " << temp_pub_topic << " and " << temp_sub_topic << std::endl;
+
     if (pubs.at(index).getThread()->joinable()) {
         pubs.at(index).getThread()->join();
     }
 
+    std::cout << "erased pub" << std::endl;
+
     if (subs.at(index).getThread()->joinable()) {
         subs.at(index).getThread()->join();
     }
+
+    std::cout << "erased sub" << std::endl;
 
     delete pubs.at(index).getPub();
     delete subs.at(index).getSub();
@@ -309,6 +314,11 @@ void removeUser(std::vector<pub_thread>& pubs, std::vector<sub_thread>& subs, st
     endThreadSignal.clear();
 
     std::cout << removed_user + " has been successfully removed." << std::endl;
+}
+
+void dartRemoveUser(int index) {
+    removeUser(index-1, pubs, subs, threaded_usernames, username, chat_histories);
+    std::cout << "Exiting dart user remove..." << std::endl;
 }
 
 void createPublisher(char *user) {
