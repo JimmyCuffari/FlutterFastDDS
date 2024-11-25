@@ -8,4 +8,5 @@ EXPORTS
    receiveDart
    setDartReceiveCallback
    callbackNative
+   setUsername
    dartRemoveUser

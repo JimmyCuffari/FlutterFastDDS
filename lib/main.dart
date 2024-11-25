@@ -45,6 +45,9 @@ typedef SetDartReceiveCallback = void Function(
 typedef DartRemoveUserFunc = ffi.Void Function(Int32);
 typedef DartRemoveUser = void Function(int);
 
+typedef SetUserFunc = ffi.Void Function(Pointer<Utf8>);
+typedef SetUser = void Function(Pointer<Utf8>);
+
 /*typedef SetDartReceivePortFunc = ffi.Void Function(Pointer<NativeType>);
 typedef SetDartReceivePort = void Function(Pointer<NativeType>);*/
 
@@ -81,10 +84,13 @@ final SetDartReceiveCallback setDartReceiveCallback = dylib
     .lookup<ffi.NativeFunction<SetDartReceiveCallbackFunc>>(
         'setDartReceiveCallback')
     .asFunction();
-  
-final DartRemoveUser dartRemoveUser =
-    dylib.lookup<ffi.NativeFunction<DartRemoveUserFunc>>('dartRemoveUser').asFunction();
 
+final DartRemoveUser dartRemoveUser = dylib
+    .lookup<ffi.NativeFunction<DartRemoveUserFunc>>('dartRemoveUser')
+    .asFunction();
+
+final SetUser _setUser =
+    dylib.lookup<ffi.NativeFunction<SetUserFunc>>('setUsername').asFunction();
 /*final SetDartReceivePort setDartReceivePort =
     dylib.lookup<ffi.NativeFunction<SetDartReceivePortFunc>>('setDartReceivePort').asFunction();*/
 
@@ -154,21 +160,7 @@ void main() {
         Directory.current.path, 'lib', 'hello_library', 'libhello.dll');
   }
 
-  final dylib = ffi.DynamicLibrary.open(libraryPath);
-
-
-  // Look up the C function 'hello_world'
-  final HelloWorld hello = dylib
-      .lookup<ffi.NativeFunction<HelloWorldFunc>>('hello_world')
-      .asFunction();
-
-    final returnHello hi = dylib
-      .lookup<ffi.NativeFunction<returnHelloFunc>>('returnHello')
-      .asFunction();
-  // Call the function
-*/
-
-  //hello();
+ */
 
   runApp(const MyApp());
 }
@@ -224,10 +216,96 @@ class MyHomePage extends StatefulWidget {
   final String title;
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<MyHomePage> createState() => _LogInPageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _LogInPageState extends State<MyHomePage> {
+  TextEditingController usernameController = TextEditingController();
+
+  void _loadNext() {
+    if (usernameController.text.length > 2)
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => _ChatPage()),
+      );
+  }
+
+  void _checks() {
+    if (usernameController.text.length > 32) {
+      usernameController.text = usernameController.text.substring(0, 32);
+    }
+    usernameController.text = usernameController.text.trim();
+    _setUser(usernameController.text.toNativeUtf8());
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+          child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+        Expanded(
+            child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+                width: 525,
+                padding: EdgeInsets.all(10),
+                child: Container(
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: const Color.fromARGB(255, 72, 72, 72)),
+                  child: TextFormField(
+                    textAlign: TextAlign.center,
+                    cursorColor: Colors.white,
+                    style: TextStyle(color: Colors.white),
+                    decoration: const InputDecoration(
+                        border: InputBorder.none,
+                        focusedBorder: InputBorder.none,
+                        enabledBorder: InputBorder.none,
+                        errorBorder: InputBorder.none,
+                        disabledBorder: InputBorder.none,
+                        contentPadding: EdgeInsets.only(
+                            left: 15, bottom: 11, top: 11, right: 15),
+                        hintText: "Start Typing...",
+                        hintStyle: TextStyle(
+                            color: Color.fromARGB(70, 255, 255, 255))),
+                    onChanged: (text) {
+                      _checks();
+                    },
+                    //onEditingComplete: _updateText,
+                    //onEditingComplete: _updateText,
+                    controller: usernameController,
+                  ),
+                )),
+            Container(
+                // color: Color.fromARGB(255, 72, 72, 72),
+                padding: EdgeInsets.all(10),
+                height: 50,
+                width: 100,
+                child: FloatingActionButton(
+                  backgroundColor: Color.fromARGB(255, 117, 117, 117),
+                  child: const Text('Log In'),
+                  onPressed: () {
+                    _loadNext();
+                  },
+                ))
+          ],
+        ))
+      ])),
+    );
+  }
+}
+
+class _ChatPage extends StatefulWidget {
+  @override
+  State<_ChatPage> createState() => _MyHomePageState();
+}
+
+//colors for backgrounds be different themes
+//fonts predetermined, have a drop-down
+//font colors be sepera
+
+class _MyHomePageState extends State<_ChatPage> {
   var deleteUserBtn = null;
   final textController = TextEditingController();
   final userController = TextEditingController();
@@ -295,20 +373,6 @@ class _MyHomePageState extends State<MyHomePage> {
     super.dispose();
   }
 
-/*
-
-  var other_message = Container(
-      padding: EdgeInsets.fromLTRB(10, 0, 10, 5),
-      alignment: Alignment.centerLeft,
-      child: Container(
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
-            color: Color.fromARGB(255, 116, 116, 116)),
-        padding: EdgeInsets.all(10),
-        child: Text("Nice"),
-      ));
-*/
-
   List<Widget> message_list = <Widget>[
     //self_message
   ];
@@ -319,27 +383,12 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void _blank() {}
 
-/*
-  var user = Container(
-      padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-      child: FloatingActionButton(
-        splashColor: Colors.transparent,
-        hoverColor: const Color.fromARGB(255, 27, 27, 27),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
-        backgroundColor: const Color.fromARGB(255, 36, 36, 36),
-        onPressed: _blank,
-        child: Container(
-          alignment: Alignment.centerLeft,
-          //color: Color.fromARGB(255, 36, 36, 36),
-          padding: const EdgeInsets.fromLTRB(20, 0, 30, 0),
-          child: const Text(
-            textAlign: TextAlign.left,
-            "USER 1",
-            style: TextStyle(color: Color.fromARGB(255, 229, 229, 229)),
-          ),
-        ),
-      ));
-*/
+  void _loadNext() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => _SettingsPage()),
+    );
+  }
 
   void _addUser() {
     if (userController.text.trim() != "" &&
@@ -373,28 +422,6 @@ class _MyHomePageState extends State<MyHomePage> {
         );
       });
     }
-
-    /*else {
-      message = textController.text;
-      textController.text = "";
-
-      setState(() {
-        message_list = [
-          Container(
-              key: UniqueKey(),
-              padding: EdgeInsets.fromLTRB(10, 0, 5, 5),
-              alignment: Alignment.centerLeft,
-              child: Container(
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: Color.fromARGB(255, 116, 116, 116)),
-                padding: EdgeInsets.all(10),
-                child: Container(child: Text(message)),
-              )),
-          ...message_list,
-        ];
-      });
-    }*/
   }
 
   void _removeUser() {
@@ -419,6 +446,7 @@ class _MyHomePageState extends State<MyHomePage> {
             onPressed: _removeUser,
             icon: Icon(Icons.person_remove));
       }
+      message_list = userMessages[usernameList[selectedUser]]!;
     });
   }
 
@@ -465,7 +493,7 @@ class _MyHomePageState extends State<MyHomePage> {
       message_list = [
         Container(
             key: UniqueKey(),
-            padding: EdgeInsets.fromLTRB(10, 0, 5, 5),
+            padding: EdgeInsets.fromLTRB(10, 0, 60, 5),
             alignment: Alignment.centerLeft,
             child: Container(
               decoration: BoxDecoration(
@@ -585,7 +613,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                                 BorderRadius.circular(40)),
                                         backgroundColor: const Color.fromARGB(
                                             255, 117, 117, 117),
-                                        onPressed: _blank,
+                                        onPressed: _loadNext,
                                         child: const Icon(Icons.settings),
                                       )),
                                 ])),
@@ -749,6 +777,45 @@ class _MyHomePageState extends State<MyHomePage> {
           ],
         ),
       ), // This trailing comma makes auto-formatting nicer for build methods.
+    );
+  }
+}
+
+class _SettingsPage extends StatefulWidget {
+  @override
+  State<_SettingsPage> createState() => SettingsPage();
+}
+
+class SettingsPage extends State<_SettingsPage> {
+  // This widget is the home page of your application. It is stateful, meaning
+  // that it has a State object (defined below) that contains fields that affect
+  // how it looks.
+
+  // This class is the configuration for the state. It holds the values (in this
+  // case the title) provided by the parent (in this case the App widget) and
+  // used by the build method of the State. Fields in a Widget subclass are
+  // always marked "final".
+
+  void _goBack() {
+    Navigator.pop(context);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+          child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+        Expanded(
+            child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            ElevatedButton(
+              onPressed: _goBack,
+              child: Icon(Icons.arrow_back_rounded),
+            )
+          ],
+        ))
+      ])),
     );
   }
 }

@@ -138,7 +138,13 @@ public:
 std::vector<pub_thread> pubs = {};
 std::vector<sub_thread> subs = {};
 std::vector<std::string> threaded_usernames = {};
-std::string username = "kkvkv";
+std::string username = "a";
+
+void setUsername(char* name){
+    std::string str(name);
+    username = str;
+    std::cout << "heyo" << std::endl;
+}
 
 // Find index of element in vector
 int findIndex(std::vector<std::string> vector, std::string search) {
