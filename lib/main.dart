@@ -272,7 +272,7 @@ class _LogInPageState extends State<MyHomePage> {
                     onChanged: (text) {
                       _checks();
                     },
-                    //onEditingComplete: _updateText,
+                    onEditingComplete: _loadNext,
                     //onEditingComplete: _updateText,
                     controller: usernameController,
                   ),
@@ -390,6 +390,14 @@ class _MyHomePageState extends State<_ChatPage> {
     );
   }
 
+  void _checks() {
+    if (userController.text.length > 32) {
+      userController.text = userController.text.substring(0, 32);
+    }
+    userController.text = userController.text.trim();
+    _setUser(userController.text.toNativeUtf8());
+  }
+
   void _addUser() {
     if (userController.text.trim() != "" &&
         !usernameList.contains(userController.text)) {
@@ -412,8 +420,10 @@ class _MyHomePageState extends State<_ChatPage> {
                     width: 30,
                     height: 30)),
             Container(
+                width: 200,
                 padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
                 child: Text(
+                    overflow: TextOverflow.ellipsis,
                     textAlign: TextAlign.center,
                     newUser,
                     style:
@@ -486,6 +496,8 @@ class _MyHomePageState extends State<_ChatPage> {
 
     _updateTextReceive(msg);
   }
+
+  void _saveChat() {}
 
   // for updating messages when received
   void _updateTextReceive(String message) {
@@ -590,6 +602,9 @@ class _MyHomePageState extends State<_ChatPage> {
                                                   color: Color.fromARGB(
                                                       143, 0, 0, 0))),
                                           onEditingComplete: _addUser,
+                                          onChanged: (text) {
+                                            _checks();
+                                          },
                                           controller: userController,
                                         ),
                                       )),
@@ -683,6 +698,7 @@ class _MyHomePageState extends State<_ChatPage> {
                         padding: EdgeInsets.fromLTRB(30, 0, 0, 0),
                         alignment: Alignment.centerLeft,
                         child: Text(
+                          overflow: TextOverflow.ellipsis,
                           usernameList[selectedUser],
                           style: TextStyle(
                               color: const Color.fromARGB(255, 255, 255, 255),
@@ -692,6 +708,11 @@ class _MyHomePageState extends State<_ChatPage> {
                       Container(
                         alignment: Alignment.centerRight,
                         child: deleteUserBtn,
+                      ),
+                      Container(
+                        child: ElevatedButton(
+                            onPressed: _saveChat,
+                            child: Text("Save User Chat")),
                       )
                     ])),
                 Expanded(
