@@ -397,32 +397,49 @@ void chatUser(std::string username, std::string other_user, std::vector<std::str
     std::cout << "Leaving chat with " + other_user + "." << std::endl;
 }
 
+
+
 void killThreads(){
   //  end_signal->push_back(pub_topic);
   //  pt.join();
-        
 
-    for (int i = 0; i < pubs.size(); i++) {
-        std::cout << "Starting removal " << i << std::endl;
-        std::string removed_user = threaded_usernames.at(i);
 
-        std::string temp_pub_topic = username + "_" + removed_user;
-    //    std::string temp_sub_topic = removed_user + "_" + username;
+for (int index = 0; index < pubs.size(); index++) {
+    std::string removed_user = threaded_usernames.at(index);
+    std::cout << "Currently removing user: " << removed_user << std::endl;
 
-        endThreadSignal.push_back(temp_pub_topic);
-        std::cout << "Username: " + temp_pub_topic << std::endl;
 
-        
-        std::cout << "join " << i << std::endl;
-     //   endThreadSignal.push_back(temp_sub_topic);
+    std::string temp_pub_topic = username + "_" + removed_user;
+    std::string temp_sub_topic = removed_user + "_" + username;
 
-        pubs.at(i).end();
-        std::cout << "End removal " << i << std::endl;
-//        subs.at(i).getThread()->join();
+    endThreadSignal.push_back(temp_pub_topic);
+    endThreadSignal.push_back(temp_sub_topic);
+
+    std::cout << "Topics to remove: " << temp_pub_topic << " and " << temp_sub_topic << std::endl;
+
+    if (pubs.at(index).getThread()->joinable()) {
+        pubs.at(index).getThread()->join();
     }
 
+    std::cout << "erased pub" << std::endl;
 
-        std::cout << "End all removal" << std::endl;
+    if (subs.at(index).getThread()->joinable()) {
+        subs.at(index).getThread()->join();
+    }
+
+    std::cout << "erased sub" << std::endl;
+
+    delete pubs.at(index).getPub();
+    delete subs.at(index).getSub();
+
+    endThreadSignal.clear();
+
+    std::cout << removed_user + " has been successfully removed." << std::endl;
+    }
+
+    std::cout << "End all removal" << std::endl;
+
+   
 }
 
 

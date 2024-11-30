@@ -42,6 +42,11 @@ if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   include("C:/Users/jimmy/Desktop/FastDDS/FlutterFastDDS/build/windows/x64/runner/cmake_install.cmake")
 endif()
 
+if(NOT CMAKE_INSTALL_LOCAL_ONLY)
+  # Include the install script for the subdirectory.
+  include("C:/Users/jimmy/Desktop/FastDDS/FlutterFastDDS/build/windows/x64/plugins/bitsdojo_window_windows/cmake_install.cmake")
+endif()
+
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xRuntimex" OR NOT CMAKE_INSTALL_COMPONENT)
   if("${CMAKE_INSTALL_CONFIG_NAME}" MATCHES "^([Dd][Ee][Bb][Uu][Gg])$")
     list(APPEND CMAKE_ABSOLUTE_DESTINATION_FILES
@@ -141,6 +146,40 @@ if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xRuntimex" OR NOT CMAKE_INSTALL_COMP
       message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
     endif()
     file(INSTALL DESTINATION "C:/Users/jimmy/Desktop/FastDDS/FlutterFastDDS/build/windows/x64/runner/Release" TYPE FILE FILES "C:/Users/jimmy/Desktop/FastDDS/FlutterFastDDS/windows/flutter/ephemeral/flutter_windows.dll")
+  endif()
+endif()
+
+if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xRuntimex" OR NOT CMAKE_INSTALL_COMPONENT)
+  if("${CMAKE_INSTALL_CONFIG_NAME}" MATCHES "^([Dd][Ee][Bb][Uu][Gg])$")
+    list(APPEND CMAKE_ABSOLUTE_DESTINATION_FILES
+     "C:/Users/jimmy/Desktop/FastDDS/FlutterFastDDS/build/windows/x64/runner/Debug/bitsdojo_window_windows_plugin.lib")
+    if(CMAKE_WARN_ON_ABSOLUTE_INSTALL_DESTINATION)
+      message(WARNING "ABSOLUTE path INSTALL DESTINATION : ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
+    endif()
+    if(CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
+      message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
+    endif()
+    file(INSTALL DESTINATION "C:/Users/jimmy/Desktop/FastDDS/FlutterFastDDS/build/windows/x64/runner/Debug" TYPE FILE FILES "C:/Users/jimmy/Desktop/FastDDS/FlutterFastDDS/build/windows/x64/plugins/bitsdojo_window_windows/Debug/bitsdojo_window_windows_plugin.lib")
+  elseif("${CMAKE_INSTALL_CONFIG_NAME}" MATCHES "^([Pp][Rr][Oo][Ff][Ii][Ll][Ee])$")
+    list(APPEND CMAKE_ABSOLUTE_DESTINATION_FILES
+     "C:/Users/jimmy/Desktop/FastDDS/FlutterFastDDS/build/windows/x64/runner/Profile/bitsdojo_window_windows_plugin.lib")
+    if(CMAKE_WARN_ON_ABSOLUTE_INSTALL_DESTINATION)
+      message(WARNING "ABSOLUTE path INSTALL DESTINATION : ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
+    endif()
+    if(CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
+      message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
+    endif()
+    file(INSTALL DESTINATION "C:/Users/jimmy/Desktop/FastDDS/FlutterFastDDS/build/windows/x64/runner/Profile" TYPE FILE FILES "C:/Users/jimmy/Desktop/FastDDS/FlutterFastDDS/build/windows/x64/plugins/bitsdojo_window_windows/Profile/bitsdojo_window_windows_plugin.lib")
+  elseif("${CMAKE_INSTALL_CONFIG_NAME}" MATCHES "^([Rr][Ee][Ll][Ee][Aa][Ss][Ee])$")
+    list(APPEND CMAKE_ABSOLUTE_DESTINATION_FILES
+     "C:/Users/jimmy/Desktop/FastDDS/FlutterFastDDS/build/windows/x64/runner/Release/bitsdojo_window_windows_plugin.lib")
+    if(CMAKE_WARN_ON_ABSOLUTE_INSTALL_DESTINATION)
+      message(WARNING "ABSOLUTE path INSTALL DESTINATION : ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
+    endif()
+    if(CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
+      message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
+    endif()
+    file(INSTALL DESTINATION "C:/Users/jimmy/Desktop/FastDDS/FlutterFastDDS/build/windows/x64/runner/Release" TYPE FILE FILES "C:/Users/jimmy/Desktop/FastDDS/FlutterFastDDS/build/windows/x64/plugins/bitsdojo_window_windows/Release/bitsdojo_window_windows_plugin.lib")
   endif()
 endif()
 

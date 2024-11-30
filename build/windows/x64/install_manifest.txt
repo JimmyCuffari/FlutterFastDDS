@@ -1,5 +1,6 @@
 C:/Users/jimmy/Desktop/FastDDS/FlutterFastDDS/build/windows/x64/runner/Debug/data/icudtl.dat
 C:/Users/jimmy/Desktop/FastDDS/FlutterFastDDS/build/windows/x64/runner/Debug/flutter_windows.dll
+C:/Users/jimmy/Desktop/FastDDS/FlutterFastDDS/build/windows/x64/runner/Debug/bitsdojo_window_windows_plugin.lib
 C:/Users/jimmy/Desktop/FastDDS/FlutterFastDDS/build/windows/x64/runner/Debug/data/flutter_assets/AssetManifest.bin
 C:/Users/jimmy/Desktop/FastDDS/FlutterFastDDS/build/windows/x64/runner/Debug/data/flutter_assets/AssetManifest.json
 C:/Users/jimmy/Desktop/FastDDS/FlutterFastDDS/build/windows/x64/runner/Debug/data/flutter_assets/assets/ASRCLOGO.png

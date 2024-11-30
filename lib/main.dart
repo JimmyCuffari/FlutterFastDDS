@@ -5,13 +5,18 @@
 import 'dart:collection';
 import 'dart:ffi' as ffi;
 import 'dart:ffi';
-import 'dart:io' show Platform, Directory;
+import 'dart:ui' as ui;
+import 'dart:io' show Directory, Platform, exit, sleep;
 import 'dart:isolate';
 
+import 'package:bitsdojo_window/bitsdojo_window.dart';
 import "package:ffi/ffi.dart";
+import 'package:flutter/cupertino.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/scheduler.dart';
+import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 //import 'package:flutter_application_1/main.dart';
 import 'package:path/path.dart' as path;
 
@@ -113,6 +118,12 @@ void _onMessageReceived(Pointer<Utf8> message) {
   print("Message received from C++: $dartMessage");
 }
 
+List<Color> Theme = [
+  Color.fromARGB(255, 59, 59, 59),
+  Color.fromARGB(255, 59, 59, 59),
+  Color.fromARGB(255, 59, 59, 59)
+];
+
 /*
 // Look up the C function 'hello_world'
 final HelloWorld hello = dylib
@@ -163,6 +174,15 @@ void main() {
  */
 
   runApp(const MyApp());
+
+  doWhenWindowReady(() {
+    var initialSize = ui.Size(600, 450);
+    appWindow.minSize = initialSize;
+    appWindow.size = initialSize;
+    appWindow.alignment = Alignment.center;
+    appWindow.minSize = ui.Size(600, 450);
+    appWindow.show();
+  });
 }
 
 class MyApp extends StatelessWidget {
@@ -191,7 +211,7 @@ class MyApp extends StatelessWidget {
         // This works for code too, not just values: Most code changes can be
         // tested with just a hot reload.
         colorScheme:
-            ColorScheme.fromSeed(seedColor: Color.fromARGB(255, 101, 146, 182)),
+            ColorScheme.fromSeed(seedColor: Color.fromARGB(255, 59, 59, 59)),
 
         ///const Color.fromARGB(255, 101, 146, 182)
         useMaterial3: true,
@@ -217,6 +237,35 @@ class MyHomePage extends StatefulWidget {
 
   @override
   State<MyHomePage> createState() => _LogInPageState();
+}
+
+class WindowButtons extends StatelessWidget {
+  var buttonColors = WindowButtonColors(
+    iconNormal: Colors.white,
+    iconMouseDown: const Color.fromARGB(46, 255, 255, 255),
+    mouseDown: const Color.fromARGB(46, 255, 255, 255),
+    mouseOver: const Color.fromARGB(46, 255, 255, 255),
+    iconMouseOver: const Color.fromARGB(46, 255, 255, 255),
+  );
+
+  void _killThreads() {
+    killThreads();
+    appWindow.close();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        MinimizeWindowButton(colors: buttonColors),
+        MaximizeWindowButton(colors: buttonColors),
+        CloseWindowButton(
+          colors: buttonColors,
+          onPressed: _killThreads,
+        )
+      ],
+    );
+  }
 }
 
 class _LogInPageState extends State<MyHomePage> {
@@ -245,8 +294,22 @@ class _LogInPageState extends State<MyHomePage> {
           child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
         Expanded(
             child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.values[0],
           children: [
+            Stack(
+              children: [
+                Container(
+                  color: const Color.fromARGB(255, 31, 31, 31),
+                  width: double.infinity,
+                  height: 30,
+                ),
+                WindowTitleBarBox(
+                  child: Row(
+                    children: [Expanded(child: MoveWindow()), WindowButtons()],
+                  ),
+                )
+              ],
+            ),
             Container(
                 width: 525,
                 padding: EdgeInsets.all(10),
@@ -307,6 +370,7 @@ class _ChatPage extends StatefulWidget {
 
 class _MyHomePageState extends State<_ChatPage> {
   var deleteUserBtn = null;
+  var chatText = null;
   final textController = TextEditingController();
   final userController = TextEditingController();
   String message = "";
@@ -395,7 +459,7 @@ class _MyHomePageState extends State<_ChatPage> {
       userController.text = userController.text.substring(0, 32);
     }
     userController.text = userController.text.trim();
-    _setUser(userController.text.toNativeUtf8());
+    //_setUser(userController.text.toNativeUtf8());
   }
 
   void _addUser() {
@@ -424,7 +488,7 @@ class _MyHomePageState extends State<_ChatPage> {
                 padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
                 child: Text(
                     overflow: TextOverflow.ellipsis,
-                    textAlign: TextAlign.center,
+                    textAlign: TextAlign.left,
                     newUser,
                     style:
                         TextStyle(color: Color.fromARGB(255, 229, 229, 229))))
@@ -565,6 +629,22 @@ class _MyHomePageState extends State<_ChatPage> {
                       child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
+                        Stack(
+                          children: [
+                            Container(
+                              color: const Color.fromARGB(255, 31, 31, 31),
+                              width: double.infinity,
+                              height: 30,
+                            ),
+                            WindowTitleBarBox(
+                              child: Row(
+                                children: [
+                                  Expanded(child: MoveWindow()),
+                                ],
+                              ),
+                            )
+                          ],
+                        ),
                         Container(
                             color: const Color.fromARGB(255, 36, 36, 36),
                             child: Row(
@@ -608,15 +688,6 @@ class _MyHomePageState extends State<_ChatPage> {
                                           controller: userController,
                                         ),
                                       )),
-                                  /*Container(
-                                    padding: EdgeInsets.fromLTRB(0, 15, 60, 15),
-                                    child: FloatingActionButton.extended(
-                                      label: Text("Add User"),
-                                      backgroundColor: const Color.fromARGB(
-                                          255, 117, 117, 117),
-                                      onPressed: _blank,
-                                      icon: const Icon(Icons.add),
-                                    )),*/
                                   Container(
                                       padding:
                                           EdgeInsets.fromLTRB(0, 15, 0, 15),
@@ -689,32 +760,68 @@ class _MyHomePageState extends State<_ChatPage> {
                 child: Column(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
+                Stack(
+                  children: [
+                    Container(
+                      color: const Color.fromARGB(255, 31, 31, 31),
+                      width: double.infinity,
+                      height: 30,
+                    ),
+                    WindowTitleBarBox(
+                      child: Row(
+                        children: [
+                          Expanded(child: MoveWindow()),
+                          WindowButtons()
+                        ],
+                      ),
+                    )
+                  ],
+                ),
                 Container(
                     height: 50,
                     width: double.infinity,
                     color: const Color.fromARGB(255, 50, 50, 50),
-                    child: Row(children: [
-                      Container(
-                        padding: EdgeInsets.fromLTRB(30, 0, 0, 0),
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          overflow: TextOverflow.ellipsis,
-                          usernameList[selectedUser],
-                          style: TextStyle(
-                              color: const Color.fromARGB(255, 255, 255, 255),
-                              fontSize: 25),
-                        ),
-                      ),
-                      Container(
-                        alignment: Alignment.centerRight,
-                        child: deleteUserBtn,
-                      ),
-                      Container(
-                        child: ElevatedButton(
-                            onPressed: _saveChat,
-                            child: Text("Save User Chat")),
-                      )
-                    ])),
+                    child: Row(
+                        //mainAxisAlignment: MainAxisAlignment.values[3],
+                        children: [
+                          Container(
+                            width: MediaQuery.sizeOf(context).width - 480,
+                            padding: EdgeInsets.fromLTRB(30, 0, 0, 0),
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              overflow: TextOverflow.ellipsis,
+                              usernameList[selectedUser],
+                              style: TextStyle(
+                                  color:
+                                      const Color.fromARGB(255, 255, 255, 255),
+                                  fontSize: 25),
+                            ),
+                          ),
+                          Expanded(
+                              child: Row(
+                            mainAxisAlignment: MainAxisAlignment.values[1],
+                            children: [
+                              Container(
+                                  // color: Color.fromARGB(255, 72, 72, 72),
+                                  padding: EdgeInsets.all(10),
+                                  height: 50,
+                                  width: 140,
+                                  child: FloatingActionButton(
+                                    backgroundColor:
+                                        Color.fromARGB(255, 117, 117, 117),
+                                    child: const Text("Save User Chat"),
+                                    onPressed: () {
+                                      _saveChat();
+                                    },
+                                  )),
+                              Container(
+                                padding: EdgeInsets.fromLTRB(10, 0, 30, 0),
+                                alignment: Alignment.centerRight,
+                                child: deleteUserBtn,
+                              ),
+                            ],
+                          ))
+                        ])),
                 Expanded(
                     child: ListView(
                         shrinkWrap: true,
@@ -817,9 +924,32 @@ class SettingsPage extends State<_SettingsPage> {
   // used by the build method of the State. Fields in a Widget subclass are
   // always marked "final".
 
+  var _isSelected = 0;
+
+  List<Text> options = [
+    Text("Primary Color"),
+    Text("Secondary Color"),
+    Text("Ternary Color")
+  ];
+
+  List<bool> optionsButtons = [true, false, false];
+
+  List<Widget> ColorWheels = [];
+
+  late var pickerColor = Theme[0];
+
+  void changeColor(Color color) {
+    setState(() => pickerColor = color);
+    setState(() {
+      Theme[0] = color;
+    });
+  }
+
   void _goBack() {
     Navigator.pop(context);
   }
+
+  // Theme.of(context).colorScheme.primary,
 
   @override
   Widget build(BuildContext context) {
@@ -827,13 +957,101 @@ class SettingsPage extends State<_SettingsPage> {
       body: Center(
           child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
         Expanded(
-            child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+            child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            ElevatedButton(
-              onPressed: _goBack,
-              child: Icon(Icons.arrow_back_rounded),
-            )
+            Container(
+                color: Theme[0], //
+                width: 260,
+                child: Expanded(
+                    child: Column(children: [
+                  Stack(
+                    children: [
+                      Container(
+                        color: const Color.fromARGB(255, 31, 31, 31),
+                        width: double.infinity,
+                        height: 30,
+                      ),
+                      WindowTitleBarBox(
+                        child: Row(
+                          children: [
+                            Expanded(child: MoveWindow()),
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                  Container(
+                      alignment: Alignment.topLeft,
+                      padding: EdgeInsets.fromLTRB(10, 10, 0, 0),
+                      child: FloatingActionButton(
+                        foregroundColor: Color.fromARGB(255, 36, 36, 36),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20)),
+                        backgroundColor:
+                            const Color.fromARGB(255, 117, 117, 117),
+                        onPressed: _goBack,
+                        child: const Icon(Icons.arrow_back_rounded),
+                      )),
+                  Container(
+                    child: ToggleButtons(
+                      disabledColor: Color.fromARGB(255, 36, 36, 36),
+                      fillColor: Color.fromARGB(255, 50, 50, 50),
+                      selectedBorderColor: Color.fromARGB(255, 50, 50, 50),
+                      direction: Axis.vertical,
+                      isSelected: optionsButtons,
+                      children: options,
+                      onPressed: (int index) {
+                        setState(() {
+                          _isSelected = index;
+                          // var strUser = usernameList[index].toString();
+                          //  setCurrTab(strUser.toNativeUtf8());
+                          //setCurrTab(usernameList[index].toNativeUtf8());
+                          //print(index);
+                          for (int buttonIndex = 0;
+                              buttonIndex < optionsButtons.length;
+                              buttonIndex++) {
+                            if (buttonIndex == index) {
+                              optionsButtons[buttonIndex] = true;
+                            } else {
+                              optionsButtons[buttonIndex] = false;
+                            }
+                          }
+                        });
+                      },
+                    ),
+                  ),
+                ]))),
+            Expanded(
+              child: Column(
+                children: [
+                  Stack(
+                    children: [
+                      Container(
+                        color: const Color.fromARGB(255, 31, 31, 31),
+                        width: double.infinity,
+                        height: 30,
+                      ),
+                      WindowTitleBarBox(
+                        child: Row(
+                          children: [
+                            Expanded(child: MoveWindow()),
+                            WindowButtons()
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                  Container(
+                      //height: 70,
+                      padding: EdgeInsets.all(20),
+                      child: SlidePicker(
+                        pickerColor: pickerColor,
+                        onColorChanged: changeColor,
+                      )),
+                ],
+              ),
+            ),
           ],
         ))
       ])),

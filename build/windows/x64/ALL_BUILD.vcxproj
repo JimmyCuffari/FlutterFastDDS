@@ -216,6 +216,10 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </ProjectReference>
+    <ProjectReference Include="C:\Users\jimmy\Desktop\FastDDS\FlutterFastDDS\build\windows\x64\plugins\bitsdojo_window_windows\bitsdojo_window_windows_plugin.vcxproj">
+      <Project>{55FB1A57-3675-3A82-B321-3347B2685DC7}</Project>
+      <Name>bitsdojo_window_windows_plugin</Name>
+    </ProjectReference>
     <ProjectReference Include="C:\Users\jimmy\Desktop\FastDDS\FlutterFastDDS\build\windows\x64\runner\flutter_application_1.vcxproj">
       <Project>{E4A5C165-C5FE-3227-8E01-7248B2F3E22B}</Project>
       <Name>flutter_application_1</Name>
