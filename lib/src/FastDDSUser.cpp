@@ -158,6 +158,15 @@ int findIndex(std::vector<std::string> vector, std::string search) {
     }
 }
 
+bool getCurrentUserStatus(int index) {
+    bool user_status;
+
+    index -= 1; // Dart is one ahead
+    user_status = pubs.at(index).getPub()->getStatus();
+
+    return user_status;
+}
+
 // View users currently added
 void viewUsers(std::vector<std::string>& threaded_usernames, std::vector<pub_thread>& pubs) {
     std::cout << std::endl << "These are the users you are currently connected to:" << std::endl;

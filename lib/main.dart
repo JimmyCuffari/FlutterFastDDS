@@ -53,6 +53,9 @@ typedef DartRemoveUser = void Function(int);
 typedef SetUserFunc = ffi.Void Function(Pointer<Utf8>);
 typedef SetUser = void Function(Pointer<Utf8>);
 
+typedef GetCurrentUserStatusFunc = ffi.Bool Function(Int32);
+typedef GetCurrentUserStatus = bool Function(int);
+
 /*typedef SetDartReceivePortFunc = ffi.Void Function(Pointer<NativeType>);
 typedef SetDartReceivePort = void Function(Pointer<NativeType>);*/
 
@@ -109,6 +112,10 @@ typedef CallbackNativeTypeNativeFunction = Void Function(Pointer<Utf8>);
 final CallbackNativeTypeFunction callbackNativeType = dylib
     .lookup<ffi.NativeFunction<CallbackNativeTypeNativeFunction>>(
         'callbackNativeType')
+    .asFunction();
+  
+final GetCurrentUserStatus getCurrentUserStatus = dylib
+    .lookup<ffi.NativeFunction<GetCurrentUserStatusFunc>>('getCurrentUserStatus')
     .asFunction();
 
 var pubs = {};
@@ -529,6 +536,9 @@ class _MyHomePageState extends State<_ChatPage> {
     if (textController.text != "") {
       message = textController.text;
       textController.text = "";
+
+      bool status = getCurrentUserStatus(selectedUser);
+      print("Current Status of user selected: $status");
 
       // Sends Message to Publisher
       final sendMessage = message.toNativeUtf8();

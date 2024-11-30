@@ -8,6 +8,8 @@
 #include <thread>
 #include <string>
 #include <atomic>
+#include <ctime>
+#include <fstream>
 
 #include <fastdds/dds/domain/DomainParticipant.hpp>
 #include <fastdds/dds/domain/DomainParticipantFactory.hpp>
@@ -15,6 +17,8 @@
 #include <fastdds/dds/publisher/DataWriterListener.hpp>
 #include <fastdds/dds/publisher/Publisher.hpp>
 #include <fastdds/dds/topic/TypeSupport.hpp>
+
+#include <fastdds/rtps/transport/TCPv4TransportDescriptor.hpp>
 
 //std::vector<std::string> test = {};
 //std::vector<std::string> endThreadSignal = {};
@@ -181,6 +185,12 @@ public:
             //std::cout << "PUBLISHER TOPIC NAME: " << topic_name << std::endl;
 
             if (publish() && !send_message.empty()) {
+                auto now = std::chrono::system_clock::now();
+                std::time_t now_time = std::chrono::system_clock::to_time_t(now);
+                std::tm local_time = *std::localtime(&now_time);
+                std::string timestamp = std::asctime(&local_time);
+                timestamp.pop_back();
+
                 user_message_.message(send_message.at(1));
                 std::cout << "Message received from Publisher: \"" + send_message.at(1) + "\". Sent to " + send_message.at(0) + "." << std::endl;
                 send_message.clear();
