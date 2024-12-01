@@ -113,9 +113,10 @@ final CallbackNativeTypeFunction callbackNativeType = dylib
     .lookup<ffi.NativeFunction<CallbackNativeTypeNativeFunction>>(
         'callbackNativeType')
     .asFunction();
-  
+
 final GetCurrentUserStatus getCurrentUserStatus = dylib
-    .lookup<ffi.NativeFunction<GetCurrentUserStatusFunc>>('getCurrentUserStatus')
+    .lookup<ffi.NativeFunction<GetCurrentUserStatusFunc>>(
+        'getCurrentUserStatus')
     .asFunction();
 
 var pubs = {};
@@ -126,9 +127,11 @@ void _onMessageReceived(Pointer<Utf8> message) {
 }
 
 List<Color> Theme = [
-  Color.fromARGB(255, 59, 59, 59),
-  Color.fromARGB(255, 59, 59, 59),
-  Color.fromARGB(255, 59, 59, 59)
+  Color.fromARGB(255, 59, 59, 59), //primary
+  Color.fromARGB(255, 31, 31, 31), //secondary
+  Color.fromARGB(255, 117, 117, 117), //buttons
+  Color.fromARGB(255, 101, 146, 182), //usermessage
+  Color.fromARGB(255, 116, 116, 116) //othermessage
 ];
 
 /*
@@ -317,48 +320,55 @@ class _LogInPageState extends State<MyHomePage> {
                 )
               ],
             ),
-            Container(
-                width: 525,
-                padding: EdgeInsets.all(10),
-                child: Container(
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: const Color.fromARGB(255, 72, 72, 72)),
-                  child: TextFormField(
-                    textAlign: TextAlign.center,
-                    cursorColor: Colors.white,
-                    style: TextStyle(color: Colors.white),
-                    decoration: const InputDecoration(
-                        border: InputBorder.none,
-                        focusedBorder: InputBorder.none,
-                        enabledBorder: InputBorder.none,
-                        errorBorder: InputBorder.none,
-                        disabledBorder: InputBorder.none,
-                        contentPadding: EdgeInsets.only(
-                            left: 15, bottom: 11, top: 11, right: 15),
-                        hintText: "Start Typing...",
-                        hintStyle: TextStyle(
-                            color: Color.fromARGB(70, 255, 255, 255))),
-                    onChanged: (text) {
-                      _checks();
-                    },
-                    onEditingComplete: _loadNext,
-                    //onEditingComplete: _updateText,
-                    controller: usernameController,
-                  ),
-                )),
-            Container(
-                // color: Color.fromARGB(255, 72, 72, 72),
-                padding: EdgeInsets.all(10),
-                height: 50,
-                width: 100,
-                child: FloatingActionButton(
-                  backgroundColor: Color.fromARGB(255, 117, 117, 117),
-                  child: const Text('Log In'),
-                  onPressed: () {
-                    _loadNext();
-                  },
-                ))
+            Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                      width: 525,
+                      padding: EdgeInsets.all(10),
+                      child: Container(
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: const Color.fromARGB(255, 72, 72, 72)),
+                        child: TextFormField(
+                          textAlign: TextAlign.center,
+                          cursorColor: Colors.white,
+                          style: TextStyle(color: Colors.white),
+                          decoration: const InputDecoration(
+                              border: InputBorder.none,
+                              focusedBorder: InputBorder.none,
+                              enabledBorder: InputBorder.none,
+                              errorBorder: InputBorder.none,
+                              disabledBorder: InputBorder.none,
+                              contentPadding: EdgeInsets.only(
+                                  left: 15, bottom: 11, top: 11, right: 15),
+                              hintText: "Start Typing...",
+                              hintStyle: TextStyle(
+                                  color: Color.fromARGB(70, 255, 255, 255))),
+                          onChanged: (text) {
+                            _checks();
+                          },
+                          onEditingComplete: _loadNext,
+                          //onEditingComplete: _updateText,
+                          controller: usernameController,
+                        ),
+                      )),
+                  Container(
+                      // color: Color.fromARGB(255, 72, 72, 72),
+                      padding: EdgeInsets.all(10),
+                      height: 50,
+                      width: 100,
+                      child: FloatingActionButton(
+                        backgroundColor: Color.fromARGB(255, 117, 117, 117),
+                        child: const Text('Log In'),
+                        onPressed: () {
+                          _loadNext();
+                        },
+                      ))
+                ],
+              ),
+            )
           ],
         ))
       ])),
@@ -382,6 +392,8 @@ class _MyHomePageState extends State<_ChatPage> {
   final userController = TextEditingController();
   String message = "";
 
+  List profilePictures = [AssetImage('assets/ASRCTransparent.png')];
+
   List<Widget> users = <Widget>[
     Row(children: [
       Container(
@@ -394,14 +406,14 @@ class _MyHomePageState extends State<_ChatPage> {
           padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
           child: Text(
               textAlign: TextAlign.center,
-              "General",
+              "Notes",
               style: TextStyle(color: Color.fromARGB(255, 229, 229, 229))))
     ])
   ];
 
   List<bool> _selectedUsers = [true]; //for toggle button
 
-  List usernameList = ["General"]; //for the user being selected
+  List usernameList = ["Notes"]; //for the user being selected
 
   var userMessages = Map<String, List<Widget>>();
 
@@ -409,9 +421,9 @@ class _MyHomePageState extends State<_ChatPage> {
 
   @override
   initState() {
-    userMessages["General"] = <Widget>[];
+    userMessages["Notes"] = <Widget>[];
 
-    var tempStr = "General";
+    var tempStr = "Notes";
     setCurrTab(tempStr.toNativeUtf8()); // Sets initial tab to General
 
     final callback =
@@ -458,7 +470,7 @@ class _MyHomePageState extends State<_ChatPage> {
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => _SettingsPage()),
-    );
+    ).then((_) => setState(() {}));
   }
 
   void _checks() {
@@ -482,12 +494,14 @@ class _MyHomePageState extends State<_ChatPage> {
       setState(() {
         _selectedUsers.add(false);
         usernameList.add(newUser);
+        profilePictures.add(AssetImage('assets/pic1.png'));
+
         users.add(
           Row(children: [
             Container(
                 padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
                 child: Image(
-                    image: AssetImage('assets/pic1.png'),
+                    image: profilePictures[usernameList.indexOf(newUser)],
                     width: 30,
                     height: 30)),
             Container(
@@ -517,6 +531,7 @@ class _MyHomePageState extends State<_ChatPage> {
       users.remove(users[selectedUser]);
       _selectedUsers.remove(_selectedUsers[selectedUser]);
       usernameList.remove(usernameList[selectedUser]);
+      profilePictures.remove(usernameList[selectedUser]);
       selectedUser = 0;
       if (selectedUser == 0) {
         deleteUserBtn = null;
@@ -532,13 +547,16 @@ class _MyHomePageState extends State<_ChatPage> {
   }
 
   void _updateText() {
+    //user sending text
     //  killThreads();
     if (textController.text != "") {
       message = textController.text;
       textController.text = "";
 
-      bool status = getCurrentUserStatus(selectedUser);
-      print("Current Status of user selected: $status");
+////////////////////////////////////////////////////////////////////////////////
+      //     bool status = getCurrentUserStatus(selectedUser);
+      //     print("Current Status of user selected: $status");
+////////////////////////////////////////////////////////////////////////////////
 
       // Sends Message to Publisher
       final sendMessage = message.toNativeUtf8();
@@ -553,10 +571,16 @@ class _MyHomePageState extends State<_ChatPage> {
               alignment: Alignment.centerRight,
               child: Container(
                 decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: Color.fromARGB(255, 101, 146, 182)),
+                    borderRadius: BorderRadius.circular(10), color: Theme[3]),
                 padding: EdgeInsets.all(10),
-                child: Container(child: Text(message)),
+                child: Container(
+                    child: Text(
+                  message,
+                  style: TextStyle(
+                      color: Theme[4].computeLuminance() < 0.5
+                          ? Colors.white.withAlpha(200)
+                          : Colors.black.withAlpha(200)),
+                )),
               )),
           ...message_list,
         ];
@@ -583,8 +607,7 @@ class _MyHomePageState extends State<_ChatPage> {
             alignment: Alignment.centerLeft,
             child: Container(
               decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: Color.fromARGB(255, 116, 116, 116)),
+                  borderRadius: BorderRadius.circular(10), color: Theme[4]),
               padding: EdgeInsets.all(10),
               child: Container(child: Text(message)),
             )),
@@ -632,7 +655,7 @@ class _MyHomePageState extends State<_ChatPage> {
 
           children: <Widget>[
             Container(
-                color: const Color.fromARGB(255, 31, 31, 31), //
+                color: Theme[1], //
                 width: 260,
                 child: Column(children: [
                   Expanded(
@@ -656,7 +679,7 @@ class _MyHomePageState extends State<_ChatPage> {
                           ],
                         ),
                         Container(
-                            color: const Color.fromARGB(255, 36, 36, 36),
+                            color: Theme[1],
                             child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
@@ -668,15 +691,20 @@ class _MyHomePageState extends State<_ChatPage> {
                                         decoration: BoxDecoration(
                                             borderRadius:
                                                 BorderRadius.circular(10),
-                                            color: const Color.fromARGB(
-                                                255, 117, 117, 117)),
+                                            color: Theme[2]),
                                         child: TextFormField(
-                                          cursorColor: const Color.fromARGB(
-                                              255, 0, 0, 0),
-                                          style: const TextStyle(
-                                              color:
-                                                  Color.fromARGB(255, 0, 0, 0)),
-                                          decoration: const InputDecoration(
+                                          cursorColor:
+                                              Theme[3].computeLuminance() < 0.5
+                                                  ? Colors.white.withAlpha(200)
+                                                  : Colors.black.withAlpha(200),
+                                          style: TextStyle(
+                                              color: Theme[3]
+                                                          .computeLuminance() <
+                                                      0.5
+                                                  ? Colors.white.withAlpha(200)
+                                                  : Colors.black
+                                                      .withAlpha(200)),
+                                          decoration: InputDecoration(
                                               border: InputBorder.none,
                                               focusedBorder: InputBorder.none,
                                               enabledBorder: InputBorder.none,
@@ -689,8 +717,13 @@ class _MyHomePageState extends State<_ChatPage> {
                                                   right: 15),
                                               hintText: "+ Add User",
                                               hintStyle: TextStyle(
-                                                  color: Color.fromARGB(
-                                                      143, 0, 0, 0))),
+                                                  color:
+                                                      Theme[3].computeLuminance() <
+                                                              0.5
+                                                          ? Colors.white
+                                                              .withAlpha(200)
+                                                          : Colors.black
+                                                              .withAlpha(200))),
                                           onEditingComplete: _addUser,
                                           onChanged: (text) {
                                             _checks();
@@ -707,8 +740,7 @@ class _MyHomePageState extends State<_ChatPage> {
                                         shape: RoundedRectangleBorder(
                                             borderRadius:
                                                 BorderRadius.circular(40)),
-                                        backgroundColor: const Color.fromARGB(
-                                            255, 117, 117, 117),
+                                        backgroundColor: Theme[2],
                                         onPressed: _loadNext,
                                         child: const Icon(Icons.settings),
                                       )),
@@ -721,10 +753,11 @@ class _MyHomePageState extends State<_ChatPage> {
                           children: [
                             Container(
                               child: ToggleButtons(
-                                disabledColor: Color.fromARGB(255, 36, 36, 36),
-                                fillColor: Color.fromARGB(255, 50, 50, 50),
-                                selectedBorderColor:
-                                    Color.fromARGB(255, 50, 50, 50),
+                                disabledColor: Theme[1],
+                                disabledBorderColor: Theme[1],
+                                fillColor: Theme[0].withAlpha(
+                                    200), //Color.fromARGB(255, 50, 50, 50),
+                                //selectedBorderColor: Theme[0].withAlpha(200),
                                 direction: Axis.vertical,
                                 isSelected: _selectedUsers,
                                 children: users,
@@ -752,7 +785,7 @@ class _MyHomePageState extends State<_ChatPage> {
                                     } else {
                                       deleteUserBtn = IconButton(
                                           alignment: Alignment.centerRight,
-                                          color: Colors.grey,
+                                          color: Theme[2],
                                           onPressed: _removeUser,
                                           icon: Icon(Icons.person_remove));
                                     }
@@ -767,151 +800,123 @@ class _MyHomePageState extends State<_ChatPage> {
                       ]))
                 ])),
             Expanded(
-                child: Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Stack(
-                  children: [
-                    Container(
-                      color: const Color.fromARGB(255, 31, 31, 31),
-                      width: double.infinity,
-                      height: 30,
-                    ),
-                    WindowTitleBarBox(
-                      child: Row(
-                        children: [
-                          Expanded(child: MoveWindow()),
-                          WindowButtons()
-                        ],
-                      ),
-                    )
-                  ],
-                ),
-                Container(
-                    height: 50,
-                    width: double.infinity,
-                    color: const Color.fromARGB(255, 50, 50, 50),
-                    child: Row(
-                        //mainAxisAlignment: MainAxisAlignment.values[3],
-                        children: [
-                          Container(
-                            width: MediaQuery.sizeOf(context).width - 480,
-                            padding: EdgeInsets.fromLTRB(30, 0, 0, 0),
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              overflow: TextOverflow.ellipsis,
-                              usernameList[selectedUser],
-                              style: TextStyle(
-                                  color:
-                                      const Color.fromARGB(255, 255, 255, 255),
-                                  fontSize: 25),
+                child: Container(
+                    color: Theme[0],
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Stack(
+                          children: [
+                            Container(
+                              color: const Color.fromARGB(255, 31, 31, 31),
+                              width: double.infinity,
+                              height: 30,
                             ),
-                          ),
-                          Expanded(
+                            WindowTitleBarBox(
                               child: Row(
-                            mainAxisAlignment: MainAxisAlignment.values[1],
-                            children: [
-                              Container(
-                                  // color: Color.fromARGB(255, 72, 72, 72),
-                                  padding: EdgeInsets.all(10),
-                                  height: 50,
-                                  width: 140,
-                                  child: FloatingActionButton(
-                                    backgroundColor:
-                                        Color.fromARGB(255, 117, 117, 117),
-                                    child: const Text("Save User Chat"),
-                                    onPressed: () {
-                                      _saveChat();
-                                    },
-                                  )),
-                              Container(
-                                padding: EdgeInsets.fromLTRB(10, 0, 30, 0),
-                                alignment: Alignment.centerRight,
-                                child: deleteUserBtn,
+                                children: [
+                                  Expanded(child: MoveWindow()),
+                                  WindowButtons()
+                                ],
                               ),
-                            ],
-                          ))
-                        ])),
-                Expanded(
-                    child: ListView(
-                        shrinkWrap: true,
-                        scrollDirection: Axis.vertical,
-                        reverse: true,
-                        children: message_list
-
-                        /*     
-                        [
-                      /*   //  Container(
-                      //alignment: Alignment.centerRight,
-                      Container(
-                          padding: EdgeInsets.fromLTRB(0, 0, 0, 5),
-                          child: Container(
-                            alignment: Alignment.centerRight,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                color: Color.fromARGB(255, 101, 146, 182)),
-                            constraints: const BoxConstraints(
-                                maxWidth: 250, minWidth: 0),
+                            )
+                          ],
+                        ),
+                        Container(
+                            height: 50,
+                            width: double.infinity,
+                            color: Theme[1].withAlpha(50),
+                            child: Row(
+                                //mainAxisAlignment: MainAxisAlignment.values[3],
+                                children: [
+                                  Container(
+                                    width:
+                                        MediaQuery.sizeOf(context).width - 480,
+                                    padding: EdgeInsets.fromLTRB(40, 0, 0, 0),
+                                    alignment: Alignment.centerLeft,
+                                    child: Text(
+                                      overflow: TextOverflow.ellipsis,
+                                      usernameList[selectedUser],
+                                      style: TextStyle(
+                                          color:
+                                              Theme[0].computeLuminance() < 0.5
+                                                  ? Colors.white.withAlpha(200)
+                                                  : Colors.black.withAlpha(200),
+                                          fontSize: 25),
+                                    ),
+                                  ),
+                                  Expanded(
+                                      child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.values[1],
+                                    children: [
+                                      Container(
+                                          // color: Color.fromARGB(255, 72, 72, 72),
+                                          padding: EdgeInsets.fromLTRB(
+                                              10, 10, 0, 10),
+                                          height: 50,
+                                          width: 140,
+                                          child: FloatingActionButton(
+                                            backgroundColor: Theme[2],
+                                            foregroundColor: Theme[3]
+                                                        .computeLuminance() <
+                                                    0.5
+                                                ? Colors.white.withAlpha(200)
+                                                : Colors.black.withAlpha(200),
+                                            child: const Text("Save User Chat"),
+                                            onPressed: () {
+                                              _saveChat();
+                                            },
+                                          )),
+                                      Container(
+                                        padding:
+                                            EdgeInsets.fromLTRB(10, 0, 30, 0),
+                                        alignment: Alignment.centerRight,
+                                        child: deleteUserBtn,
+                                      ),
+                                    ],
+                                  ))
+                                ])),
+                        Expanded(
+                            child: ListView(
+                                shrinkWrap: true,
+                                scrollDirection: Axis.vertical,
+                                reverse: true,
+                                children: message_list)),
+                        Container(
                             padding: EdgeInsets.all(10),
-                            child: Align(
-                                alignment: Alignment.centerRight,
-                                child: Text("ewewenew")),
-                          )),
-                 */
-                      self_message,
-                      other_message,
-                      self_message,
-                    ]
-                  */
-
-                        )),
-                /*     Container(
-                    padding: EdgeInsets.fromLTRB(0, 0, 10, 5),
-                    alignment: Alignment.centerRight,
-                    child: Container(
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: Color.fromARGB(255, 101, 146, 182)),
-                      padding: EdgeInsets.all(10),
-                      child: Text("Nice"),
-                    )),
-                Container(
-                    padding: EdgeInsets.fromLTRB(10, 0, 10, 5),
-                    alignment: Alignment.centerLeft,
-                    child: Container(
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: Color.fromARGB(255, 116, 116, 116)),
-                      padding: EdgeInsets.all(10),
-                      child: Text("Nice"),
-                    )), */
-                Container(
-                    padding: EdgeInsets.all(10),
-                    child: Container(
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: const Color.fromARGB(255, 72, 72, 72)),
-                      child: TextFormField(
-                        cursorColor: Colors.white,
-                        style: TextStyle(color: Colors.white),
-                        decoration: const InputDecoration(
-                            border: InputBorder.none,
-                            focusedBorder: InputBorder.none,
-                            enabledBorder: InputBorder.none,
-                            errorBorder: InputBorder.none,
-                            disabledBorder: InputBorder.none,
-                            contentPadding: EdgeInsets.only(
-                                left: 15, bottom: 11, top: 11, right: 15),
-                            hintText: "Start Typing...",
-                            hintStyle: TextStyle(
-                                color: Color.fromARGB(70, 255, 255, 255))),
-                        //onEditingComplete: _updateText,
-                        onEditingComplete: _updateText,
-                        controller: textController,
-                      ),
-                    ))
-              ],
-            ))
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: Theme[2].withAlpha(
+                                      200)), //const Color.fromARGB(255, 72, 72, 72)),
+                              child: TextFormField(
+                                cursorColor: Theme[2].computeLuminance() < 0.5
+                                    ? Colors.white
+                                    : Colors.black,
+                                style: TextStyle(color: Colors.white),
+                                decoration: InputDecoration(
+                                  border: InputBorder.none,
+                                  focusedBorder: InputBorder.none,
+                                  enabledBorder: InputBorder.none,
+                                  errorBorder: InputBorder.none,
+                                  disabledBorder: InputBorder.none,
+                                  contentPadding: EdgeInsets.only(
+                                      left: 15, bottom: 11, top: 11, right: 15),
+                                  hintText: "Start Typing...",
+                                  hintStyle: TextStyle(
+                                      color: Theme[2].computeLuminance() < 0.5
+                                          ? Colors.white.withAlpha(200)
+                                          : Colors.black.withAlpha(200)),
+                                ),
+                                // Color.fromARGB(70, 255, 255, 255))),
+                                //onEditingComplete: _updateText,
+                                onEditingComplete: _updateText,
+                                controller: textController,
+                              ),
+                            ))
+                      ],
+                    )))
           ],
         ),
       ), // This trailing comma makes auto-formatting nicer for build methods.
@@ -934,15 +939,52 @@ class SettingsPage extends State<_SettingsPage> {
   // used by the build method of the State. Fields in a Widget subclass are
   // always marked "final".
 
-  var _isSelected = 0;
+  var _isSelected;
 
-  List<Text> options = [
-    Text("Primary Color"),
-    Text("Secondary Color"),
-    Text("Ternary Color")
+  List<Widget> options = [
+    Container(
+        width: 260,
+        padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+        child: Text(
+            overflow: TextOverflow.ellipsis,
+            textAlign: TextAlign.left,
+            "Primary Color",
+            style: TextStyle(color: Color.fromARGB(255, 229, 229, 229)))),
+    Container(
+        width: 260,
+        padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+        child: Text(
+            overflow: TextOverflow.ellipsis,
+            textAlign: TextAlign.left,
+            "Secondary Color",
+            style: TextStyle(color: Color.fromARGB(255, 229, 229, 229)))),
+    Container(
+        width: 260,
+        padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+        child: Text(
+            overflow: TextOverflow.ellipsis,
+            textAlign: TextAlign.left,
+            "Button Color",
+            style: TextStyle(color: Color.fromARGB(255, 229, 229, 229)))),
+    Container(
+        width: 260,
+        padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+        child: Text(
+            overflow: TextOverflow.ellipsis,
+            textAlign: TextAlign.left,
+            "Self Message Color",
+            style: TextStyle(color: Color.fromARGB(255, 229, 229, 229)))),
+    Container(
+        width: 260,
+        padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+        child: Text(
+            overflow: TextOverflow.ellipsis,
+            textAlign: TextAlign.left,
+            "Other Message Color",
+            style: TextStyle(color: Color.fromARGB(255, 229, 229, 229))))
   ];
 
-  List<bool> optionsButtons = [true, false, false];
+  List<bool> optionsButtons = [true, false, false, false, false];
 
   List<Widget> ColorWheels = [];
 
@@ -951,7 +993,15 @@ class SettingsPage extends State<_SettingsPage> {
   void changeColor(Color color) {
     setState(() => pickerColor = color);
     setState(() {
-      Theme[0] = color;
+      if (optionsButtons[0] == true)
+        Theme[0] = color;
+      else if (optionsButtons[1] == true)
+        Theme[1] = color;
+      else if (optionsButtons[2] == true)
+        Theme[2] = color;
+      else if (optionsButtons[3] == true)
+        Theme[3] = color;
+      else if (optionsButtons[4] == true) Theme[4] = color;
     });
   }
 
@@ -971,7 +1021,7 @@ class SettingsPage extends State<_SettingsPage> {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Container(
-                color: Theme[0], //
+                color: Theme[1], //
                 width: 260,
                 child: Expanded(
                     child: Column(children: [
@@ -993,21 +1043,20 @@ class SettingsPage extends State<_SettingsPage> {
                   ),
                   Container(
                       alignment: Alignment.topLeft,
-                      padding: EdgeInsets.fromLTRB(10, 10, 0, 0),
+                      padding: EdgeInsets.fromLTRB(10, 10, 0, 20),
                       child: FloatingActionButton(
                         foregroundColor: Color.fromARGB(255, 36, 36, 36),
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(20)),
-                        backgroundColor:
-                            const Color.fromARGB(255, 117, 117, 117),
+                        backgroundColor: Theme[2],
                         onPressed: _goBack,
                         child: const Icon(Icons.arrow_back_rounded),
                       )),
                   Container(
                     child: ToggleButtons(
-                      disabledColor: Color.fromARGB(255, 36, 36, 36),
-                      fillColor: Color.fromARGB(255, 50, 50, 50),
-                      selectedBorderColor: Color.fromARGB(255, 50, 50, 50),
+                      disabledColor: Theme[1],
+                      disabledBorderColor: Theme[1],
+                      fillColor: Theme[0].withAlpha(200),
                       direction: Axis.vertical,
                       isSelected: optionsButtons,
                       children: options,
@@ -1026,6 +1075,7 @@ class SettingsPage extends State<_SettingsPage> {
                             } else {
                               optionsButtons[buttonIndex] = false;
                             }
+                            pickerColor = Theme[_isSelected];
                           }
                         });
                       },
@@ -1033,34 +1083,43 @@ class SettingsPage extends State<_SettingsPage> {
                   ),
                 ]))),
             Expanded(
-              child: Column(
-                children: [
-                  Stack(
+              child: Container(
+                  color: Theme[0],
+                  child: Column(
                     children: [
-                      Container(
-                        color: const Color.fromARGB(255, 31, 31, 31),
-                        width: double.infinity,
-                        height: 30,
+                      Stack(
+                        children: [
+                          Container(
+                            color: const Color.fromARGB(255, 31, 31, 31),
+                            width: double.infinity,
+                            height: 30,
+                          ),
+                          WindowTitleBarBox(
+                            child: Row(
+                              children: [
+                                Expanded(child: MoveWindow()),
+                                WindowButtons()
+                              ],
+                            ),
+                          )
+                        ],
                       ),
-                      WindowTitleBarBox(
-                        child: Row(
-                          children: [
-                            Expanded(child: MoveWindow()),
-                            WindowButtons()
-                          ],
-                        ),
-                      )
+                      Expanded(
+                          child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+
+                              //height: 70,
+                              padding: EdgeInsets.all(20),
+                              child: SlidePicker(
+                                pickerColor: pickerColor,
+                                onColorChanged: changeColor,
+                              ))
+                        ],
+                      ))
                     ],
-                  ),
-                  Container(
-                      //height: 70,
-                      padding: EdgeInsets.all(20),
-                      child: SlidePicker(
-                        pickerColor: pickerColor,
-                        onColorChanged: changeColor,
-                      )),
-                ],
-              ),
+                  )),
             ),
           ],
         ))
