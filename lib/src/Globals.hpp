@@ -3,7 +3,7 @@
 
 #include <vector>
 
-typedef void (*CallbackFunction)(const char*);
+typedef void (*CallbackFunction)(const char*, const char*);
 
 //extern std::vector<std::string> endThreadSignal;
 //extern std::vector<std::string> curr_chat_tab;
@@ -18,7 +18,7 @@ extern std::string receive_message;
 extern CallbackFunction receiveCallback;
 
 extern "C" void receiveDart(const char*);
-extern "C" void callbackNative(const char*);
+extern "C" void callbackNative(const char*, const char*);
 
 
 // for colors

@@ -189,9 +189,9 @@ void viewUsers(std::vector<std::string>& threaded_usernames, std::vector<pub_thr
 CallbackFunction receiveCallback = nullptr;
 //Dart_Port receivePort;
 
-void callbackNative(const char* message) {
+void callbackNative(const char* message, const char* username) {
     if (receiveCallback) {
-        receiveCallback(message);
+        receiveCallback(message, username);
     } else {
         std::cout << "No callback is currently set." << std::endl;
     }
@@ -227,12 +227,14 @@ void setDartReceiveCallback(CallbackFunction callback) {
 
 void setSendMessage(char *user, char *msg) {
     //send_message = message;
-    std::string username(user);
+    std::string sendUser(user);
     std::string message(msg);
 
-    std::cout << "User is " + username + ". Set Message to \"" + message + "\"" << std::endl;
+    std::cout << "User is " + sendUser + ". Set Message to \"" + message + "\"" << std::endl;
 
-    send_message.push_back(username);
+    std::string send_topic = username + "_" + sendUser;
+
+    send_message.push_back(send_topic);
     send_message.push_back(message);
 }
 

@@ -6,7 +6,7 @@ import 'dart:collection';
 import 'dart:ffi' as ffi;
 import 'dart:ffi';
 import 'dart:ui' as ui;
-import 'dart:io' show Directory, Platform, exit, sleep;
+import 'dart:io' show Directory, File, Platform, exit, sleep;
 import 'dart:isolate';
 
 import 'package:bitsdojo_window/bitsdojo_window.dart';
@@ -19,6 +19,8 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 //import 'package:flutter_application_1/main.dart';
 import 'package:path/path.dart' as path;
+
+import 'package:intl/intl.dart';
 
 // FFI signature of the hello_world C function
 typedef AddUserFunc = ffi.Void Function();
@@ -43,9 +45,9 @@ typedef ReceiveDartFunc = ffi.Void Function(Pointer<Utf8>);
 typedef ReceiveDart = void Function(Pointer<Utf8>);
 
 typedef SetDartReceiveCallbackFunc = ffi.Void Function(
-    Pointer<NativeFunction<Void Function(Pointer<Utf8>)>>);
+    Pointer<NativeFunction<Void Function(Pointer<Utf8>, Pointer<Utf8>)>>);
 typedef SetDartReceiveCallback = void Function(
-    Pointer<NativeFunction<Void Function(Pointer<Utf8>)>>);
+    Pointer<NativeFunction<Void Function(Pointer<Utf8>, Pointer<Utf8>)>>);
 
 typedef DartRemoveUserFunc = ffi.Void Function(Int32);
 typedef DartRemoveUser = void Function(int);
@@ -103,11 +105,13 @@ final SetUser _setUser =
     dylib.lookup<ffi.NativeFunction<SetDartReceivePortFunc>>('setDartReceivePort').asFunction();*/
 
 //test
-typedef CallbackNativeType = Void Function(Pointer<Utf8>);
+typedef CallbackNativeType = Void Function(Pointer<Utf8>, Pointer<Utf8>);
 //typedef CallbackNativeTypeFunc = ffi.Void Function(Pointer<Utf8>);
 
-typedef CallbackNativeTypeFunction = void Function(Pointer<Utf8>);
-typedef CallbackNativeTypeNativeFunction = Void Function(Pointer<Utf8>);
+typedef CallbackNativeTypeFunction = void Function(
+    Pointer<Utf8>, Pointer<Utf8>);
+typedef CallbackNativeTypeNativeFunction = Void Function(
+    Pointer<Utf8>, Pointer<Utf8>);
 
 final CallbackNativeTypeFunction callbackNativeType = dylib
     .lookup<ffi.NativeFunction<CallbackNativeTypeNativeFunction>>(
@@ -134,6 +138,9 @@ List<Color> Theme = [
   Color.fromARGB(255, 116, 116, 116) //othermessage
 ];
 
+double textSize = 14;
+
+var username;
 /*
 // Look up the C function 'hello_world'
 final HelloWorld hello = dylib
@@ -295,6 +302,7 @@ class _LogInPageState extends State<MyHomePage> {
     }
     usernameController.text = usernameController.text.trim();
     _setUser(usernameController.text.toNativeUtf8());
+    username = usernameController.text;
   }
 
   @override
@@ -392,7 +400,12 @@ class _MyHomePageState extends State<_ChatPage> {
   final userController = TextEditingController();
   String message = "";
 
+  //String selfUserName = username;
+
   List profilePictures = [AssetImage('assets/ASRCTransparent.png')];
+  var messageStrings = Map<String, List<String>>(); //the text of each message
+  var userMessages =
+      Map<String, List<Widget>>(); //the actual widgets for each message
 
   List<Widget> users = <Widget>[
     Row(children: [
@@ -415,13 +428,12 @@ class _MyHomePageState extends State<_ChatPage> {
 
   List usernameList = ["Notes"]; //for the user being selected
 
-  var userMessages = Map<String, List<Widget>>();
-
   int selectedUser = 0;
 
   @override
   initState() {
     userMessages["Notes"] = <Widget>[];
+    messageStrings["Notes"] = [];
 
     var tempStr = "Notes";
     setCurrTab(tempStr.toNativeUtf8()); // Sets initial tab to General
@@ -460,6 +472,8 @@ class _MyHomePageState extends State<_ChatPage> {
     //self_message
   ];
 
+  List<String> messageString_list = [];
+
   List<Widget> tempList = <Widget>[
     //self_message
   ];
@@ -490,31 +504,29 @@ class _MyHomePageState extends State<_ChatPage> {
       createPub(newUser.toNativeUtf8()); // To add user to topics
 
       userMessages[newUser] = <Widget>[];
+      messageStrings[newUser] = [];
 
       setState(() {
         _selectedUsers.add(false);
         usernameList.add(newUser);
         profilePictures.add(AssetImage('assets/pic1.png'));
 
-        users.add(
-          Row(children: [
-            Container(
-                padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                child: Image(
-                    image: profilePictures[usernameList.indexOf(newUser)],
-                    width: 30,
-                    height: 30)),
-            Container(
-                width: 200,
-                padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                child: Text(
-                    overflow: TextOverflow.ellipsis,
-                    textAlign: TextAlign.left,
-                    newUser,
-                    style:
-                        TextStyle(color: Color.fromARGB(255, 229, 229, 229))))
-          ]),
-        );
+        users.add(Row(children: [
+          Container(
+              padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+              child: Image(
+                  image: profilePictures[usernameList.indexOf(newUser)],
+                  width: 30,
+                  height: 30)),
+          Container(
+              width: 200,
+              padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+              child: Text(
+                  overflow: TextOverflow.ellipsis,
+                  textAlign: TextAlign.left,
+                  newUser,
+                  style: TextStyle(color: Color.fromARGB(255, 229, 229, 229))))
+        ]));
       });
     }
   }
@@ -529,9 +541,9 @@ class _MyHomePageState extends State<_ChatPage> {
 
     setState(() {
       users.remove(users[selectedUser]);
-      _selectedUsers.remove(_selectedUsers[selectedUser]);
-      usernameList.remove(usernameList[selectedUser]);
-      profilePictures.remove(usernameList[selectedUser]);
+      //   _selectedUsers.remove(_selectedUsers[selectedUser]);
+      //   usernameList.remove(usernameList[selectedUser]);
+      //   profilePictures.remove(usernameList[selectedUser]);
       selectedUser = 0;
       if (selectedUser == 0) {
         deleteUserBtn = null;
@@ -542,7 +554,8 @@ class _MyHomePageState extends State<_ChatPage> {
             onPressed: _removeUser,
             icon: Icon(Icons.person_remove));
       }
-      message_list = userMessages[usernameList[selectedUser]]!;
+      // message_list = userMessages[usernameList[selectedUser]]!;
+      // messageString_list = messageStrings[usernameList[selectedUser]]!;
     });
   }
 
@@ -566,6 +579,19 @@ class _MyHomePageState extends State<_ChatPage> {
       setState(() {
         message_list = [
           Container(
+            key: UniqueKey(),
+            padding: EdgeInsets.fromLTRB(60, 0, 10, 0),
+            alignment: Alignment.centerRight,
+            child: Text(
+              DateFormat.jm().format(DateTime.now()),
+              style: TextStyle(
+                  fontSize: textSize - 3, color: getTextColor(Theme[0])),
+            ),
+          ),
+          ...message_list,
+        ];
+        message_list = [
+          Container(
               key: UniqueKey(),
               padding: EdgeInsets.fromLTRB(60, 0, 10, 5),
               alignment: Alignment.centerRight,
@@ -577,42 +603,144 @@ class _MyHomePageState extends State<_ChatPage> {
                     child: Text(
                   message,
                   style: TextStyle(
-                      color: Theme[4].computeLuminance() < 0.5
-                          ? Colors.white.withAlpha(200)
-                          : Colors.black.withAlpha(200)),
+                      fontSize: textSize, color: getTextColor(Theme[3])),
                 )),
               )),
           ...message_list,
+        ];
+
+        messageString_list = [
+          username +
+              " " +
+              DateFormat.jm().format(DateTime.now()) +
+              '\n' +
+              message,
+          ...messageString_list
         ];
       });
     }
   }
 
-  void callbackFunction(Pointer<Utf8> message) {
+  void callbackFunction(Pointer<Utf8> message, Pointer<Utf8> other_username) {
     String msg = message.toDartString();
+    String usr = other_username.toDartString();
     print(msg);
 
-    _updateTextReceive(msg);
+    _updateTextReceive(msg, usr);
   }
 
-  void _saveChat() {}
+  Color getTextColor(Color color) {
+    int d = 0;
+
+    // Counting the perceptive luminance - human eye favors green color...
+    double luminance =
+        (0.299 * color.red + 0.587 * color.green + 0.114 * color.blue) / 255;
+
+    if (luminance > 0.5)
+      d = 0; // bright colors - black font
+    else
+      d = 255; // dark colors - white font
+
+    return Color.fromARGB(color.alpha, d, d, d);
+  }
+
+  Future<void> _saveChat() async {
+    var filename = "ChatLogs/" +
+        usernameList[selectedUser] +
+        "-" +
+        DateTime.now().toString().split(" ")[0];
+    // var chatFile = File(usernameList[selectedUser]);
+    var chatFile;
+
+    var allMessages = "";
+    for (int i = messageString_list.length - 1; i >= 0; i--) {
+      allMessages += messageString_list[i] + '\n';
+    }
+    chatFile = await File(filename).writeAsString(allMessages);
+  }
 
   // for updating messages when received
-  void _updateTextReceive(String message) {
+  void _updateTextReceive(String message, String other_username) {
     setState(() {
-      message_list = [
-        Container(
+      if (usernameList[selectedUser] == other_username) {
+        message_list = [
+          Container(
             key: UniqueKey(),
-            padding: EdgeInsets.fromLTRB(10, 0, 60, 5),
+            padding: EdgeInsets.fromLTRB(10, 0, 60, 0),
             alignment: Alignment.centerLeft,
-            child: Container(
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10), color: Theme[4]),
-              padding: EdgeInsets.all(10),
-              child: Container(child: Text(message)),
-            )),
-        ...message_list,
-      ];
+            child: Text(
+              DateFormat.jm().format(DateTime.now()),
+              //DateTime.now().hour.toString() +
+              //    ":" +
+              //    DateTime.now().minute.toString(),
+              style: TextStyle(
+                  fontSize: textSize - 3, color: getTextColor(Theme[0])),
+            ),
+          ),
+          ...message_list,
+        ];
+        message_list = [
+          Container(
+              key: UniqueKey(),
+              padding: EdgeInsets.fromLTRB(10, 0, 60, 5),
+              alignment: Alignment.centerLeft,
+              child: Container(
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10), color: Theme[4]),
+                padding: EdgeInsets.all(10),
+                child: Container(child: Text(message)),
+              )),
+          ...message_list,
+        ];
+
+        messageString_list = [
+          other_username +
+              " " +
+              DateFormat.jm().format(DateTime.now()) +
+              '\n' +
+              message,
+          ...messageString_list
+        ];
+      } else {
+        userMessages[other_username] = [
+          Container(
+            key: UniqueKey(),
+            padding: EdgeInsets.fromLTRB(10, 0, 60, 0),
+            alignment: Alignment.centerLeft,
+            child: Text(
+              DateFormat.jm().format(DateTime.now()),
+              //DateTime.now().hour.toString() +
+              //    ":" +
+              //    DateTime.now().minute.toString(),
+              style: TextStyle(
+                  fontSize: textSize - 3, color: getTextColor(Theme[0])),
+            ),
+          ),
+          ...?userMessages[other_username],
+        ];
+        userMessages[other_username] = [
+          Container(
+              key: UniqueKey(),
+              padding: EdgeInsets.fromLTRB(10, 0, 60, 5),
+              alignment: Alignment.centerLeft,
+              child: Container(
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10), color: Theme[4]),
+                padding: EdgeInsets.all(10),
+                child: Container(child: Text(message)),
+              )),
+          ...?userMessages[other_username],
+        ];
+
+        messageStrings[other_username] = [
+          other_username +
+              " " +
+              DateFormat.jm().format(DateTime.now()) +
+              '\n' +
+              message,
+          ...?messageStrings[other_username]
+        ];
+      }
     });
   }
 
@@ -693,17 +821,9 @@ class _MyHomePageState extends State<_ChatPage> {
                                                 BorderRadius.circular(10),
                                             color: Theme[2]),
                                         child: TextFormField(
-                                          cursorColor:
-                                              Theme[3].computeLuminance() < 0.5
-                                                  ? Colors.white.withAlpha(200)
-                                                  : Colors.black.withAlpha(200),
+                                          cursorColor: getTextColor(Theme[2]),
                                           style: TextStyle(
-                                              color: Theme[3]
-                                                          .computeLuminance() <
-                                                      0.5
-                                                  ? Colors.white.withAlpha(200)
-                                                  : Colors.black
-                                                      .withAlpha(200)),
+                                              color: getTextColor(Theme[2])),
                                           decoration: InputDecoration(
                                               border: InputBorder.none,
                                               focusedBorder: InputBorder.none,
@@ -717,13 +837,8 @@ class _MyHomePageState extends State<_ChatPage> {
                                                   right: 15),
                                               hintText: "+ Add User",
                                               hintStyle: TextStyle(
-                                                  color:
-                                                      Theme[3].computeLuminance() <
-                                                              0.5
-                                                          ? Colors.white
-                                                              .withAlpha(200)
-                                                          : Colors.black
-                                                              .withAlpha(200))),
+                                                  color: getTextColor(Theme[2])
+                                                      .withAlpha(180))),
                                           onEditingComplete: _addUser,
                                           onChanged: (text) {
                                             _checks();
@@ -742,7 +857,10 @@ class _MyHomePageState extends State<_ChatPage> {
                                                 BorderRadius.circular(40)),
                                         backgroundColor: Theme[2],
                                         onPressed: _loadNext,
-                                        child: const Icon(Icons.settings),
+                                        child: Icon(
+                                          Icons.settings,
+                                          color: getTextColor(Theme[2]),
+                                        ),
                                       )),
                                 ])),
                         Expanded(
@@ -765,6 +883,8 @@ class _MyHomePageState extends State<_ChatPage> {
                                   setState(() {
                                     userMessages[usernameList[selectedUser]] =
                                         message_list;
+                                    messageStrings[usernameList[selectedUser]] =
+                                        messageString_list;
                                     selectedUser = index;
                                     var strUser =
                                         usernameList[index].toString();
@@ -790,6 +910,8 @@ class _MyHomePageState extends State<_ChatPage> {
                                           icon: Icon(Icons.person_remove));
                                     }
                                     message_list = userMessages[
+                                        usernameList[selectedUser]]!;
+                                    messageString_list = messageStrings[
                                         usernameList[selectedUser]]!;
                                   });
                                 },
@@ -838,10 +960,7 @@ class _MyHomePageState extends State<_ChatPage> {
                                       overflow: TextOverflow.ellipsis,
                                       usernameList[selectedUser],
                                       style: TextStyle(
-                                          color:
-                                              Theme[0].computeLuminance() < 0.5
-                                                  ? Colors.white.withAlpha(200)
-                                                  : Colors.black.withAlpha(200),
+                                          color: getTextColor(Theme[0]),
                                           fontSize: 25),
                                     ),
                                   ),
@@ -858,11 +977,8 @@ class _MyHomePageState extends State<_ChatPage> {
                                           width: 140,
                                           child: FloatingActionButton(
                                             backgroundColor: Theme[2],
-                                            foregroundColor: Theme[3]
-                                                        .computeLuminance() <
-                                                    0.5
-                                                ? Colors.white.withAlpha(200)
-                                                : Colors.black.withAlpha(200),
+                                            foregroundColor:
+                                                getTextColor(Theme[2]),
                                             child: const Text("Save User Chat"),
                                             onPressed: () {
                                               _saveChat();
@@ -891,10 +1007,8 @@ class _MyHomePageState extends State<_ChatPage> {
                                   color: Theme[2].withAlpha(
                                       200)), //const Color.fromARGB(255, 72, 72, 72)),
                               child: TextFormField(
-                                cursorColor: Theme[2].computeLuminance() < 0.5
-                                    ? Colors.white
-                                    : Colors.black,
-                                style: TextStyle(color: Colors.white),
+                                cursorColor: getTextColor(Theme[2]),
+                                style: TextStyle(color: getTextColor(Theme[2])),
                                 decoration: InputDecoration(
                                   border: InputBorder.none,
                                   focusedBorder: InputBorder.none,
@@ -904,10 +1018,8 @@ class _MyHomePageState extends State<_ChatPage> {
                                   contentPadding: EdgeInsets.only(
                                       left: 15, bottom: 11, top: 11, right: 15),
                                   hintText: "Start Typing...",
-                                  hintStyle: TextStyle(
-                                      color: Theme[2].computeLuminance() < 0.5
-                                          ? Colors.white.withAlpha(200)
-                                          : Colors.black.withAlpha(200)),
+                                  hintStyle:
+                                      TextStyle(color: getTextColor(Theme[2])),
                                 ),
                                 // Color.fromARGB(70, 255, 255, 255))),
                                 //onEditingComplete: _updateText,
@@ -939,7 +1051,33 @@ class SettingsPage extends State<_SettingsPage> {
   // used by the build method of the State. Fields in a Widget subclass are
   // always marked "final".
 
+  //double textSize = 0;
+
   var _isSelected;
+
+  var settingSelected;
+
+  initState() {
+    settingSelected = SlidePicker(
+      pickerColor: pickerColor,
+      onColorChanged: changeColor,
+    );
+  }
+
+  Color getTextColor(Color color) {
+    int d = 0;
+
+    // Counting the perceptive luminance - human eye favors green color...
+    double luminance =
+        (0.299 * color.red + 0.587 * color.green + 0.114 * color.blue) / 255;
+
+    if (luminance > 0.5)
+      d = 0; // bright colors - black font
+    else
+      d = 255; // dark colors - white font
+
+    return Color.fromARGB(color.alpha, d, d, d);
+  }
 
   List<Widget> options = [
     Container(
@@ -981,14 +1119,50 @@ class SettingsPage extends State<_SettingsPage> {
             overflow: TextOverflow.ellipsis,
             textAlign: TextAlign.left,
             "Other Message Color",
+            style: TextStyle(color: Color.fromARGB(255, 229, 229, 229)))),
+    Container(
+        width: 260,
+        padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+        child: Text(
+            overflow: TextOverflow.ellipsis,
+            textAlign: TextAlign.left,
+            "Font Options",
             style: TextStyle(color: Color.fromARGB(255, 229, 229, 229))))
   ];
 
-  List<bool> optionsButtons = [true, false, false, false, false];
+  List<bool> optionsButtons = [true, false, false, false, false, false];
 
   List<Widget> ColorWheels = [];
 
   late var pickerColor = Theme[0];
+
+  void changeSetting() {
+    if (_isSelected != 5) {
+      pickerColor = Theme[_isSelected];
+      settingSelected = SlidePicker(
+        pickerColor: pickerColor,
+        onColorChanged: changeColor,
+      );
+    } else {
+      settingSelected =
+          Column(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+        Slider(
+            value: textSize,
+            max: 35,
+            onChanged: (newNum) {
+              setState(() {
+                textSize = newNum;
+                changeSetting();
+              });
+            }),
+        Container(
+            child: Text(
+          "Sample Text",
+          style: TextStyle(fontSize: textSize),
+        ))
+      ]);
+    }
+  }
 
   void changeColor(Color color) {
     setState(() => pickerColor = color);
@@ -1063,10 +1237,7 @@ class SettingsPage extends State<_SettingsPage> {
                       onPressed: (int index) {
                         setState(() {
                           _isSelected = index;
-                          // var strUser = usernameList[index].toString();
-                          //  setCurrTab(strUser.toNativeUtf8());
-                          //setCurrTab(usernameList[index].toNativeUtf8());
-                          //print(index);
+
                           for (int buttonIndex = 0;
                               buttonIndex < optionsButtons.length;
                               buttonIndex++) {
@@ -1075,7 +1246,7 @@ class SettingsPage extends State<_SettingsPage> {
                             } else {
                               optionsButtons[buttonIndex] = false;
                             }
-                            pickerColor = Theme[_isSelected];
+                            changeSetting();
                           }
                         });
                       },
@@ -1112,10 +1283,7 @@ class SettingsPage extends State<_SettingsPage> {
 
                               //height: 70,
                               padding: EdgeInsets.all(20),
-                              child: SlidePicker(
-                                pickerColor: pickerColor,
-                                onColorChanged: changeColor,
-                              ))
+                              child: settingSelected)
                         ],
                       ))
                     ],

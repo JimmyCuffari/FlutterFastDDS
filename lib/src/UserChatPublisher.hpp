@@ -184,7 +184,10 @@ public:
             if (std::find(endThreadSignal.begin(), endThreadSignal.end(), topic_name) != endThreadSignal.end()) break;
             //std::cout << "PUBLISHER TOPIC NAME: " << topic_name << std::endl;
 
-            if (publish() && !send_message.empty()) {
+            if(!send_message.empty())
+            std::cout << "Topic Name: " << topic_name << " SendMessageat0: " <<  send_message.at(0) << std::endl;
+
+            if (publish() && !send_message.empty() && send_message.at(0) == topic_name) {
                 auto now = std::chrono::system_clock::now();
                 std::time_t now_time = std::chrono::system_clock::to_time_t(now);
                 std::tm local_time = *std::localtime(&now_time);
@@ -193,8 +196,10 @@ public:
 
                 user_message_.message(send_message.at(1));
                 std::cout << "Message received from Publisher: \"" + send_message.at(1) + "\". Sent to " + send_message.at(0) + "." << std::endl;
-                send_message.clear();
+                
             }
+            
+            send_message.clear();
             /*if (getActive()) {
                 std::cout << "hello?" << std::endl;
                 if (!getStatus()) {
