@@ -49,6 +49,14 @@ typedef SetDartReceiveCallbackFunc = ffi.Void Function(
 typedef SetDartReceiveCallback = void Function(
     Pointer<NativeFunction<Void Function(Pointer<Utf8>, Pointer<Utf8>)>>);
 
+typedef StatusReceiveDartFunc = ffi.Void Function(Pointer<Utf8>);
+typedef StatusReceiveDart = void Function(Pointer<Utf8>);
+
+typedef SetDartStatusReceiveCallbackFunc = ffi.Void Function(
+    Pointer<NativeFunction<Void Function(Pointer<Bool>, Pointer<Int>)>>);
+typedef SetDartStatusReceiveCallback = void Function(
+    Pointer<NativeFunction<Void Function(Pointer<Bool>, Pointer<Int>)>>);
+
 typedef DartRemoveUserFunc = ffi.Void Function(Int32);
 typedef DartRemoveUser = void Function(int);
 
@@ -95,6 +103,15 @@ final SetDartReceiveCallback setDartReceiveCallback = dylib
         'setDartReceiveCallback')
     .asFunction();
 
+final StatusReceiveDart statusReceiveDart = dylib
+    .lookup<ffi.NativeFunction<StatusReceiveDartFunc>>('statusReceiveDart')
+    .asFunction();
+
+final SetDartStatusReceiveCallback setDartStatusReceiveCallback = dylib
+    .lookup<ffi.NativeFunction<SetDartStatusReceiveCallbackFunc>>(
+        'setDartStatusReceiveCallback')
+    .asFunction();
+
 final DartRemoveUser dartRemoveUser = dylib
     .lookup<ffi.NativeFunction<DartRemoveUserFunc>>('dartRemoveUser')
     .asFunction();
@@ -106,16 +123,29 @@ final SetUser _setUser =
 
 //test
 typedef CallbackNativeType = Void Function(Pointer<Utf8>, Pointer<Utf8>);
+typedef StatusCallbackNativeType = Void Function(Pointer<Bool>, Pointer<Int>);
 //typedef CallbackNativeTypeFunc = ffi.Void Function(Pointer<Utf8>);
 
+//for user messages
 typedef CallbackNativeTypeFunction = void Function(
     Pointer<Utf8>, Pointer<Utf8>);
 typedef CallbackNativeTypeNativeFunction = Void Function(
     Pointer<Utf8>, Pointer<Utf8>);
 
+//for user status
+typedef StatusCallbackNativeTypeFunction = void Function(
+    Pointer<Bool>, Pointer<Utf8>);
+typedef StatusCallbackNativeTypeNativeFunction = Void Function(
+    Pointer<Bool>, Pointer<Utf8>);
+
 final CallbackNativeTypeFunction callbackNativeType = dylib
     .lookup<ffi.NativeFunction<CallbackNativeTypeNativeFunction>>(
         'callbackNativeType')
+    .asFunction();
+
+final CallbackNativeTypeFunction statusCallbackNativeType = dylib
+    .lookup<ffi.NativeFunction<CallbackNativeTypeNativeFunction>>(
+        'statusCallbackNativeType')
     .asFunction();
 
 final GetCurrentUserStatus getCurrentUserStatus = dylib
@@ -289,7 +319,8 @@ class _LogInPageState extends State<MyHomePage> {
   TextEditingController usernameController = TextEditingController();
 
   void _loadNext() {
-    if (usernameController.text.length > 2)
+    if (usernameController.text.length > 2 &&
+        usernameController.text != "Notes")
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => _ChatPage()),
@@ -428,6 +459,8 @@ class _MyHomePageState extends State<_ChatPage> {
 
   List usernameList = ["Notes"]; //for the user being selected
 
+  List isActiveList = [true];
+
   int selectedUser = 0;
 
   @override
@@ -441,6 +474,10 @@ class _MyHomePageState extends State<_ChatPage> {
     final callback =
         NativeCallable<CallbackNativeType>.listener(callbackFunction);
     setDartReceiveCallback(callback.nativeFunction);
+
+    final statusCallback = NativeCallable<StatusCallbackNativeType>.listener(
+        statusCallbackFunction);
+    setDartStatusReceiveCallback(statusCallback.nativeFunction);
 
     /*final callbackPointer = Pointer.fromFunction<Void Function(Pointer<Utf8>)>(callbackFunction);
     setDartReceiveCallback(callbackPointer);*/
@@ -497,7 +534,9 @@ class _MyHomePageState extends State<_ChatPage> {
 
   void _addUser() {
     if (userController.text.trim() != "" &&
-        !usernameList.contains(userController.text)) {
+        !usernameList.contains(userController.text) &&
+        userController.text.length > 2 &&
+        userController.text != "Notes") {
       String newUser = userController.text;
       userController.text = "";
 
@@ -505,10 +544,13 @@ class _MyHomePageState extends State<_ChatPage> {
 
       userMessages[newUser] = <Widget>[];
       messageStrings[newUser] = [];
+      //isActiveList[newUser] = ;
 
       setState(() {
         _selectedUsers.add(false);
         usernameList.add(newUser);
+        isActiveList.add(false);
+
         profilePictures.add(AssetImage('assets/pic1.png'));
 
         users.add(Row(children: [
@@ -539,11 +581,18 @@ class _MyHomePageState extends State<_ChatPage> {
 
     _selectedUsers[0] = true;
 
+    // isActiveList[selectedUser] = false;
+    for (int i = selectedUser; i < isActiveList.length - 1; i++) {
+      isActiveList[i] = isActiveList[i + 1];
+    }
+
     setState(() {
       users.remove(users[selectedUser]);
-      //   _selectedUsers.remove(_selectedUsers[selectedUser]);
-      //   usernameList.remove(usernameList[selectedUser]);
-      //   profilePictures.remove(usernameList[selectedUser]);
+      _selectedUsers.remove(_selectedUsers[selectedUser]);
+      usernameList.remove(usernameList[selectedUser]);
+      //profilePictures.remove(usernameList.indexOf(selectedUser));
+      //isActiveList.remove(usernameList[selectedUser]);
+
       selectedUser = 0;
       if (selectedUser == 0) {
         deleteUserBtn = null;
@@ -554,22 +603,17 @@ class _MyHomePageState extends State<_ChatPage> {
             onPressed: _removeUser,
             icon: Icon(Icons.person_remove));
       }
-      // message_list = userMessages[usernameList[selectedUser]]!;
-      // messageString_list = messageStrings[usernameList[selectedUser]]!;
+      message_list = userMessages[usernameList[selectedUser]]!;
+      messageString_list = messageStrings[usernameList[selectedUser]]!;
     });
   }
 
   void _updateText() {
     //user sending text
     //  killThreads();
-    if (textController.text != "") {
+    if (textController.text != "" && isActiveList[selectedUser] == true) {
       message = textController.text;
       textController.text = "";
-
-////////////////////////////////////////////////////////////////////////////////
-      //     bool status = getCurrentUserStatus(selectedUser);
-      //     print("Current Status of user selected: $status");
-////////////////////////////////////////////////////////////////////////////////
 
       // Sends Message to Publisher
       final sendMessage = message.toNativeUtf8();
@@ -624,15 +668,36 @@ class _MyHomePageState extends State<_ChatPage> {
   void callbackFunction(Pointer<Utf8> message, Pointer<Utf8> other_username) {
     String msg = message.toDartString();
     String usr = other_username.toDartString();
+    print(usr);
     print(msg);
 
-    _updateTextReceive(msg, usr);
+    setState(() {
+      _updateTextReceive(msg, usr);
+    });
+  }
+
+  void statusCallbackFunction(Pointer<Bool> isActive, Pointer<Int> userIndex) {
+    if (isActive == nullptr || userIndex == nullptr) {
+      print("Received null pointer(s).");
+      return;
+    }
+
+    bool msg = isActive.value;
+    //String usr = other_username.toDartString();
+    int usr = userIndex.value;
+
+    //bool active = getCurrentUserStatus(usernameList.indexOf(usr));
+    //  print(usr);
+
+    isActiveList[usr + 1] = msg;
+
+    //_updateTextReceive(msg, usr);
   }
 
   Color getTextColor(Color color) {
     int d = 0;
 
-    // Counting the perceptive luminance - human eye favors green color...
+    // Counting the perceptive luminance
     double luminance =
         (0.299 * color.red + 0.587 * color.green + 0.114 * color.blue) / 255;
 
@@ -641,7 +706,7 @@ class _MyHomePageState extends State<_ChatPage> {
     else
       d = 255; // dark colors - white font
 
-    return Color.fromARGB(color.alpha, d, d, d);
+    return Color.fromARGB(255, d, d, d);
   }
 
   Future<void> _saveChat() async {
@@ -670,9 +735,6 @@ class _MyHomePageState extends State<_ChatPage> {
             alignment: Alignment.centerLeft,
             child: Text(
               DateFormat.jm().format(DateTime.now()),
-              //DateTime.now().hour.toString() +
-              //    ":" +
-              //    DateTime.now().minute.toString(),
               style: TextStyle(
                   fontSize: textSize - 3, color: getTextColor(Theme[0])),
             ),
@@ -797,10 +859,18 @@ class _MyHomePageState extends State<_ChatPage> {
                               width: double.infinity,
                               height: 30,
                             ),
+                            Container(
+                                padding: EdgeInsets.fromLTRB(10, 6, 0, 0),
+                                child: Text(
+                                  username,
+                                  style: TextStyle(color: Colors.white),
+                                )),
                             WindowTitleBarBox(
                               child: Row(
                                 children: [
-                                  Expanded(child: MoveWindow()),
+                                  Expanded(
+                                    child: MoveWindow(),
+                                  ),
                                 ],
                               ),
                             )
@@ -974,12 +1044,12 @@ class _MyHomePageState extends State<_ChatPage> {
                                           padding: EdgeInsets.fromLTRB(
                                               10, 10, 0, 10),
                                           height: 50,
-                                          width: 140,
+                                          width: 100,
                                           child: FloatingActionButton(
                                             backgroundColor: Theme[2],
                                             foregroundColor:
                                                 getTextColor(Theme[2]),
-                                            child: const Text("Save User Chat"),
+                                            child: const Text("Save Chat"),
                                             onPressed: () {
                                               _saveChat();
                                             },
@@ -1126,7 +1196,7 @@ class SettingsPage extends State<_SettingsPage> {
         child: Text(
             overflow: TextOverflow.ellipsis,
             textAlign: TextAlign.left,
-            "Font Options",
+            "Font Size",
             style: TextStyle(color: Color.fromARGB(255, 229, 229, 229))))
   ];
 

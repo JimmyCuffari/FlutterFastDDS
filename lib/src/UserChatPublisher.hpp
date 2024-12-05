@@ -35,12 +35,13 @@ private:
     TypeSupport type_;
 
     std::atomic<bool> active;           // Whether Publisher is accepting input
-    std::atomic<bool> status;           // Whether Publisher is online or not (matched with subscriber)
+    //std::atomic<bool> status;           // Whether Publisher is online or not (matched with subscriber)
     //std::vector<std::string>* history;  // Ongoing history of chat
     int history_index;
 
     std::string username;
     std::string topic_name;
+    bool status;
 
     class PubListener : public DataWriterListener
     {
@@ -56,12 +57,15 @@ private:
                 matched_ = info.total_count;
                 std::cout << "Publisher matched." << std::endl;
                 publisher_->setStatus(true);
+//                statusCallbackNative(&publisher_->getStatus(), publisher_->getUsername().c_str());
+
             }
             else if (info.current_count_change == -1)
             {
                 matched_ = info.total_count;
                 std::cout << "Publisher unmatched." << std::endl;
                 publisher_->setStatus(false);
+ //               statusCallbackNative(&publisher_->getStatus(), publisher_->getUsername().c_str());
             }
             else {
                 std::cout << info.current_count_change << " is not a valid value for PublicationMatchedStatus current count change." << std::endl;
@@ -166,11 +170,17 @@ public:
 
     // Signals online or offline
     void setStatus(bool set) {
-        status.store(set);
+        //status.store(set);
+        status = set;
     }
 
-    bool getStatus() {
-        return status.load();
+    bool& getStatus() {
+        //return status.load();
+        return status;
+    }
+
+    std::string& getUsername() {
+        return user_message_.username();
     }
 
     void run()

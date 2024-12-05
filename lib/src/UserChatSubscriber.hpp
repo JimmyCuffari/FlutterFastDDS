@@ -34,6 +34,8 @@ private:
     //std::vector<std::string>* curr_tab; // Tells subscriber if user is tabbed into chat to output messages
     int history_index;
 
+    bool status;
+
     class SubListener : public DataReaderListener
     {
     private:
@@ -47,9 +49,12 @@ private:
         {
             if (info.current_count_change == 1) {
                 //std::cout << "Subscriber matched." << std::endl;
+                subscriber_->setStatus(true);
+                statusCallbackNative(&subscriber_->getStatus(), &subscriber_->getHistoryIndexStatus());
             }
             else if (info.current_count_change == -1) {
                 //std::cout << "Subscriber unmatched." << std::endl;
+                statusCallbackNative(&subscriber_->getStatus(), &subscriber_->getHistoryIndexStatus());
             }
             else {
                 std::cout << info.current_count_change << " is not a valid value for SubscriptionMatchedStatus current count change." << std::endl;
@@ -70,7 +75,7 @@ private:
                         //std::vector<std::string>* curr_tab = subscriber_->getCurrTab();
                         
                         callbackNative(user_message_.message().c_str(), user_message_.username().c_str());
-
+                        
                         if (last_received_message == "") {
                             /*if (curr_chat_tab.at(0) == "in" && curr_chat_tab.at(1) == subscriber_->getTopicName()) {
                                 std::cout << user_message_.username() + ": ";
@@ -190,6 +195,10 @@ public:
         return history_index;
     }
 
+    int& getHistoryIndexStatus() {
+        return history_index;
+    }
+
     void run(std::string test) {
         while (true) {
             //if (std::find(endThreadSignal.begin(), endThreadSignal.end(), topic_name) != endThreadSignal.end()) break;
@@ -210,4 +219,16 @@ public:
             std::this_thread::sleep_for(std::chrono::milliseconds(1000));
         }
     }
+
+    // Signals online or offline
+    void setStatus(bool set) {
+        //status.store(set);
+        status = set;
+    }
+
+    bool& getStatus() {
+        //return status.load();
+        return status;
+    }
+
 };

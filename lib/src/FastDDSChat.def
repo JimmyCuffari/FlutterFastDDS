@@ -11,3 +11,6 @@ EXPORTS
    setUsername
    dartRemoveUser
    getCurrentUserStatus
+   statusCallbackNative
+   statusReceiveDart
+   setDartStatusReceiveCallback

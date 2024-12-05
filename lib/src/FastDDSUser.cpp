@@ -196,6 +196,16 @@ void callbackNative(const char* message, const char* username) {
         std::cout << "No callback is currently set." << std::endl;
     }
 }
+StatusCallbackFunction statusReceiveCallback = nullptr;
+//Dart_Port receivePort;
+
+void statusCallbackNative(const bool* isActive, const int* userIndex) {
+    if (statusReceiveCallback) {
+        statusReceiveCallback(isActive, userIndex);
+    } else {
+        std::cout << "No callback is currently set." << std::endl;
+    }
+}
 
 void receiveDart(const char* message) {
     if (receiveCallback) {
@@ -224,6 +234,26 @@ void receiveDart(const char* message) {
 void setDartReceiveCallback(CallbackFunction callback) {
     receiveCallback = callback;
 }
+
+void statusReceiveDart(const char* message) {
+    if (receiveCallback) {
+        //receiveCallback(message);
+        /*Dart_CObject msg;
+        msg.type = Dart_CObject_kString;
+        msg.value.as_string = "HELLO WORK!!!";
+        Dart_PostCObject_DL(receivePort, &msg);*/
+        //Dart_PostCObject;
+    } else {
+        std::cout << "No callback is currently set." << std::endl;
+    }
+}
+
+void setDartStatusReceiveCallback(StatusCallbackFunction callback) {
+    statusReceiveCallback = callback;
+}
+
+
+
 
 void setSendMessage(char *user, char *msg) {
     //send_message = message;
