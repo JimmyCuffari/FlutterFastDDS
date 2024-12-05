@@ -582,8 +582,12 @@ class _MyHomePageState extends State<_ChatPage> {
     _selectedUsers[0] = true;
 
     // isActiveList[selectedUser] = false;
-    for (int i = selectedUser; i < isActiveList.length - 1; i++) {
-      isActiveList[i] = isActiveList[i + 1];
+    if (selectedUser != isActiveList.length) {
+      for (int i = selectedUser; i < isActiveList.length - 1; i++) {
+        isActiveList[i] = isActiveList[i + 1];
+      }
+    } else {
+      isActiveList[selectedUser] = false;
     }
 
     setState(() {
@@ -688,8 +692,9 @@ class _MyHomePageState extends State<_ChatPage> {
 
     //bool active = getCurrentUserStatus(usernameList.indexOf(usr));
     //  print(usr);
-
-    isActiveList[usr + 1] = msg;
+    setState(() {
+      isActiveList[usr + 1] = msg;
+    });
 
     //_updateTextReceive(msg, usr);
   }
@@ -722,6 +727,33 @@ class _MyHomePageState extends State<_ChatPage> {
       allMessages += messageString_list[i] + '\n';
     }
     chatFile = await File(filename).writeAsString(allMessages);
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          //title: Text('Alert Title'),
+          content: Container(
+            padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
+            alignment: Alignment.center,
+            width: 40,
+            height: 40,
+            child: Text(
+              'Chat Log Saved.',
+              style: TextStyle(fontSize: 15),
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Ok'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   // for updating messages when received
@@ -750,7 +782,9 @@ class _MyHomePageState extends State<_ChatPage> {
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10), color: Theme[4]),
                 padding: EdgeInsets.all(10),
-                child: Container(child: Text(message)),
+                child: Container(
+                    child: Text(message,
+                        style: TextStyle(color: getTextColor(Theme[4])))),
               )),
           ...message_list,
         ];
@@ -789,7 +823,11 @@ class _MyHomePageState extends State<_ChatPage> {
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10), color: Theme[4]),
                 padding: EdgeInsets.all(10),
-                child: Container(child: Text(message)),
+                child: Container(
+                    child: Text(
+                  message,
+                  style: TextStyle(color: getTextColor(Theme[4])),
+                )),
               )),
           ...?userMessages[other_username],
         ];
@@ -1022,9 +1060,19 @@ class _MyHomePageState extends State<_ChatPage> {
                                 //mainAxisAlignment: MainAxisAlignment.values[3],
                                 children: [
                                   Container(
+                                    padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                                    child: Icon(
+                                      Icons.circle,
+                                      size: 15,
+                                      color: isActiveList[selectedUser] == true
+                                          ? Colors.green
+                                          : Colors.red,
+                                    ),
+                                  ),
+                                  Container(
                                     width:
                                         MediaQuery.sizeOf(context).width - 480,
-                                    padding: EdgeInsets.fromLTRB(40, 0, 0, 0),
+                                    padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
                                     alignment: Alignment.centerLeft,
                                     child: Text(
                                       overflow: TextOverflow.ellipsis,
@@ -1212,10 +1260,11 @@ class SettingsPage extends State<_SettingsPage> {
       settingSelected = SlidePicker(
         pickerColor: pickerColor,
         onColorChanged: changeColor,
+        sliderTextStyle: TextStyle(color: getTextColor(Theme[0])),
       );
     } else {
       settingSelected =
-          Column(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+          Column(mainAxisAlignment: MainAxisAlignment.values[4], children: [
         Slider(
             value: textSize,
             max: 35,
@@ -1225,11 +1274,13 @@ class SettingsPage extends State<_SettingsPage> {
                 changeSetting();
               });
             }),
-        Container(
+        SizedBox(
+            height: 60,
             child: Text(
-          "Sample Text",
-          style: TextStyle(fontSize: textSize),
-        ))
+              "Sample Text",
+              style:
+                  TextStyle(fontSize: textSize, color: getTextColor(Theme[0])),
+            ))
       ]);
     }
   }
@@ -1247,6 +1298,7 @@ class SettingsPage extends State<_SettingsPage> {
         Theme[3] = color;
       else if (optionsButtons[4] == true) Theme[4] = color;
     });
+    changeSetting();
   }
 
   void _goBack() {

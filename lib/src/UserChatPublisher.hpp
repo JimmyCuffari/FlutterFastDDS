@@ -115,6 +115,31 @@ public:
         DomainParticipantQos participantQos;
         participantQos.name("Participant_publisher");
 
+        // Parse for IPs
+
+        std::ifstream inputFile("../../ip_list.txt");
+
+        if (!inputFile) {
+            std::cerr << "Could not open file!" << std::endl;
+        }
+
+        std::string line;
+
+        // Skips first two lines
+        std::getline(inputFile, line);
+        std::getline(inputFile, line);
+
+        while (std::getline(inputFile, line)) {
+            eprosima::fastdds::rtps::Locator_t locator;
+            eprosima::fastdds::rtps::IPLocator::setIPv4(locator, line);
+            locator.port = 7412;
+            participantQos.wire_protocol().builtin.initialPeersList.push_back(locator);
+        }
+
+        inputFile.close();
+
+        // End IP stuff
+
         participant_ = DomainParticipantFactory::get_instance()->create_participant(0, participantQos);
 
         if (participant_ == nullptr)

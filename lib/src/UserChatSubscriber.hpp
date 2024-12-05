@@ -54,6 +54,7 @@ private:
             }
             else if (info.current_count_change == -1) {
                 //std::cout << "Subscriber unmatched." << std::endl;
+                subscriber_->setStatus(false);
                 statusCallbackNative(&subscriber_->getStatus(), &subscriber_->getHistoryIndexStatus());
             }
             else {
