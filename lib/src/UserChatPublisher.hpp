@@ -117,7 +117,7 @@ public:
 
         // Parse for IPs
 
-        std::ifstream inputFile("../../ip_list.txt");
+        std::ifstream inputFile("../../../../ip_list.txt");
 
         if (!inputFile) {
             std::cerr << "Could not open file!" << std::endl;
