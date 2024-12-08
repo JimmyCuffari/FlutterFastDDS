@@ -958,6 +958,7 @@ class _MyHomePageState extends State<_ChatPage> {
                                       padding:
                                           EdgeInsets.fromLTRB(0, 15, 0, 15),
                                       child: FloatingActionButton(
+                                        heroTag: "tagSettings",
                                         foregroundColor:
                                             Color.fromARGB(255, 36, 36, 36),
                                         shape: RoundedRectangleBorder(
@@ -1094,6 +1095,7 @@ class _MyHomePageState extends State<_ChatPage> {
                                           height: 50,
                                           width: 100,
                                           child: FloatingActionButton(
+                                            heroTag: "tag_save",
                                             backgroundColor: Theme[2],
                                             foregroundColor:
                                                 getTextColor(Theme[2]),
@@ -1202,11 +1204,13 @@ class SettingsPage extends State<_SettingsPage> {
         width: 260,
         padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
         child: Text(
+            key: UniqueKey(),
             overflow: TextOverflow.ellipsis,
             textAlign: TextAlign.left,
             "Primary Color",
             style: TextStyle(color: Color.fromARGB(255, 229, 229, 229)))),
     Container(
+        key: UniqueKey(),
         width: 260,
         padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
         child: Text(
@@ -1215,6 +1219,7 @@ class SettingsPage extends State<_SettingsPage> {
             "Secondary Color",
             style: TextStyle(color: Color.fromARGB(255, 229, 229, 229)))),
     Container(
+        key: UniqueKey(),
         width: 260,
         padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
         child: Text(
@@ -1223,6 +1228,7 @@ class SettingsPage extends State<_SettingsPage> {
             "Button Color",
             style: TextStyle(color: Color.fromARGB(255, 229, 229, 229)))),
     Container(
+        key: UniqueKey(),
         width: 260,
         padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
         child: Text(
@@ -1231,6 +1237,7 @@ class SettingsPage extends State<_SettingsPage> {
             "Self Message Color",
             style: TextStyle(color: Color.fromARGB(255, 229, 229, 229)))),
     Container(
+        key: UniqueKey(),
         width: 260,
         padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
         child: Text(
@@ -1239,6 +1246,7 @@ class SettingsPage extends State<_SettingsPage> {
             "Other Message Color",
             style: TextStyle(color: Color.fromARGB(255, 229, 229, 229)))),
     Container(
+        key: UniqueKey(),
         width: 260,
         padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
         child: Text(
@@ -1319,8 +1327,7 @@ class SettingsPage extends State<_SettingsPage> {
             Container(
                 color: Theme[1], //
                 width: 260,
-                child: Expanded(
-                    child: Column(children: [
+                child: Column(children: [
                   Stack(
                     children: [
                       Container(
@@ -1341,6 +1348,7 @@ class SettingsPage extends State<_SettingsPage> {
                       alignment: Alignment.topLeft,
                       padding: EdgeInsets.fromLTRB(10, 10, 0, 20),
                       child: FloatingActionButton(
+                        key: UniqueKey(),
                         foregroundColor: Color.fromARGB(255, 36, 36, 36),
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(20)),
@@ -1374,7 +1382,7 @@ class SettingsPage extends State<_SettingsPage> {
                       },
                     ),
                   ),
-                ]))),
+                ])),
             Expanded(
               child: Container(
                   color: Theme[0],
