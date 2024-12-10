@@ -189,9 +189,9 @@ void viewUsers(std::vector<std::string>& threaded_usernames, std::vector<pub_thr
 CallbackFunction receiveCallback = nullptr;
 //Dart_Port receivePort;
 
-void callbackNative(const char* message, const char* username) {
+void callbackNative(const char* message, const char* username, int *pic) {
     if (receiveCallback) {
-        receiveCallback(message, username);
+        receiveCallback(message, username, pic);
     } else {
         std::cout << "No callback is currently set." << std::endl;
     }

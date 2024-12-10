@@ -69,13 +69,14 @@ typedef GetCurrentUserStatus = bool Function(int);
 /*typedef SetDartReceivePortFunc = ffi.Void Function(Pointer<NativeType>);
 typedef SetDartReceivePort = void Function(Pointer<NativeType>);*/
 
-var libraryPath = path.join(
-    Directory.current.path, 'lib', 'build', 'Debug', 'FastDDSUser.dll');
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//var libraryPath = path.join(    Directory.current.path, 'lib', 'build', 'Debug', 'FastDDSUser.dll');
 
 //path.join(
 //  Directory.current.path, 'lib', 'hello_library', 'libhello_library.dll');
 
-final dylib = ffi.DynamicLibrary.open(libraryPath);
+//final dylib = ffi.DynamicLibrary.open(libraryPath);
+final dylib = ffi.DynamicLibrary.open("FastDDSUser.dll");
 
 final CppAddUser addUser =
     dylib.lookup<ffi.NativeFunction<AddUserFunc>>('addUser').asFunction();
@@ -168,6 +169,15 @@ List<Color> Theme = [
   Color.fromARGB(255, 116, 116, 116) //othermessage
 ];
 
+List<Widget> profiles = [
+  Image(image: AssetImage('assets/pic1.png'), width: 30, height: 30),
+  Image(image: AssetImage('assets/ASRCTransparent.png'), width: 30, height: 30),
+  Image(image: AssetImage('assets/ASRCRed.png'), width: 30, height: 30),
+  Image(image: AssetImage('assets/ASRCYellow.png'), width: 30, height: 30),
+  Image(image: AssetImage('assets/ASRCGreen.png'), width: 30, height: 30),
+  Image(image: AssetImage('assets/ASRCPurple.png'), width: 30, height: 30)
+];
+
 double textSize = 14;
 
 var username;
@@ -240,6 +250,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: '',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         scaffoldBackgroundColor: const Color.fromARGB(255, 59, 59, 59),
         // This is the theme of your application.
@@ -425,31 +436,34 @@ class _ChatPage extends StatefulWidget {
 //font colors be sepera
 
 class _MyHomePageState extends State<_ChatPage> {
+  var scrollUser = ScrollController();
+  var scrollPic = ScrollController();
+
   var deleteUserBtn = null;
   var chatText = null;
   final textController = TextEditingController();
   final userController = TextEditingController();
   String message = "";
-
   //String selfUserName = username;
 
-  List profilePictures = [AssetImage('assets/ASRCTransparent.png')];
+  List profilePictures = ['assets/ASRCTransparent.png'];
   var messageStrings = Map<String, List<String>>(); //the text of each message
   var userMessages =
       Map<String, List<Widget>>(); //the actual widgets for each message
 
   List<Widget> users = <Widget>[
     Row(children: [
-      Container(
+      /* Container(
           padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
           child: Image(
               image: AssetImage('assets/ASRCTransparent.png'),
               width: 30,
-              height: 30)),
+              height: 30)),*/
       Container(
-          padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+          width: 258,
+          padding: EdgeInsets.fromLTRB(50, 0, 0, 0),
           child: Text(
-              textAlign: TextAlign.center,
+              textAlign: TextAlign.left,
               "Notes",
               style: TextStyle(color: Color.fromARGB(255, 229, 229, 229))))
     ])
@@ -479,6 +493,9 @@ class _MyHomePageState extends State<_ChatPage> {
         statusCallbackFunction);
     setDartStatusReceiveCallback(statusCallback.nativeFunction);
 
+    scrollPic.addListener(() => _syncScroll(scrollPic, scrollUser));
+    scrollUser.addListener(() => _syncScroll(scrollUser, scrollPic));
+
     /*final callbackPointer = Pointer.fromFunction<Void Function(Pointer<Utf8>)>(callbackFunction);
     setDartReceiveCallback(callbackPointer);*/
 
@@ -494,6 +511,16 @@ class _MyHomePageState extends State<_ChatPage> {
 
     final receivePortPointer = Pointer.fromAddress(receivePort.hashCode);
     setDartReceivePort(receivePortPointer);*/
+  }
+
+  var _isSyncingScroll = false;
+
+  void _syncScroll(ScrollController source, ScrollController target) {
+    if (_isSyncingScroll) return;
+
+    _isSyncingScroll = true;
+    target.jumpTo(source.offset); // Synchronize the scroll position
+    _isSyncingScroll = false;
   }
 
   @override
@@ -551,24 +578,25 @@ class _MyHomePageState extends State<_ChatPage> {
         usernameList.add(newUser);
         isActiveList.add(false);
 
-        profilePictures.add(AssetImage('assets/pic1.png'));
+        profilePictures.add('assets/pic1.png');
 
-        users.add(Row(children: [
-          Container(
+        users.add(
+            /* Container(
               padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
               child: Image(
                   image: profilePictures[usernameList.indexOf(newUser)],
                   width: 30,
-                  height: 30)),
-          Container(
-              width: 200,
-              padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
-              child: Text(
-                  overflow: TextOverflow.ellipsis,
-                  textAlign: TextAlign.left,
-                  newUser,
-                  style: TextStyle(color: Color.fromARGB(255, 229, 229, 229))))
-        ]));
+                  height: 30)),*/
+
+            Container(
+                width: 258,
+                padding: EdgeInsets.fromLTRB(55, 0, 0, 0),
+                child: Text(
+                    overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.left,
+                    newUser,
+                    style:
+                        TextStyle(color: Color.fromARGB(255, 229, 229, 229)))));
       });
     }
   }
@@ -672,8 +700,8 @@ class _MyHomePageState extends State<_ChatPage> {
   void callbackFunction(Pointer<Utf8> message, Pointer<Utf8> other_username) {
     String msg = message.toDartString();
     String usr = other_username.toDartString();
-    print(usr);
-    print(msg);
+    // print(usr);
+    // print(msg);
 
     setState(() {
       _updateTextReceive(msg, usr);
@@ -715,7 +743,7 @@ class _MyHomePageState extends State<_ChatPage> {
   }
 
   Future<void> _saveChat() async {
-    var filename = "ChatLogs/" +
+    var filename = "./ChatLogs/" +
         usernameList[selectedUser] +
         "-" +
         DateTime.now().toString().split(" ")[0];
@@ -902,6 +930,7 @@ class _MyHomePageState extends State<_ChatPage> {
                                 child: Text(
                                   username,
                                   style: TextStyle(color: Colors.white),
+                                  overflow: TextOverflow.ellipsis,
                                 )),
                             WindowTitleBarBox(
                               child: Row(
@@ -973,18 +1002,33 @@ class _MyHomePageState extends State<_ChatPage> {
                                       )),
                                 ])),
                         Expanded(
-                            child: ListView(
-                          shrinkWrap: true,
-                          scrollDirection: Axis.vertical,
-                          //mainAxisAlignment: MainAxisAlignment.start,
+                            child: Stack(
                           children: [
                             Container(
+                                padding: EdgeInsets.fromLTRB(0, 3, 0, 0),
+                                child: ListView.builder(
+                                  controller: scrollPic,
+                                  itemCount: profilePictures.length,
+                                  itemBuilder:
+                                      (BuildContext context, int index) {
+                                    return ListTile(
+                                      title: Container(
+                                          alignment: Alignment.centerLeft,
+                                          padding:
+                                              EdgeInsets.fromLTRB(0, 0, 0, 3),
+                                          child: Image.asset(
+                                              profilePictures[index],
+                                              width: 30,
+                                              height: 30)),
+                                    );
+                                  },
+                                )),
+                            SingleChildScrollView(
+                              controller: scrollUser,
                               child: ToggleButtons(
                                 disabledColor: Theme[1],
                                 disabledBorderColor: Theme[1],
-                                fillColor: Theme[0].withAlpha(
-                                    200), //Color.fromARGB(255, 50, 50, 50),
-                                //selectedBorderColor: Theme[0].withAlpha(200),
+                                fillColor: Theme[0].withAlpha(200),
                                 direction: Axis.vertical,
                                 isSelected: _selectedUsers,
                                 children: users,
@@ -1025,7 +1069,7 @@ class _MyHomePageState extends State<_ChatPage> {
                                   });
                                 },
                               ),
-                            ),
+                            )
                           ],
                         )),
                       ]))
@@ -1175,6 +1219,8 @@ class SettingsPage extends State<_SettingsPage> {
 
   var _isSelected;
 
+  var _profileIsSelected;
+
   var settingSelected;
 
   initState() {
@@ -1253,24 +1299,28 @@ class SettingsPage extends State<_SettingsPage> {
             overflow: TextOverflow.ellipsis,
             textAlign: TextAlign.left,
             "Font Size",
+            style: TextStyle(color: Color.fromARGB(255, 229, 229, 229)))),
+    Container(
+        key: UniqueKey(),
+        width: 260,
+        padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+        child: Text(
+            overflow: TextOverflow.ellipsis,
+            textAlign: TextAlign.left,
+            "Profile Picture",
             style: TextStyle(color: Color.fromARGB(255, 229, 229, 229))))
   ];
 
-  List<bool> optionsButtons = [true, false, false, false, false, false];
+  List<bool> optionsButtons = [true, false, false, false, false, false, false];
+
+  List<bool> profileButtons = [true, false, false, false, false, false];
 
   List<Widget> ColorWheels = [];
 
   late var pickerColor = Theme[0];
 
   void changeSetting() {
-    if (_isSelected != 5) {
-      pickerColor = Theme[_isSelected];
-      settingSelected = SlidePicker(
-        pickerColor: pickerColor,
-        onColorChanged: changeColor,
-        sliderTextStyle: TextStyle(color: getTextColor(Theme[0])),
-      );
-    } else {
+    if (_isSelected == 5) {
       settingSelected =
           Column(mainAxisAlignment: MainAxisAlignment.values[4], children: [
         Slider(
@@ -1290,6 +1340,45 @@ class SettingsPage extends State<_SettingsPage> {
                   TextStyle(fontSize: textSize, color: getTextColor(Theme[0])),
             ))
       ]);
+    } else if (_isSelected == 6) {
+      settingSelected = Container(
+          child: Column(
+        children: [
+          ToggleButtons(
+            //selectedColor: Theme[1],
+            selectedBorderColor: Theme[1],
+            disabledColor: Theme[0],
+            disabledBorderColor: Theme[0],
+            //fillColor: Theme[0].withAlpha(200),
+            direction: Axis.horizontal,
+            isSelected: profileButtons,
+            children: profiles,
+            onPressed: (int index) {
+              setState(() {
+                _profileIsSelected = index;
+
+                for (int buttonIndex = 0;
+                    buttonIndex < profileButtons.length;
+                    buttonIndex++) {
+                  if (buttonIndex == index) {
+                    profileButtons[buttonIndex] = true;
+                  } else {
+                    profileButtons[buttonIndex] = false;
+                  }
+                  changeSetting();
+                }
+              });
+            },
+          ),
+        ],
+      ));
+    } else {
+      pickerColor = Theme[_isSelected];
+      settingSelected = SlidePicker(
+        pickerColor: pickerColor,
+        onColorChanged: changeColor,
+        sliderTextStyle: TextStyle(color: getTextColor(Theme[0])),
+      );
     }
   }
 
@@ -1346,7 +1435,7 @@ class SettingsPage extends State<_SettingsPage> {
                   ),
                   Container(
                       alignment: Alignment.topLeft,
-                      padding: EdgeInsets.fromLTRB(10, 10, 0, 20),
+                      padding: EdgeInsets.fromLTRB(10, 10, 0, 10),
                       child: FloatingActionButton(
                         key: UniqueKey(),
                         foregroundColor: Color.fromARGB(255, 36, 36, 36),

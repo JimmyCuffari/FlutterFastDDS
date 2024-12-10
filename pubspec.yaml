@@ -65,6 +65,10 @@ flutter:
     - assets/pic2.png
     - assets/ASRCLOGO.png
     - assets/ASRCTransparent.png
+    - assets/ASRCRed.png
+    - assets/ASRCYellow.png
+    - assets/ASRCPurple.png
+    - assets/ASRCGreen.png
     
   # To add assets to your application, add an assets section, like this:
   # assets:
