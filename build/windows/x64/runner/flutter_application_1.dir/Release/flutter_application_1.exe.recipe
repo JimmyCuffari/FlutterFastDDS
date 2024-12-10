@@ -2,13 +2,13 @@
 <Project>
   <ProjectOutputs>
     <ProjectOutput>
-      <FullPath>C:\Users\jimmy\Desktop\FastDDS\FlutterFastDDS\build\windows\x64\x64\Release\ZERO_CHECK</FullPath>
+      <FullPath>D:\ddsplace\FlutterFastDDS\build\windows\x64\x64\Release\ZERO_CHECK</FullPath>
     </ProjectOutput>
     <ProjectOutput>
-      <FullPath>C:\Users\jimmy\Desktop\FastDDS\FlutterFastDDS\build\windows\x64\flutter\x64\Release\flutter_assemble</FullPath>
+      <FullPath>D:\ddsplace\FlutterFastDDS\build\windows\x64\flutter\x64\Release\flutter_assemble</FullPath>
     </ProjectOutput>
     <ProjectOutput>
-      <FullPath>C:\Users\jimmy\Desktop\FastDDS\FlutterFastDDS\build\windows\x64\runner\Release\flutter_application_1.exe</FullPath>
+      <FullPath>D:\ddsplace\FlutterFastDDS\build\windows\x64\runner\Release\flutter_application_1.exe</FullPath>
     </ProjectOutput>
   </ProjectOutputs>
   <ContentFiles />

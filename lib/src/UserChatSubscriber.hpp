@@ -75,8 +75,6 @@ private:
                         //std::vector<std::string>* curr_history = subscriber_->getHistory();
                         //std::vector<std::string>* curr_tab = subscriber_->getCurrTab();
                         
-                        callbackNative(user_message_.message().c_str(), user_message_.username().c_str());
-                        
                         if (last_received_message == "") {
                             /*if (curr_chat_tab.at(0) == "in" && curr_chat_tab.at(1) == subscriber_->getTopicName()) {
                                 std::cout << user_message_.username() + ": ";
@@ -90,6 +88,8 @@ private:
 
                             chat_histories.at(subscriber_->getHistoryIndex()).push_back(str);
                             last_received_message = str;
+
+                            callbackNative(user_message_.message().c_str(), user_message_.username().c_str());
                         }
                         else if (last_received_message != str) {
                             /*if (curr_chat_tab.at(0) == "in" && curr_chat_tab.at(1) == subscriber_->getTopicName()) {
@@ -103,6 +103,8 @@ private:
 
                             chat_histories.at(subscriber_->getHistoryIndex()).push_back(str);
                             last_received_message = str;
+
+                            callbackNative(user_message_.message().c_str(), user_message_.username().c_str());
                         }
                     }
                 }

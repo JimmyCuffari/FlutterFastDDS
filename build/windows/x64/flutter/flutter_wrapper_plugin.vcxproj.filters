@@ -1,25 +1,25 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="C:\Users\jimmy\Desktop\FastDDS\FlutterFastDDS\windows\flutter\ephemeral\cpp_client_wrapper\core_implementations.cc">
+    <ClCompile Include="D:\ddsplace\FlutterFastDDS\windows\flutter\ephemeral\cpp_client_wrapper\core_implementations.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Users\jimmy\Desktop\FastDDS\FlutterFastDDS\windows\flutter\ephemeral\cpp_client_wrapper\standard_codec.cc">
+    <ClCompile Include="D:\ddsplace\FlutterFastDDS\windows\flutter\ephemeral\cpp_client_wrapper\standard_codec.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Users\jimmy\Desktop\FastDDS\FlutterFastDDS\windows\flutter\ephemeral\cpp_client_wrapper\plugin_registrar.cc">
+    <ClCompile Include="D:\ddsplace\FlutterFastDDS\windows\flutter\ephemeral\cpp_client_wrapper\plugin_registrar.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="C:\Users\jimmy\Desktop\FastDDS\FlutterFastDDS\windows\flutter\CMakeLists.txt" />
+    <CustomBuild Include="D:\ddsplace\FlutterFastDDS\windows\flutter\CMakeLists.txt" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="CMake Rules">
-      <UniqueIdentifier>{8B598986-5C43-3DF5-8437-07F9034521C3}</UniqueIdentifier>
+      <UniqueIdentifier>{997A5D1C-6D36-327F-8E3D-18F1437F35F7}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files">
-      <UniqueIdentifier>{E2938B9D-8CC4-3869-92CD-8E73672FFA9F}</UniqueIdentifier>
+      <UniqueIdentifier>{D45A7519-D60B-34ED-8779-96A3DDB30959}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
