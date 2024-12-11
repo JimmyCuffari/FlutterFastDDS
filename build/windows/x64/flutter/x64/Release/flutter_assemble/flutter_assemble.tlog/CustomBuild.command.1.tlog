@@ -1,6 +1,6 @@
-^D:\DDSPLACE\FLUTTERFASTDDS\BUILD\WINDOWS\X64\CMAKEFILES\47B44C94DBD8BD0378380FAE3B512B32\FLUTTER_WINDOWS.DLL.RULE
+^C:\USERS\JIMMY\DESKTOP\FASTDDS\FLUTTERFASTDDS\BUILD\WINDOWS\X64\CMAKEFILES\62631F0FB0B5A68A775F3F8275A5CCC9\FLUTTER_WINDOWS.DLL.RULE
 setlocal
-"C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -E env FLUTTER_ROOT=C:\Users\miles\flutter\flutter PROJECT_DIR=D:\ddsplace\FlutterFastDDS FLUTTER_ROOT=C:\Users\miles\flutter\flutter FLUTTER_EPHEMERAL_DIR=D:\ddsplace\FlutterFastDDS\windows\flutter\ephemeral PROJECT_DIR=D:\ddsplace\FlutterFastDDS FLUTTER_TARGET=lib\main.dart DART_OBFUSCATION=false TRACK_WIDGET_CREATION=true TREE_SHAKE_ICONS=true PACKAGE_CONFIG=D:\ddsplace\FlutterFastDDS\.dart_tool\package_config.json C:/Users/miles/flutter/flutter/packages/flutter_tools/bin/tool_backend.bat windows-x64 Release
+"C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -E env FLUTTER_ROOT=C:\Users\jimmy\Documents\Flutter\flutter PROJECT_DIR=C:\Users\jimmy\Desktop\FastDDS\FlutterFastDDS FLUTTER_ROOT=C:\Users\jimmy\Documents\Flutter\flutter FLUTTER_EPHEMERAL_DIR=C:\Users\jimmy\Desktop\FastDDS\FlutterFastDDS\windows\flutter\ephemeral PROJECT_DIR=C:\Users\jimmy\Desktop\FastDDS\FlutterFastDDS FLUTTER_TARGET=lib\main.dart DART_OBFUSCATION=false TRACK_WIDGET_CREATION=true TREE_SHAKE_ICONS=true PACKAGE_CONFIG=C:\Users\jimmy\Desktop\FastDDS\FlutterFastDDS\.dart_tool\package_config.json C:/Users/jimmy/Documents/Flutter/flutter/packages/flutter_tools/bin/tool_backend.bat windows-x64 Release
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
@@ -8,7 +8,7 @@ endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
 exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd
-^D:\DDSPLACE\FLUTTERFASTDDS\BUILD\WINDOWS\X64\CMAKEFILES\15038BFDE944D00493A91ADDEA155146\FLUTTER_ASSEMBLE.RULE
+^C:\USERS\JIMMY\DESKTOP\FASTDDS\FLUTTERFASTDDS\BUILD\WINDOWS\X64\CMAKEFILES\C69131D7955966F5CE0C2437738E12DE\FLUTTER_ASSEMBLE.RULE
 setlocal
 :cmEnd
 endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
@@ -16,9 +16,9 @@ endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
 exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd
-^D:\DDSPLACE\FLUTTERFASTDDS\WINDOWS\FLUTTER\CMAKELISTS.TXT
+^C:\USERS\JIMMY\DESKTOP\FASTDDS\FLUTTERFASTDDS\WINDOWS\FLUTTER\CMAKELISTS.TXT
 setlocal
-"C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -SD:/ddsplace/FlutterFastDDS/windows -BD:/ddsplace/FlutterFastDDS/build/windows/x64 --check-stamp-file D:/ddsplace/FlutterFastDDS/build/windows/x64/flutter/CMakeFiles/generate.stamp
+"C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -SC:/Users/jimmy/Desktop/FastDDS/FlutterFastDDS/windows -BC:/Users/jimmy/Desktop/FastDDS/FlutterFastDDS/build/windows/x64 --check-stamp-file C:/Users/jimmy/Desktop/FastDDS/FlutterFastDDS/build/windows/x64/flutter/CMakeFiles/generate.stamp
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone

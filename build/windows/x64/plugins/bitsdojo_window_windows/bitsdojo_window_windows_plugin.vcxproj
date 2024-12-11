@@ -18,9 +18,10 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{801EC847-0740-31E0-B759-789C81C067EF}</ProjectGuid>
+    <ProjectGuid>{55FB1A57-3675-3A82-B321-3347B2685DC7}</ProjectGuid>
+    <WindowsTargetPlatformVersion>10.0.19041.0</WindowsTargetPlatformVersion>
     <Keyword>Win32Proj</Keyword>
-    <WindowsTargetPlatformVersion>10.0.20348.0</WindowsTargetPlatformVersion>
+    <Platform>x64</Platform>
     <Platform>x64</Platform>
     <ProjectName>bitsdojo_window_windows_plugin</ProjectName>
     <VCProjectUpgraderObjectName>NoUpgrade</VCProjectUpgraderObjectName>
@@ -50,22 +51,22 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
     <_ProjectFileVersion>10.0.20506.1</_ProjectFileVersion>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">D:\ddsplace\FlutterFastDDS\build\windows\x64\plugins\bitsdojo_window_windows\Debug\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Users\jimmy\Desktop\FastDDS\FlutterFastDDS\build\windows\x64\plugins\bitsdojo_window_windows\Debug\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">bitsdojo_window_windows_plugin.dir\Debug\</IntDir>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">bitsdojo_window_windows_plugin</TargetName>
     <TargetExt Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.lib</TargetExt>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Profile|x64'">D:\ddsplace\FlutterFastDDS\build\windows\x64\plugins\bitsdojo_window_windows\Profile\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Profile|x64'">C:\Users\jimmy\Desktop\FastDDS\FlutterFastDDS\build\windows\x64\plugins\bitsdojo_window_windows\Profile\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Profile|x64'">bitsdojo_window_windows_plugin.dir\Profile\</IntDir>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Profile|x64'">bitsdojo_window_windows_plugin</TargetName>
     <TargetExt Condition="'$(Configuration)|$(Platform)'=='Profile|x64'">.lib</TargetExt>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">D:\ddsplace\FlutterFastDDS\build\windows\x64\plugins\bitsdojo_window_windows\Release\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Users\jimmy\Desktop\FastDDS\FlutterFastDDS\build\windows\x64\plugins\bitsdojo_window_windows\Release\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">bitsdojo_window_windows_plugin.dir\Release\</IntDir>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">bitsdojo_window_windows_plugin</TargetName>
     <TargetExt Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.lib</TargetExt>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>D:\ddsplace\FlutterFastDDS\windows\flutter\ephemeral;D:\ddsplace\FlutterFastDDS\windows\flutter\ephemeral\cpp_client_wrapper\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\jimmy\Desktop\FastDDS\FlutterFastDDS\windows\flutter\ephemeral;C:\Users\jimmy\Desktop\FastDDS\FlutterFastDDS\windows\flutter\ephemeral\cpp_client_wrapper\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
@@ -85,10 +86,10 @@
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_DEBUG;_WINDOWS;_HAS_EXCEPTIONS=0;FLUTTER_PLUGIN_IMPL;UNICODE;_UNICODE;CMAKE_INTDIR=\"Debug\"</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>D:\ddsplace\FlutterFastDDS\windows\flutter\ephemeral;D:\ddsplace\FlutterFastDDS\windows\flutter\ephemeral\cpp_client_wrapper\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\jimmy\Desktop\FastDDS\FlutterFastDDS\windows\flutter\ephemeral;C:\Users\jimmy\Desktop\FastDDS\FlutterFastDDS\windows\flutter\ephemeral\cpp_client_wrapper\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Midl>
-      <AdditionalIncludeDirectories>D:\ddsplace\FlutterFastDDS\windows\flutter\ephemeral;D:\ddsplace\FlutterFastDDS\windows\flutter\ephemeral\cpp_client_wrapper\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\jimmy\Desktop\FastDDS\FlutterFastDDS\windows\flutter\ephemeral;C:\Users\jimmy\Desktop\FastDDS\FlutterFastDDS\windows\flutter\ephemeral\cpp_client_wrapper\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
@@ -101,7 +102,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Profile|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>D:\ddsplace\FlutterFastDDS\windows\flutter\ephemeral;D:\ddsplace\FlutterFastDDS\windows\flutter\ephemeral\cpp_client_wrapper\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\jimmy\Desktop\FastDDS\FlutterFastDDS\windows\flutter\ephemeral;C:\Users\jimmy\Desktop\FastDDS\FlutterFastDDS\windows\flutter\ephemeral\cpp_client_wrapper\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
       <DisableSpecificWarnings>"4100"</DisableSpecificWarnings>
       <ExceptionHandling>Sync</ExceptionHandling>
@@ -121,10 +122,10 @@
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;_HAS_EXCEPTIONS=0;FLUTTER_PLUGIN_IMPL;UNICODE;_UNICODE;CMAKE_INTDIR=\"Profile\"</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>D:\ddsplace\FlutterFastDDS\windows\flutter\ephemeral;D:\ddsplace\FlutterFastDDS\windows\flutter\ephemeral\cpp_client_wrapper\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\jimmy\Desktop\FastDDS\FlutterFastDDS\windows\flutter\ephemeral;C:\Users\jimmy\Desktop\FastDDS\FlutterFastDDS\windows\flutter\ephemeral\cpp_client_wrapper\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Midl>
-      <AdditionalIncludeDirectories>D:\ddsplace\FlutterFastDDS\windows\flutter\ephemeral;D:\ddsplace\FlutterFastDDS\windows\flutter\ephemeral\cpp_client_wrapper\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\jimmy\Desktop\FastDDS\FlutterFastDDS\windows\flutter\ephemeral;C:\Users\jimmy\Desktop\FastDDS\FlutterFastDDS\windows\flutter\ephemeral\cpp_client_wrapper\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
@@ -137,7 +138,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>D:\ddsplace\FlutterFastDDS\windows\flutter\ephemeral;D:\ddsplace\FlutterFastDDS\windows\flutter\ephemeral\cpp_client_wrapper\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\jimmy\Desktop\FastDDS\FlutterFastDDS\windows\flutter\ephemeral;C:\Users\jimmy\Desktop\FastDDS\FlutterFastDDS\windows\flutter\ephemeral\cpp_client_wrapper\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
       <DisableSpecificWarnings>"4100"</DisableSpecificWarnings>
       <ExceptionHandling>Sync</ExceptionHandling>
@@ -157,10 +158,10 @@
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;_HAS_EXCEPTIONS=0;FLUTTER_PLUGIN_IMPL;UNICODE;_UNICODE;CMAKE_INTDIR=\"Release\"</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>D:\ddsplace\FlutterFastDDS\windows\flutter\ephemeral;D:\ddsplace\FlutterFastDDS\windows\flutter\ephemeral\cpp_client_wrapper\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\jimmy\Desktop\FastDDS\FlutterFastDDS\windows\flutter\ephemeral;C:\Users\jimmy\Desktop\FastDDS\FlutterFastDDS\windows\flutter\ephemeral\cpp_client_wrapper\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Midl>
-      <AdditionalIncludeDirectories>D:\ddsplace\FlutterFastDDS\windows\flutter\ephemeral;D:\ddsplace\FlutterFastDDS\windows\flutter\ephemeral\cpp_client_wrapper\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\jimmy\Desktop\FastDDS\FlutterFastDDS\windows\flutter\ephemeral;C:\Users\jimmy\Desktop\FastDDS\FlutterFastDDS\windows\flutter\ephemeral\cpp_client_wrapper\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
@@ -172,11 +173,11 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <CustomBuild Include="D:\ddsplace\FlutterFastDDS\windows\flutter\ephemeral\.plugin_symlinks\bitsdojo_window_windows\windows\CMakeLists.txt">
+    <CustomBuild Include="C:\Users\jimmy\Desktop\FastDDS\FlutterFastDDS\windows\flutter\ephemeral\.plugin_symlinks\bitsdojo_window_windows\windows\CMakeLists.txt">
       <UseUtf8Encoding>Always</UseUtf8Encoding>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Building Custom Rule D:/ddsplace/FlutterFastDDS/windows/flutter/ephemeral/.plugin_symlinks/bitsdojo_window_windows/windows/CMakeLists.txt</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Building Custom Rule C:/Users/jimmy/Desktop/FastDDS/FlutterFastDDS/windows/flutter/ephemeral/.plugin_symlinks/bitsdojo_window_windows/windows/CMakeLists.txt</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">setlocal
-"C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -SD:/ddsplace/FlutterFastDDS/windows -BD:/ddsplace/FlutterFastDDS/build/windows/x64 --check-stamp-file D:/ddsplace/FlutterFastDDS/build/windows/x64/plugins/bitsdojo_window_windows/CMakeFiles/generate.stamp
+"C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -SC:/Users/jimmy/Desktop/FastDDS/FlutterFastDDS/windows -BC:/Users/jimmy/Desktop/FastDDS/FlutterFastDDS/build/windows/x64 --check-stamp-file C:/Users/jimmy/Desktop/FastDDS/FlutterFastDDS/build/windows/x64/plugins/bitsdojo_window_windows/CMakeFiles/generate.stamp
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -185,11 +186,11 @@ exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">D:\ddsplace\FlutterFastDDS\build\windows\x64\plugins\bitsdojo_window_windows\CMakeFiles\generate.stamp</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Users\jimmy\Desktop\FastDDS\FlutterFastDDS\build\windows\x64\plugins\bitsdojo_window_windows\CMakeFiles\generate.stamp</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</LinkObjects>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Profile|x64'">Building Custom Rule D:/ddsplace/FlutterFastDDS/windows/flutter/ephemeral/.plugin_symlinks/bitsdojo_window_windows/windows/CMakeLists.txt</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Profile|x64'">Building Custom Rule C:/Users/jimmy/Desktop/FastDDS/FlutterFastDDS/windows/flutter/ephemeral/.plugin_symlinks/bitsdojo_window_windows/windows/CMakeLists.txt</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Profile|x64'">setlocal
-"C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -SD:/ddsplace/FlutterFastDDS/windows -BD:/ddsplace/FlutterFastDDS/build/windows/x64 --check-stamp-file D:/ddsplace/FlutterFastDDS/build/windows/x64/plugins/bitsdojo_window_windows/CMakeFiles/generate.stamp
+"C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -SC:/Users/jimmy/Desktop/FastDDS/FlutterFastDDS/windows -BC:/Users/jimmy/Desktop/FastDDS/FlutterFastDDS/build/windows/x64 --check-stamp-file C:/Users/jimmy/Desktop/FastDDS/FlutterFastDDS/build/windows/x64/plugins/bitsdojo_window_windows/CMakeFiles/generate.stamp
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -198,11 +199,11 @@ exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Profile|x64'">%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Profile|x64'">D:\ddsplace\FlutterFastDDS\build\windows\x64\plugins\bitsdojo_window_windows\CMakeFiles\generate.stamp</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Profile|x64'">C:\Users\jimmy\Desktop\FastDDS\FlutterFastDDS\build\windows\x64\plugins\bitsdojo_window_windows\CMakeFiles\generate.stamp</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Profile|x64'">false</LinkObjects>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Building Custom Rule D:/ddsplace/FlutterFastDDS/windows/flutter/ephemeral/.plugin_symlinks/bitsdojo_window_windows/windows/CMakeLists.txt</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Building Custom Rule C:/Users/jimmy/Desktop/FastDDS/FlutterFastDDS/windows/flutter/ephemeral/.plugin_symlinks/bitsdojo_window_windows/windows/CMakeLists.txt</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">setlocal
-"C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -SD:/ddsplace/FlutterFastDDS/windows -BD:/ddsplace/FlutterFastDDS/build/windows/x64 --check-stamp-file D:/ddsplace/FlutterFastDDS/build/windows/x64/plugins/bitsdojo_window_windows/CMakeFiles/generate.stamp
+"C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -SC:/Users/jimmy/Desktop/FastDDS/FlutterFastDDS/windows -BC:/Users/jimmy/Desktop/FastDDS/FlutterFastDDS/build/windows/x64 --check-stamp-file C:/Users/jimmy/Desktop/FastDDS/FlutterFastDDS/build/windows/x64/plugins/bitsdojo_window_windows/CMakeFiles/generate.stamp
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -211,30 +212,108 @@ exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">D:\ddsplace\FlutterFastDDS\build\windows\x64\plugins\bitsdojo_window_windows\CMakeFiles\generate.stamp</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Users\jimmy\Desktop\FastDDS\FlutterFastDDS\build\windows\x64\plugins\bitsdojo_window_windows\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Building Custom Rule C:/Users/jimmy/Desktop/FastDDS/FlutterFastDDS/windows/flutter/ephemeral/.plugin_symlinks/bitsdojo_window_windows/windows/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">setlocal
+"C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -SC:/Users/jimmy/Desktop/FastDDS/FlutterFastDDS/windows -BC:/Users/jimmy/Desktop/FastDDS/FlutterFastDDS/build/windows/x64 --check-stamp-file C:/Users/jimmy/Desktop/FastDDS/FlutterFastDDS/build/windows/x64/plugins/bitsdojo_window_windows/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Users\jimmy\Desktop\FastDDS\FlutterFastDDS\build\windows\x64\plugins\bitsdojo_window_windows\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Profile|x64'">Building Custom Rule C:/Users/jimmy/Desktop/FastDDS/FlutterFastDDS/windows/flutter/ephemeral/.plugin_symlinks/bitsdojo_window_windows/windows/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Profile|x64'">setlocal
+"C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -SC:/Users/jimmy/Desktop/FastDDS/FlutterFastDDS/windows -BC:/Users/jimmy/Desktop/FastDDS/FlutterFastDDS/build/windows/x64 --check-stamp-file C:/Users/jimmy/Desktop/FastDDS/FlutterFastDDS/build/windows/x64/plugins/bitsdojo_window_windows/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Profile|x64'">%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Profile|x64'">C:\Users\jimmy\Desktop\FastDDS\FlutterFastDDS\build\windows\x64\plugins\bitsdojo_window_windows\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Profile|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Building Custom Rule C:/Users/jimmy/Desktop/FastDDS/FlutterFastDDS/windows/flutter/ephemeral/.plugin_symlinks/bitsdojo_window_windows/windows/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">setlocal
+"C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -SC:/Users/jimmy/Desktop/FastDDS/FlutterFastDDS/windows -BC:/Users/jimmy/Desktop/FastDDS/FlutterFastDDS/build/windows/x64 --check-stamp-file C:/Users/jimmy/Desktop/FastDDS/FlutterFastDDS/build/windows/x64/plugins/bitsdojo_window_windows/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Users\jimmy\Desktop\FastDDS\FlutterFastDDS\build\windows\x64\plugins\bitsdojo_window_windows\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Building Custom Rule C:/Users/jimmy/Desktop/FastDDS/FlutterFastDDS/windows/flutter/ephemeral/.plugin_symlinks/bitsdojo_window_windows/windows/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">setlocal
+"C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -SC:/Users/jimmy/Desktop/FastDDS/FlutterFastDDS/windows -BC:/Users/jimmy/Desktop/FastDDS/FlutterFastDDS/build/windows/x64 --check-stamp-file C:/Users/jimmy/Desktop/FastDDS/FlutterFastDDS/build/windows/x64/plugins/bitsdojo_window_windows/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Users\jimmy\Desktop\FastDDS\FlutterFastDDS\build\windows\x64\plugins\bitsdojo_window_windows\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Profile|x64'">Building Custom Rule C:/Users/jimmy/Desktop/FastDDS/FlutterFastDDS/windows/flutter/ephemeral/.plugin_symlinks/bitsdojo_window_windows/windows/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Profile|x64'">setlocal
+"C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -SC:/Users/jimmy/Desktop/FastDDS/FlutterFastDDS/windows -BC:/Users/jimmy/Desktop/FastDDS/FlutterFastDDS/build/windows/x64 --check-stamp-file C:/Users/jimmy/Desktop/FastDDS/FlutterFastDDS/build/windows/x64/plugins/bitsdojo_window_windows/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Profile|x64'">%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Profile|x64'">C:\Users\jimmy\Desktop\FastDDS\FlutterFastDDS\build\windows\x64\plugins\bitsdojo_window_windows\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Profile|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Building Custom Rule C:/Users/jimmy/Desktop/FastDDS/FlutterFastDDS/windows/flutter/ephemeral/.plugin_symlinks/bitsdojo_window_windows/windows/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">setlocal
+"C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -SC:/Users/jimmy/Desktop/FastDDS/FlutterFastDDS/windows -BC:/Users/jimmy/Desktop/FastDDS/FlutterFastDDS/build/windows/x64 --check-stamp-file C:/Users/jimmy/Desktop/FastDDS/FlutterFastDDS/build/windows/x64/plugins/bitsdojo_window_windows/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Users\jimmy\Desktop\FastDDS\FlutterFastDDS\build\windows\x64\plugins\bitsdojo_window_windows\CMakeFiles\generate.stamp</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkObjects>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="D:\ddsplace\FlutterFastDDS\windows\flutter\ephemeral\.plugin_symlinks\bitsdojo_window_windows\windows\bitsdojo_window.cpp" />
-    <ClCompile Include="D:\ddsplace\FlutterFastDDS\windows\flutter\ephemeral\.plugin_symlinks\bitsdojo_window_windows\windows\bitsdojo_window_api.cpp" />
-    <ClCompile Include="D:\ddsplace\FlutterFastDDS\windows\flutter\ephemeral\.plugin_symlinks\bitsdojo_window_windows\windows\bitsdojo_window_plugin.cpp" />
+    <ClCompile Include="C:\Users\jimmy\Desktop\FastDDS\FlutterFastDDS\windows\flutter\ephemeral\.plugin_symlinks\bitsdojo_window_windows\windows\bitsdojo_window.cpp" />
+    <ClCompile Include="C:\Users\jimmy\Desktop\FastDDS\FlutterFastDDS\windows\flutter\ephemeral\.plugin_symlinks\bitsdojo_window_windows\windows\bitsdojo_window_api.cpp" />
+    <ClCompile Include="C:\Users\jimmy\Desktop\FastDDS\FlutterFastDDS\windows\flutter\ephemeral\.plugin_symlinks\bitsdojo_window_windows\windows\bitsdojo_window_plugin.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="D:\ddsplace\FlutterFastDDS\build\windows\x64\ZERO_CHECK.vcxproj">
-      <Project>{A19DEFB8-5F15-38D2-BD02-ACEBB5BC94F3}</Project>
+    <ProjectReference Include="C:\Users\jimmy\Desktop\FastDDS\FlutterFastDDS\build\windows\x64\ZERO_CHECK.vcxproj">
+      <Project>{D5ABF051-1893-3810-82EF-4279FE6C14E1}</Project>
       <Name>ZERO_CHECK</Name>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </ProjectReference>
-    <ProjectReference Include="D:\ddsplace\FlutterFastDDS\build\windows\x64\flutter\flutter_assemble.vcxproj">
-      <Project>{887969BF-7A31-353B-8271-728DE77E77CA}</Project>
+    <ProjectReference Include="C:\Users\jimmy\Desktop\FastDDS\FlutterFastDDS\build\windows\x64\flutter\flutter_assemble.vcxproj">
+      <Project>{5074CCBF-1D83-35E6-84C5-016E5F5A5A7A}</Project>
       <Name>flutter_assemble</Name>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </ProjectReference>
-    <ProjectReference Include="D:\ddsplace\FlutterFastDDS\build\windows\x64\flutter\flutter_wrapper_plugin.vcxproj">
-      <Project>{9725FA5F-15EB-3397-9D36-C9F6EA6A4B9E}</Project>
+    <ProjectReference Include="C:\Users\jimmy\Desktop\FastDDS\FlutterFastDDS\build\windows\x64\flutter\flutter_wrapper_plugin.vcxproj">
+      <Project>{926347BE-4213-3524-99D3-220BF184946A}</Project>
       <Name>flutter_wrapper_plugin</Name>
     </ProjectReference>
   </ItemGroup>

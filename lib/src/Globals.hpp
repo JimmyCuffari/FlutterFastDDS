@@ -4,7 +4,7 @@
 #include <vector>
 
 //typedef void (*CallbackFunction)(const char*, const char*, const int*);
-typedef void (*CallbackFunction)(const char*, const char*);
+typedef void (*CallbackFunction)(const char*, const char*, const long*);
 typedef void (*StatusCallbackFunction)(const bool*, const int*);
 
 //extern std::vector<std::string> endThreadSignal;
@@ -17,12 +17,14 @@ extern std::vector<std::vector<std::string>> chat_histories;
 extern std::vector<std::string> send_message; // Message to send through Publisher
 extern std::string receive_message;
 
+extern long picture = 0;
+
 extern CallbackFunction receiveCallback;
 extern StatusCallbackFunction statusReceiveCallback;
 
 extern "C" void receiveDart(const char*);
 //extern "C" void callbackNative(const char*, const char*, const int*);
-extern "C" void callbackNative(const char*, const char*);
+extern "C" void callbackNative(const char*, const char*, const long*);
 extern "C" void statusCallbackNative(const bool*, const int*);
 
 

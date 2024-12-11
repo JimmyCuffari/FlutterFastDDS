@@ -14,3 +14,4 @@ EXPORTS
    statusCallbackNative
    statusReceiveDart
    setDartStatusReceiveCallback
+   setPicture

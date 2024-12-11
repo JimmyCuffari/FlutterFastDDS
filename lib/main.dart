@@ -45,9 +45,13 @@ typedef ReceiveDartFunc = ffi.Void Function(Pointer<Utf8>);
 typedef ReceiveDart = void Function(Pointer<Utf8>);
 
 typedef SetDartReceiveCallbackFunc = ffi.Void Function(
-    Pointer<NativeFunction<Void Function(Pointer<Utf8>, Pointer<Utf8>)>>);
+    Pointer<
+        NativeFunction<
+            Void Function(Pointer<Utf8>, Pointer<Utf8>, Pointer<Long>)>>);
 typedef SetDartReceiveCallback = void Function(
-    Pointer<NativeFunction<Void Function(Pointer<Utf8>, Pointer<Utf8>)>>);
+    Pointer<
+        NativeFunction<
+            Void Function(Pointer<Utf8>, Pointer<Utf8>, Pointer<Long>)>>);
 
 typedef StatusReceiveDartFunc = ffi.Void Function(Pointer<Utf8>);
 typedef StatusReceiveDart = void Function(Pointer<Utf8>);
@@ -63,6 +67,9 @@ typedef DartRemoveUser = void Function(int);
 typedef SetUserFunc = ffi.Void Function(Pointer<Utf8>);
 typedef SetUser = void Function(Pointer<Utf8>);
 
+typedef SetPictureFunc = ffi.Void Function(Long);
+typedef SetPicture = void Function(int);
+
 typedef GetCurrentUserStatusFunc = ffi.Bool Function(Int32);
 typedef GetCurrentUserStatus = bool Function(int);
 
@@ -70,13 +77,14 @@ typedef GetCurrentUserStatus = bool Function(int);
 typedef SetDartReceivePort = void Function(Pointer<NativeType>);*/
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//var libraryPath = path.join(    Directory.current.path, 'lib', 'build', 'Debug', 'FastDDSUser.dll');
+var libraryPath = path.join(
+    Directory.current.path, 'lib', 'build', 'Debug', 'FastDDSUser.dll');
 
 //path.join(
 //  Directory.current.path, 'lib', 'hello_library', 'libhello_library.dll');
 
-//final dylib = ffi.DynamicLibrary.open(libraryPath);
-final dylib = ffi.DynamicLibrary.open("FastDDSUser.dll");
+final dylib = ffi.DynamicLibrary.open(libraryPath);
+//final dylib = ffi.DynamicLibrary.open("FastDDSUser.dll");
 
 final CppAddUser addUser =
     dylib.lookup<ffi.NativeFunction<AddUserFunc>>('addUser').asFunction();
@@ -119,19 +127,23 @@ final DartRemoveUser dartRemoveUser = dylib
 
 final SetUser _setUser =
     dylib.lookup<ffi.NativeFunction<SetUserFunc>>('setUsername').asFunction();
+
+final SetPicture _setProfilePicture =
+    dylib.lookup<ffi.NativeFunction<SetPictureFunc>>('setPicture').asFunction();
 /*final SetDartReceivePort setDartReceivePort =
     dylib.lookup<ffi.NativeFunction<SetDartReceivePortFunc>>('setDartReceivePort').asFunction();*/
 
 //test
-typedef CallbackNativeType = Void Function(Pointer<Utf8>, Pointer<Utf8>);
+typedef CallbackNativeType = Void Function(
+    Pointer<Utf8>, Pointer<Utf8>, Pointer<Long>);
 typedef StatusCallbackNativeType = Void Function(Pointer<Bool>, Pointer<Int>);
 //typedef CallbackNativeTypeFunc = ffi.Void Function(Pointer<Utf8>);
 
 //for user messages
 typedef CallbackNativeTypeFunction = void Function(
-    Pointer<Utf8>, Pointer<Utf8>);
+    Pointer<Utf8>, Pointer<Utf8>, Pointer<Long>);
 typedef CallbackNativeTypeNativeFunction = Void Function(
-    Pointer<Utf8>, Pointer<Utf8>);
+    Pointer<Utf8>, Pointer<Utf8>, Pointer<Long>);
 
 //for user status
 typedef StatusCallbackNativeTypeFunction = void Function(
@@ -156,6 +168,8 @@ final GetCurrentUserStatus getCurrentUserStatus = dylib
 
 var pubs = {};
 
+var _profileIsSelected = 0;
+
 void _onMessageReceived(Pointer<Utf8> message) {
   final dartMessage = message.toDartString();
   print("Message received from C++: $dartMessage");
@@ -176,6 +190,15 @@ List<Widget> profiles = [
   Image(image: AssetImage('assets/ASRCYellow.png'), width: 30, height: 30),
   Image(image: AssetImage('assets/ASRCGreen.png'), width: 30, height: 30),
   Image(image: AssetImage('assets/ASRCPurple.png'), width: 30, height: 30)
+];
+
+List<String> profPics = [
+  'assets/pic1.png',
+  'assets/ASRCTransparent.png',
+  'assets/ASRCRed.png',
+  'assets/ASRCYellow.png',
+  'assets/ASRCGreen.png',
+  'assets/ASRCPurple.png',
 ];
 
 double textSize = 14;
@@ -446,7 +469,8 @@ class _MyHomePageState extends State<_ChatPage> {
   String message = "";
   //String selfUserName = username;
 
-  List profilePictures = ['assets/ASRCTransparent.png'];
+  var profilePictures = Map<String, String>();
+
   var messageStrings = Map<String, List<String>>(); //the text of each message
   var userMessages =
       Map<String, List<Widget>>(); //the actual widgets for each message
@@ -481,6 +505,7 @@ class _MyHomePageState extends State<_ChatPage> {
   initState() {
     userMessages["Notes"] = <Widget>[];
     messageStrings["Notes"] = [];
+    profilePictures["Notes"] = 'assets/ASRCTransparent.png';
 
     var tempStr = "Notes";
     setCurrTab(tempStr.toNativeUtf8()); // Sets initial tab to General
@@ -552,6 +577,7 @@ class _MyHomePageState extends State<_ChatPage> {
   }
 
   void _checks() {
+    print(usernameList.indexOf("element"));
     if (userController.text.length > 32) {
       userController.text = userController.text.substring(0, 32);
     }
@@ -571,14 +597,13 @@ class _MyHomePageState extends State<_ChatPage> {
 
       userMessages[newUser] = <Widget>[];
       messageStrings[newUser] = [];
+      profilePictures[newUser] = 'assets/pic1.png';
       //isActiveList[newUser] = ;
 
       setState(() {
         _selectedUsers.add(false);
         usernameList.add(newUser);
         isActiveList.add(false);
-
-        profilePictures.add('assets/pic1.png');
 
         users.add(
             /* Container(
@@ -619,6 +644,7 @@ class _MyHomePageState extends State<_ChatPage> {
     }
 
     setState(() {
+      profilePictures.remove(usernameList[selectedUser]);
       users.remove(users[selectedUser]);
       _selectedUsers.remove(_selectedUsers[selectedUser]);
       usernameList.remove(usernameList[selectedUser]);
@@ -697,9 +723,13 @@ class _MyHomePageState extends State<_ChatPage> {
     }
   }
 
-  void callbackFunction(Pointer<Utf8> message, Pointer<Utf8> other_username) {
+  void callbackFunction(
+      Pointer<Utf8> message, Pointer<Utf8> other_username, Pointer<Long> pic) {
     String msg = message.toDartString();
     String usr = other_username.toDartString();
+
+    profilePictures[usr] = profPics[pic.value];
+
     // print(usr);
     // print(msg);
 
@@ -1017,7 +1047,8 @@ class _MyHomePageState extends State<_ChatPage> {
                                           padding:
                                               EdgeInsets.fromLTRB(0, 0, 0, 3),
                                           child: Image.asset(
-                                              profilePictures[index],
+                                              profilePictures[
+                                                  usernameList[index]]!,
                                               width: 30,
                                               height: 30)),
                                     );
@@ -1219,8 +1250,6 @@ class SettingsPage extends State<_SettingsPage> {
 
   var _isSelected;
 
-  var _profileIsSelected;
-
   var settingSelected;
 
   initState() {
@@ -1399,10 +1428,9 @@ class SettingsPage extends State<_SettingsPage> {
   }
 
   void _goBack() {
+    _setProfilePicture(_profileIsSelected);
     Navigator.pop(context);
   }
-
-  // Theme.of(context).colorScheme.primary,
 
   @override
   Widget build(BuildContext context) {

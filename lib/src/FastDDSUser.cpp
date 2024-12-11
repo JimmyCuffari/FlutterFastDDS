@@ -190,10 +190,10 @@ CallbackFunction receiveCallback = nullptr;
 //Dart_Port receivePort;
 
 //callbackNative(const char* message, const char* username, int *pic)
-void callbackNative(const char* message, const char* username) {
+void callbackNative(const char* message, const char* username, const long* pic) {
     if (receiveCallback) {
         //receiveCallback(message, username, pic);
-        receiveCallback(message, username);
+        receiveCallback(message, username, pic);
     } else {
         std::cout << "No callback is currently set." << std::endl;
     }
@@ -276,6 +276,10 @@ void setCurrTab(char *user) {
 
     curr_chat_tab = tab + "_" + username;
     std::cout << "Current tab: " + curr_chat_tab << std::endl;
+}
+
+void setPicture(int *pic){
+    picture = (long)pic;
 }
 
 // Add new user

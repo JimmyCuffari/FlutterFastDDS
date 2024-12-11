@@ -1,4 +1,4 @@
-# Install script for directory: D:/ddsplace/FlutterFastDDS/windows/flutter/ephemeral/.plugin_symlinks/bitsdojo_window_windows/windows
+# Install script for directory: C:/Users/jimmy/Desktop/FastDDS/FlutterFastDDS/windows/flutter/ephemeral/.plugin_symlinks/bitsdojo_window_windows/windows
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)

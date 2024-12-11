@@ -89,7 +89,7 @@ private:
                             chat_histories.at(subscriber_->getHistoryIndex()).push_back(str);
                             last_received_message = str;
 
-                            callbackNative(user_message_.message().c_str(), user_message_.username().c_str());
+                            callbackNative(user_message_.message().c_str(), user_message_.username().c_str(), &subscriber_->getPic());
                         }
                         else if (last_received_message != str) {
                             /*if (curr_chat_tab.at(0) == "in" && curr_chat_tab.at(1) == subscriber_->getTopicName()) {
@@ -103,8 +103,8 @@ private:
 
                             chat_histories.at(subscriber_->getHistoryIndex()).push_back(str);
                             last_received_message = str;
-
-                            callbackNative(user_message_.message().c_str(), user_message_.username().c_str());
+                            
+                            callbackNative(user_message_.message().c_str(), user_message_.username().c_str(), &subscriber_->getPic());
                         }
                     }
                 }
@@ -233,5 +233,10 @@ public:
         //return status.load();
         return status;
     }
+
+    long& getPic(){
+        return picture;
+    }
+
 
 };
